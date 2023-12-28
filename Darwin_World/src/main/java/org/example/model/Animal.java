@@ -10,10 +10,21 @@ public class Animal implements WorldElement{
         animalPosition = new Vector2d(2,2);
         animalDirection = MapDirection.NORTH;
     }
+
+    void move(MoveValidator validator){
+        animalDirection = animalDirection.rotation(animalGenotype.nextGen());
+        animalPosition = validator.MoveTo(animalPosition, animalDirection.toUnitVector());
+    }
+
+    public MapDirection getAnimalDirection() {
+        return animalDirection;
+    }
+
     @Override
     public Vector2d getPosition() {
         return animalPosition;
     }
+    @Override
     public String toString(){
         return switch (animalDirection){
             case EAST -> "E";
@@ -26,4 +37,6 @@ public class Animal implements WorldElement{
             case NORTHWEST-> "NW";
         };
     }
+
+
 }

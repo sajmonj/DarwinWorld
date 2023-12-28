@@ -5,21 +5,40 @@ import org.example.util.MapVisualizer;
 import java.util.*;
 
 abstract class AbstractWorldMap implements WorldMap{
+    protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     protected final Map<Vector2d, Animal> mapAnimals = new HashMap<>();
     protected MapVisualizer mapVisualizer;
+    public abstract Boundary getCurrentBounds();
+    public abstract boolean canMoveTo(Vector2d position);
+    public abstract Vector2d MoveTo(Vector2d position, Vector2d directionVector);
+
+
     private final int Id;
 
-    AbstractWorldMap(int id) {
+    public AbstractWorldMap(int id, int width, int height) {
         Id = id;
+        bounds = new Boundary(new Vector2d(0,0),new Vector2d(width, height));
     }
 
-    public abstract boolean canMoveTo(Vector2d position);
     @Override
     public void place(Animal element) {
         Vector2d position = element.getPosition();
         mapAnimals.put(element.getPosition(), element);
         mapChanged("Place animal, position: " + position);
+    }
+
+
+    @Override
+    public void move(Animal animal) {
+        if(isOccupied(animal.getPosition()) && objectAt(animal.getPosition()).equals(animal)){
+            Vector2d oldPosition = animal.getPosition();
+            animal.move(this);
+            Vector2d newPosition = animal.getPosition();
+            mapAnimals.remove(oldPosition);
+            mapAnimals.put(newPosition, animal);
+            mapChanged("Move animal from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
+        }
     }
 
     @Override
@@ -28,7 +47,7 @@ abstract class AbstractWorldMap implements WorldMap{
     }
     @Override
     public String toString() {
-        return "";
+        return this.mapVisualizer.draw(bounds.lowerLeft(), bounds.upperRight());
     }
     @Override
     public Map<Vector2d, WorldElement> getElements() {
