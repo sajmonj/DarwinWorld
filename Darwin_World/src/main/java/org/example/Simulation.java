@@ -4,24 +4,27 @@ import org.example.model.Animal;
 import org.example.model.WorldMap;
 
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class Simulation{
     private final WorldMap map;
-    private final List<Animal> animalsList;
+    private final List<Animal> animalsList = new ArrayList<>();
 
-    public Simulation(List<Animal> animalsList, WorldMap map) {
+    public Simulation(int animalNumbers,int genNumbers, WorldMap map) {
         this.map = map;
-        this.animalsList = animalsList;
-        for (Animal animal : animalsList) {
-                map.place(animal);
+        for(int i =0;i<animalNumbers; ++i){
+            Animal animal = new Animal(genNumbers, i);
+            animalsList.add(animal);
+            map.place(animal);
         }
     }
 
     public void run(){
-        for(int i=0; i<15; ++i){
+        for(int i=0; i<5; ++i){
             for(Animal animal : animalsList){
+                System.out.println("Animal"+animal.getID());
                 map.move(animal);
             }
         }

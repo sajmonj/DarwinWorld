@@ -31,13 +31,15 @@ abstract class AbstractWorldMap implements WorldMap{
 
     @Override
     public void move(Animal animal) {
+        System.out.println(isOccupied(animal.getPosition()));
+//        System.out.println(" " + objectAt(animal.getPosition()).equals(animal));
         if(isOccupied(animal.getPosition()) && objectAt(animal.getPosition()).equals(animal)){
             Vector2d oldPosition = animal.getPosition();
             animal.move(this);
             Vector2d newPosition = animal.getPosition();
             mapAnimals.remove(oldPosition);
             mapAnimals.put(newPosition, animal);
-            mapChanged("Move animal from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
+            mapChanged("Move animal" +animal.getID() + " from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
         }
     }
 
