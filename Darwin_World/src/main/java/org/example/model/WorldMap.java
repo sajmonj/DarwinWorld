@@ -1,6 +1,7 @@
 package org.example.model;
 
 
+import java.util.List;
 import java.util.Map;
 
 public interface WorldMap extends MoveValidator {
@@ -36,9 +37,9 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    WorldElement objectAt(Vector2d position);
+    List<Animal> objectAt(Vector2d position);
 
-    Map<Vector2d, WorldElement> getElements();
+    Map<Vector2d, List<Animal>> getElements();
 
     void registerObserver(MapChangeListener observer);
 

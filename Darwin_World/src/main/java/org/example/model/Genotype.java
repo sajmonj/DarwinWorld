@@ -14,6 +14,10 @@ public class Genotype {
     List<Gen> Gens = new ArrayList<>();
     public Genotype(int genNumbers){
         this.genNumbers = genNumbers;
+//        Gens.add(Gen.DEGREES_270);
+//        for(int i=1; i<genNumbers; i++){
+//            Gens.add(Gen.DEGREES_0);
+//        }
         genotypeGenerate();
     }
     private void genotypeGenerate(){

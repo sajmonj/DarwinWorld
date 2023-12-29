@@ -14,7 +14,7 @@ public class Simulation{
 
     public Simulation(int animalNumbers,int genNumbers, WorldMap map) {
         this.map = map;
-        for(int i =0;i<animalNumbers; ++i){
+        for(int i=0; i<animalNumbers; ++i){
             Animal animal = new Animal(genNumbers, i);
             animalsList.add(animal);
             map.place(animal);
