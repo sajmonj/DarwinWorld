@@ -11,7 +11,7 @@ public interface WorldMap extends MoveValidator {
      *
      * @param animal The animal to place on the map.
      */
-    void place(Animal animal);
+    void place(WorldElement animal);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
@@ -37,9 +37,11 @@ public interface WorldMap extends MoveValidator {
      * @param position The position of the animal.
      * @return animal or null if the position is not occupied.
      */
-    List<Animal> objectAt(Vector2d position);
+    List<WorldElement> objectAt(Vector2d position);
 
-    Map<Vector2d, List<Animal>> getElements();
+    Map<Vector2d, List<WorldElement>> getElements();
+
+    Boundary getCurrentBounds();
 
     void registerObserver(MapChangeListener observer);
 
