@@ -9,11 +9,8 @@ public class Animal implements WorldElement{
     private final int ID;
     public Animal(int genNumbers, int ID){
         animalGenotype = new Genotype(genNumbers);
-//        if(ID ==0 )animalPosition = new Vector2d(2,2);
-//        else
-            animalPosition = new Vector2d(1,1);
+        animalPosition = new Vector2d(1,1);
         animalDirection = MapDirection.NORTH;
-        System.out.println(getAnimalGenotype());
         this.ID = ID;
     }
 
