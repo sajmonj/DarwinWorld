@@ -5,15 +5,41 @@ public class Animal implements WorldElement{
     Genotype animalGenotype;
     Vector2d animalPosition;
     MapDirection animalDirection;
-    public Animal(int genNumbers){
+
+    private final int ID;
+    public Animal(int genNumbers, int ID){
         animalGenotype = new Genotype(genNumbers);
-        animalPosition = new Vector2d(2,2);
+//        if(ID ==0 )animalPosition = new Vector2d(2,2);
+//        else
+            animalPosition = new Vector2d(3,3);
         animalDirection = MapDirection.NORTH;
+        System.out.println(getAnimalGenotype());
+        this.ID = ID;
     }
+
+    void move(MoveValidator validator){
+        animalDirection = animalDirection.rotation(animalGenotype.nextGen());
+        animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
+        System.out.println(ID + " " + animalPosition);
+    }
+
+    public MapDirection getAnimalDirection() {
+        return animalDirection;
+    }
+
+    public Genotype getAnimalGenotype() {
+        return animalGenotype;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
     @Override
     public Vector2d getPosition() {
         return animalPosition;
     }
+    @Override
     public String toString(){
         return switch (animalDirection){
             case EAST -> "E";
@@ -26,4 +52,6 @@ public class Animal implements WorldElement{
             case NORTHWEST-> "NW";
         };
     }
+
+
 }

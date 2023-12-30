@@ -1,6 +1,5 @@
 package org.example.model;
 
 public interface MoveValidator {
-
-    boolean canMoveTo(Vector2d position);
+    Vector2d moveTo(Vector2d position, Vector2d directionVector);
 }

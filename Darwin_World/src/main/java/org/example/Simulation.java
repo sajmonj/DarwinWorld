@@ -10,19 +10,23 @@ import java.util.List;
 
 public class Simulation{
     private final WorldMap map;
-    private List<Animal> animalsList = new ArrayList<>();
+    private final List<Animal> animalsList = new ArrayList<>();
 
-    public Simulation(List<Animal> animalsList, WorldMap map) {
+    public Simulation(int animalNumbers,int genNumbers, WorldMap map) {
         this.map = map;
-        this.animalsList = animalsList;
-        for (Animal animal : animalsList) {
-                map.place(animal);
+        for(int i=0; i<animalNumbers; ++i){
+            Animal animal = new Animal(genNumbers, i);
+            animalsList.add(animal);
+            map.place(animal);
         }
     }
 
     public void run(){
-        for(Animal animal : animalsList){
-            map.move(animal);
+        for(int i=0; i<5; ++i){
+            for(Animal animal : animalsList){
+                System.out.println("Animal"+animal.getID());
+                map.move(animal);
+            }
         }
     }
     public List<Animal> getAnimalsList() {
