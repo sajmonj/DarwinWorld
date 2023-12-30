@@ -9,11 +9,6 @@ public class RectangularMap extends AbstractWorldMap{
         this.mapVisualizer = new MapVisualizer(this);
     }
 
-    @Override
-    public Boundary getCurrentBounds() {
-        return bounds;
-    }
-
     public boolean canMoveTo(Vector2d position) {
         return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
     }

@@ -7,9 +7,11 @@ import java.util.*;
 abstract class AbstractWorldMap implements WorldMap{
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
-    protected final Map<Vector2d, List<Animal>> mapAnimals = new HashMap<>();
+    protected final Map<Vector2d, List<WorldElement>> mapAnimals = new HashMap<>();
     protected MapVisualizer mapVisualizer;
-    public abstract Boundary getCurrentBounds();
+    public Boundary getCurrentBounds() {
+        return bounds;
+    }
     public abstract boolean canMoveTo(Vector2d position);
     public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector);
 
@@ -22,12 +24,13 @@ abstract class AbstractWorldMap implements WorldMap{
     }
 
     @Override
-    public void place(Animal element) {
+    public void place(WorldElement element) {
         Vector2d position = element.getPosition();
-        List<Animal> objectsAt = objectAt(position);
+        List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
         mapAnimals.put(position, objectsAt);
-        mapChanged("Place animal, position: " + position);
+        if(element.getClass().equals(Animal.class))
+            mapChanged("Place animal, position: " + position);
     }
 
 
@@ -39,9 +42,9 @@ abstract class AbstractWorldMap implements WorldMap{
             Vector2d oldPosition = animal.getPosition();
             animal.move(this);
             Vector2d newPosition = animal.getPosition();
-            List<Animal> objectsAt = objectAt(newPosition);
+            List<WorldElement> objectsAt = objectAt(newPosition);
             objectsAt.add(animal);
-            List<Animal> objectsAtOldPosition = mapAnimals.get(oldPosition);
+            List<WorldElement> objectsAtOldPosition = mapAnimals.get(oldPosition);
             objectsAtOldPosition.remove(animal);
 //            mapAnimals.remove(oldPosition);
             mapAnimals.put(newPosition, objectsAt);
@@ -50,7 +53,7 @@ abstract class AbstractWorldMap implements WorldMap{
     }
 
     @Override
-    public List<Animal> objectAt(Vector2d position) {
+    public List<WorldElement> objectAt(Vector2d position) {
         if(mapAnimals.get(position) != null){
             return mapAnimals.get(position);
         }
@@ -61,7 +64,7 @@ abstract class AbstractWorldMap implements WorldMap{
         return this.mapVisualizer.draw(bounds.lowerLeft(), bounds.upperRight());
     }
     @Override
-    public Map<Vector2d, List<Animal>> getElements() {
+    public Map<Vector2d, List<WorldElement>> getElements() {
         return Collections.unmodifiableMap(mapAnimals);
     }
 
