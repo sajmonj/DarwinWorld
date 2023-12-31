@@ -9,9 +9,17 @@ public interface WorldMap extends MoveValidator {
     /**
      * Place an animal on the map.
      *
-     * @param animal The animal to place on the map.
+     * @param element The animal to place on the map.
      */
-    void place(WorldElement animal);
+    void place(WorldElement element);
+
+    /**
+     * Remove a dead animal for map.
+     * Return true if the animal has 0 and less energy
+     *
+     * @param animal The animal to remove for the map.
+     */
+    boolean removeDeadAnimals(Animal animal);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.

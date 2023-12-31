@@ -12,9 +12,7 @@ public class Animal implements WorldElement{
     private final int ID;
     public Animal(int genNumbers, int ID, int animalEnergy){
         animalGenotype = new Genotype(genNumbers);
-//        if(ID ==0 )animalPosition = new Vector2d(2,2);
-//        else
-            animalPosition = new Vector2d(3,3);
+        animalPosition = new Vector2d(3,3);
         animalDirection = MapDirection.NORTH;
         System.out.println(getAnimalGenotype());
         this.ID = ID;
@@ -26,9 +24,9 @@ public class Animal implements WorldElement{
     void move(MoveValidator validator){
         animalDirection = animalDirection.rotation(animalGenotype.nextGen());
         animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
-        System.out.println(ID + " " + animalPosition);
         age++;
         energy--;
+        System.out.println("Id: " + ID + " " + animalPosition + " " + "E: " + energy);
     }
 
     public MapDirection getAnimalDirection() {
@@ -41,6 +39,10 @@ public class Animal implements WorldElement{
 
     public int getID() {
         return ID;
+    }
+
+    public String getName() {
+        return "Animal "+ID;
     }
 
     @Override

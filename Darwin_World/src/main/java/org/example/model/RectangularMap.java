@@ -23,7 +23,6 @@ public class RectangularMap extends AbstractWorldMap{
         if(canMoveTo(position.add(directionVector))){
             return position.add(directionVector);
         }
-        System.out.println(bounds);
         Vector2d newPosition = position.add(directionVector);
         if(bounds.upperRight().getY() > newPosition.getY() && bounds.lowerLeft().getY() < newPosition.getY()) {
             if (bounds.upperRight().getX() < newPosition.getX()) {
