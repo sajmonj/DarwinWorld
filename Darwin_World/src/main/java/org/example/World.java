@@ -9,7 +9,7 @@ import java.util.Scanner;
 
 public class World {
     public static void main(String[] args) {
-        int animalEnergy = 15;
+        int animalEnergy = 2;
         int reproductionEnergy = 5;
         int grassEnergy = 3;
         int readyEnergy = 7;

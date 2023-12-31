@@ -15,7 +15,6 @@ abstract class AbstractWorldMap implements WorldMap{
     public abstract boolean canMoveTo(Vector2d position);
     public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector);
 
-
     private final int Id;
 
     public AbstractWorldMap(int id, int width, int height) {
@@ -36,21 +35,27 @@ abstract class AbstractWorldMap implements WorldMap{
 
     @Override
     public void move(Animal animal) {
-        System.out.println(isOccupied(animal.getPosition()));
-//        System.out.println(" " + objectAt(animal.getPosition()).equals(animal));
-//        if(isOccupied(animal.getPosition()) && objectAt(animal.getPosition()).equals(animal)){
-            Vector2d oldPosition = animal.getPosition();
-            animal.move(this);
-            Vector2d newPosition = animal.getPosition();
-            List<WorldElement> objectsAt = objectAt(newPosition);
-            objectsAt.add(animal);
-            List<WorldElement> objectsAtOldPosition = mapAnimals.get(oldPosition);
-            objectsAtOldPosition.remove(animal);
-//            mapAnimals.remove(oldPosition);
-            mapAnimals.put(newPosition, objectsAt);
-            mapChanged("Move animal" +animal.getID() + " from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
-//        }
+        Vector2d oldPosition = animal.getPosition();
+        animal.move(this);
+        Vector2d newPosition = animal.getPosition();
+        List<WorldElement> objectsAt = objectAt(newPosition);
+        objectsAt.add(animal);
+        List<WorldElement> objectsAtOldPosition = mapAnimals.get(oldPosition);
+        objectsAtOldPosition.remove(animal);
+        mapAnimals.put(newPosition, objectsAt);
+        mapChanged("Move "+ animal.getName() + "from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
     }
+    public boolean removeDeadAnimals(Animal animal) {
+        if(animal.getEnergy() <= 0){
+            List<WorldElement> objectsAtAnimalPosition = mapAnimals.get(animal.getPosition());
+            objectsAtAnimalPosition.remove(animal);
+            mapChanged("Dead: " + animal.getName());
+            return true;
+        }
+        return false;
+    }
+
+
 
     @Override
     public List<WorldElement> objectAt(Vector2d position) {
