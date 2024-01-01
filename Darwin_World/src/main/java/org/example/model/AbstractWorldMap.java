@@ -82,6 +82,8 @@ abstract class AbstractWorldMap implements WorldMap{
 
     private void bornAnimal(Animal a, Animal b, List<Animal> simulationAnimalsList) {
         Animal animal =  new Animal(a,b, simulationAnimalsList.size());
+        a.increaseNumberOfChildren();
+        b.increaseNumberOfChildren();
         place(animal);
         simulationAnimalsList.add(animal);
     }

@@ -68,6 +68,9 @@ public class Animal implements WorldElement{
         return age;
     }
 
+    public void increaseNumberOfChildren(){
+        numOfChildren++;
+    }
 
 
     @Override
