@@ -13,7 +13,7 @@ public class Simulation extends AbstractSimulation {
         super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
         for(int i=0; i<animalNumbers; ++i){
             Animal animal = new Animal(genNumbers, i, animalEnergy);
-            addAnimal(animal);
+            listAnimals.add(animal);
             this.map.place(animal);
         }
         GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassNum, map.getCurrentBounds());
@@ -24,31 +24,16 @@ public class Simulation extends AbstractSimulation {
         }
     }
 
-    public void run(){
-        List<Animal> animalsList = mapAnimals.values().stream()
-                .flatMap(List::stream)
-                .toList();
-        DayCycleSimulation dayCycleSimulation = new DayCycleSimulation(animalsList, map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
+    public void run() {
+        DayCycleSimulation dayCycleSimulation = new DayCycleSimulation(listAnimals, map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
 
-        for(int i=0; i<5; ++i){
+        for (int i = 0; i < 5; ++i) {
             dayCycleSimulation.removeDeadAnimals();
             dayCycleSimulation.move();
             dayCycleSimulation.reproduction();
         }
     }
-    public void addAnimal(Animal animal) {
-        Vector2d position = animal.position();
-        if (mapAnimals.containsKey(position)) {
-            mapAnimals.get(position).add(animal);
-        } else {
-            List<Animal> animals = new ArrayList<>();
-            animals.add(animal);
-            mapAnimals.put(position, animals);
-        }
-    }
     public List<Animal> getAnimalsList() {
-        return mapAnimals.values().stream()
-                .flatMap(List::stream)
-                .toList();
+        return listAnimals;
     }
 }

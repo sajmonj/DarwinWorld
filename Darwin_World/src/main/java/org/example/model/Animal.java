@@ -13,19 +13,18 @@ public class Animal implements WorldElement{
         animalGenotype = new Genotype(genNumbers);
         animalPosition = new Vector2d(3,3);
         animalDirection = MapDirection.NORTH;
-        System.out.println(getAnimalGenotype());
         this.ID = ID;
         energy = animalEnergy;
         age = 0;
         numOfChildren = 0;
     }
 
-    public Animal(Animal a, Animal b){
+    public Animal(Animal a, Animal b, int id){
+        this.ID = id;
         this.age = 0;
         this.animalPosition = a.position();
         animalGenotype = new Genotype(a,b);
         animalDirection = MapDirection.NORTH;
-        ID = 2323;
     }
 
     void move(MoveValidator validator){

@@ -6,7 +6,7 @@ import java.util.*;
 
 public class AbstractSimulation {
     protected final WorldMap map;
-    protected final Map<Vector2d,List<Animal>> mapAnimals = new HashMap<>();
+    protected final List<Animal> listAnimals = new ArrayList<>();
     protected final Set<Grass> setGrass = new HashSet<>();
     protected final int animalEnergy;
     protected final int reproductionEnergy;

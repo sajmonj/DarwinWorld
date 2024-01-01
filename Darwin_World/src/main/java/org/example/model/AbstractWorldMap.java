@@ -32,7 +32,6 @@ abstract class AbstractWorldMap implements WorldMap{
         }
     }
 
-
     @Override
     public void move(Animal animal) {
         Vector2d oldPosition = animal.position();
@@ -57,7 +56,7 @@ abstract class AbstractWorldMap implements WorldMap{
         return false;
     }
 
-    public void reproduction(){
+    public void reproduction(List<Animal> simulationAnimalsList){
         Map<Vector2d, List<Animal>> mapAnimals = new HashMap<>();
 
         mapElements.forEach((position, elements) -> {
@@ -76,13 +75,15 @@ abstract class AbstractWorldMap implements WorldMap{
 
             if(elements.size()>1){
                 elements.sort(animalComparator);
-
+                bornAnimal(elements.get(0), elements.get(1), simulationAnimalsList);
             }
         });
     }
 
-    private void bornAnimal(Animal a, Animal b){
-
+    private void bornAnimal(Animal a, Animal b, List<Animal> simulationAnimalsList) {
+        Animal animal =  new Animal(a,b, simulationAnimalsList.size());
+        place(animal);
+        simulationAnimalsList.add(animal);
     }
 
 

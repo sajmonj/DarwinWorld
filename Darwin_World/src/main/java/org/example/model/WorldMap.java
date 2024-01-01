@@ -61,5 +61,5 @@ public interface WorldMap extends MoveValidator {
 
     void unregisterObserver(MapChangeListener observer);
 
-    void reproduction();
+    void reproduction(List<Animal> simulationAnimalsList);
 }
