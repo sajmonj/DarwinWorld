@@ -2,13 +2,12 @@ package org.example.model;
 
 public class Animal implements WorldElement{
 
-    private Genotype animalGenotype;
+    private final Genotype animalGenotype;
     private Vector2d animalPosition;
     private MapDirection animalDirection;
     private int energy;
     private int numOfChildren;
     private int age;
-
     private final int ID;
     public Animal(int genNumbers, int ID, int animalEnergy){
         animalGenotype = new Genotype(genNumbers);
@@ -21,10 +20,18 @@ public class Animal implements WorldElement{
         numOfChildren = 0;
     }
 
+    public Animal(Animal a, Animal b){
+        this.age = 0;
+        this.animalPosition = a.position();
+        animalGenotype = new Genotype(a,b);
+        animalDirection = MapDirection.NORTH;
+        ID = 2323;
+    }
+
     void move(MoveValidator validator){
         animalDirection = animalDirection.rotation(animalGenotype.nextGen());
         animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
-        age++;
+        incrementAge();
         energy--;
         System.out.println("Id: " + ID + " " + animalPosition + " " + "E: " + energy);
     }
@@ -46,7 +53,7 @@ public class Animal implements WorldElement{
     }
 
     @Override
-    public Vector2d getPosition() {
+    public Vector2d position() {
         return animalPosition;
     }
 
@@ -62,6 +69,8 @@ public class Animal implements WorldElement{
         return age;
     }
 
+
+
     @Override
     public String toString(){
         return switch (animalDirection){
@@ -75,6 +84,7 @@ public class Animal implements WorldElement{
             case NORTHWEST-> "NW";
         };
     }
-
-
+    public void incrementAge() {
+        age++;
+    }
 }

@@ -3,51 +3,53 @@ package org.example.model;
 import org.example.util.MapVisualizer;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 abstract class AbstractWorldMap implements WorldMap{
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
-    protected final Map<Vector2d, List<WorldElement>> mapAnimals = new HashMap<>();
+    protected final Map<Vector2d, List<WorldElement>> mapElements = new HashMap<>();
     protected MapVisualizer mapVisualizer;
     public Boundary getCurrentBounds() {
         return bounds;
     }
     public abstract boolean canMoveTo(Vector2d position);
     public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector);
-
     private final int Id;
 
     public AbstractWorldMap(int id, int width, int height) {
         Id = id;
         bounds = new Boundary(new Vector2d(0,0),new Vector2d(width, height));
     }
-
     @Override
     public void place(WorldElement element) {
-        Vector2d position = element.getPosition();
+        Vector2d position = element.position();
         List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
-        mapAnimals.put(position, objectsAt);
-        if(element.getClass().equals(Animal.class))
+        mapElements.put(position, objectsAt);
+        if(element.getClass().equals(Animal.class)){
             mapChanged("Place animal, position: " + position);
+        }
     }
 
 
     @Override
     public void move(Animal animal) {
-        Vector2d oldPosition = animal.getPosition();
+        Vector2d oldPosition = animal.position();
         animal.move(this);
-        Vector2d newPosition = animal.getPosition();
+        Vector2d newPosition = animal.position();
         List<WorldElement> objectsAt = objectAt(newPosition);
         objectsAt.add(animal);
-        List<WorldElement> objectsAtOldPosition = mapAnimals.get(oldPosition);
+        List<WorldElement> objectsAtOldPosition = mapElements.get(oldPosition);
         objectsAtOldPosition.remove(animal);
-        mapAnimals.put(newPosition, objectsAt);
+        mapElements.put(newPosition, objectsAt);
         mapChanged("Move "+ animal.getName() + "from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
     }
+
+    @Override
     public boolean removeDeadAnimals(Animal animal) {
         if(animal.getEnergy() <= 0){
-            List<WorldElement> objectsAtAnimalPosition = mapAnimals.get(animal.getPosition());
+            List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
             objectsAtAnimalPosition.remove(animal);
             mapChanged("Dead: " + animal.getName());
             return true;
@@ -55,12 +57,39 @@ abstract class AbstractWorldMap implements WorldMap{
         return false;
     }
 
+    public void reproduction(){
+        Map<Vector2d, List<Animal>> mapAnimals = new HashMap<>();
+
+        mapElements.forEach((position, elements) -> {
+            List<Animal> animalElements = elements.stream()
+                    .filter(element -> element instanceof Animal)
+                    .map(element -> (Animal) element)
+                    .collect(Collectors.toList());
+
+            if (!animalElements.isEmpty()) {
+                mapAnimals.put(position, animalElements);
+            }
+        });
+
+        AnimalComparator animalComparator = new AnimalComparator();
+        mapAnimals.forEach((position, elements) -> {
+
+            if(elements.size()>1){
+                elements.sort(animalComparator);
+
+            }
+        });
+    }
+
+    private void bornAnimal(Animal a, Animal b){
+
+    }
 
 
     @Override
     public List<WorldElement> objectAt(Vector2d position) {
-        if(mapAnimals.get(position) != null){
-            return mapAnimals.get(position);
+        if(mapElements.get(position) != null){
+            return mapElements.get(position);
         }
         return new ArrayList<>();
     }
@@ -70,7 +99,7 @@ abstract class AbstractWorldMap implements WorldMap{
     }
     @Override
     public Map<Vector2d, List<WorldElement>> getElements() {
-        return Collections.unmodifiableMap(mapAnimals);
+        return Collections.unmodifiableMap(mapElements);
     }
 
     @Override

@@ -22,6 +22,10 @@ public class DayCycleSimulation extends AbstractSimulation {
             map.move(animal);
         }
     }
+
+    public void reproduction(){
+        map.reproduction();
+    }
     public void removeDeadAnimals(){
         simulationAnimalsList.removeIf(map::removeDeadAnimals);
     }
