@@ -6,8 +6,14 @@ import java.util.Map;
 
 public interface WorldMap extends MoveValidator {
 
+
     /**
-     * Place an animal on the map.
+     * Return Map Id.
+     */
+    int getId();
+
+    /**
+     * Place a World Element on the map.
      *
      * @param element The animal to place on the map.
      */
@@ -55,5 +61,5 @@ public interface WorldMap extends MoveValidator {
 
     void unregisterObserver(MapChangeListener observer);
 
-    int getId();
+    void reproduction(List<Animal> simulationAnimalsList);
 }

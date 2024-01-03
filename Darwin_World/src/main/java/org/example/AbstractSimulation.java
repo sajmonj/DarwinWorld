@@ -1,15 +1,13 @@
 package org.example;
 
-import org.example.model.Animal;
-import org.example.model.WorldMap;
+import org.example.model.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class AbstractSimulation {
     protected final WorldMap map;
-    protected final List<Animal> animalsList = new ArrayList<>();
+    protected final List<Animal> listAnimals = new ArrayList<>();
+    protected final Set<Grass> setGrass = new HashSet<>();
     protected final int animalEnergy;
     protected final int reproductionEnergy;
     protected final int grassEnergy;

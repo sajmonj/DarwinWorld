@@ -12,9 +12,14 @@ public class Genotype {
     private int currentGen = -1;
     private final int genNumbers;
     List<Gen> Gens = new ArrayList<>();
+
     public Genotype(int genNumbers){
         this.genNumbers = genNumbers;
         genotypeGenerate();
+    }
+    public Genotype (Animal a, Animal b){
+        this(a.getAnimalGenotype().getGenNumbers());
+
     }
     private void genotypeGenerate(){
         Random random = new Random();
@@ -25,6 +30,10 @@ public class Genotype {
     public Gen nextGen(){
         currentGen += 1;
         return Gens.get(currentGen%genNumbers);
+    }
+
+    public int getGenNumbers() {
+        return genNumbers;
     }
 
     @Override
