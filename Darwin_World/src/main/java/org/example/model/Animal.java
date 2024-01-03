@@ -89,4 +89,8 @@ public class Animal implements WorldElement{
     public void incrementAge() {
         age++;
     }
+
+    public void addConsumptionEnergy() {
+        energy += 3;
+    }
 }

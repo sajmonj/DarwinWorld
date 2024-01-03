@@ -56,6 +56,7 @@ abstract class AbstractWorldMap implements WorldMap{
         return false;
     }
 
+    @Override
     public void reproduction(List<Animal> simulationAnimalsList){
         Map<Vector2d, List<Animal>> mapAnimals = new HashMap<>();
 
@@ -88,6 +89,38 @@ abstract class AbstractWorldMap implements WorldMap{
         simulationAnimalsList.add(animal);
     }
 
+    @Override
+    public void consumption(Set<Grass> grassSet){
+        Map<Grass, Animal> consumptionList = new HashMap<>();
+
+        grassSet.forEach(grass -> {
+            List<Animal> animalList = mapElements.get(grass.position()).stream()
+                    .filter(element -> element instanceof Animal)
+                    .map(element -> (Animal) element)
+                    .collect(Collectors.toList());
+
+            AnimalComparator comparator = new AnimalComparator();
+            if(!animalList.isEmpty()) {
+                animalList.sort(comparator);
+                consumptionList.put(grass, animalList.get(0));
+            }
+        });
+
+        consumptionList.forEach((grass, animal) -> {
+            consumeGrass(grass, animal, grassSet);
+        });
+    }
+
+    private void consumeGrass(Grass grass, Animal animal, Set<Grass> grassSet) {
+        grassSet.remove(grass);
+
+        List<WorldElement> objectsAtGrassPosition = mapElements.get(grass.position());
+        objectsAtGrassPosition.remove(grass);
+
+        mapChanged(animal.getName() + " ate grass on position: " + grass.position());
+
+        animal.addConsumptionEnergy();
+    }
 
     @Override
     public List<WorldElement> objectAt(Vector2d position) {

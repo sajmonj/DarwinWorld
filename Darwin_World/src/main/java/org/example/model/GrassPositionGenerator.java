@@ -12,11 +12,13 @@ public class GrassPositionGenerator implements Iterable<Vector2d> {
     private final List<Vector2d> selectedGrids = new ArrayList<>();
     private final int howManyToGenerate;
     private final Boundary boundaries;
+    private final WorldMap map;
 
 
-    public GrassPositionGenerator(int howManyToGenerate, Boundary boundaries) {
+    public GrassPositionGenerator(int howManyToGenerate, Boundary boundaries, WorldMap map) {
         this.howManyToGenerate = howManyToGenerate;
         this.boundaries = boundaries;
+        this.map = map;
         generatePosition();
     }
 
@@ -30,18 +32,21 @@ public class GrassPositionGenerator implements Iterable<Vector2d> {
         for (int x = boundaries.lowerLeft().getX(); x <= boundaries.upperRight().getX(); x++) {
             for (int y = boundaries.lowerLeft().getY(); y <= boundaries.upperRight().getY(); y++) {
                 position = new Vector2d(x, y);
-                grids.add(position);
-                if (y >= (boundaries.upperRight().getY()/2 - boundaries.upperRight().getY()*0.2/2)
-                        && y <= (boundaries.upperRight().getY()/2 + boundaries.upperRight().getY()*0.2/2)) {
-                    for (int i=0; i<16; i++) {
-                        grids.add(position);
+                if(!map.isOccupied(position)) {
+                    grids.add(position);
+                    if (y >= (boundaries.upperRight().getY() / 2 - boundaries.upperRight().getY() * 0.2 / 2)
+                            && y <= (boundaries.upperRight().getY() / 2 + boundaries.upperRight().getY() * 0.2 / 2)) {
+                        for (int i = 0; i < 16; i++) {
+                            grids.add(position);
+                        }
                     }
                 }
             }
         }
-        System.out.println(grids);
+//        System.out.println(grids);
 
         for (int i=0; i<howManyToGenerate; i++) {
+            if(grids.isEmpty()) break;
             Vector2d selectedGrid = grids.get(generateRandom(grids.size()));
             selectedGrids.add(selectedGrid);
             grids.removeIf(selectedGrid::equals);

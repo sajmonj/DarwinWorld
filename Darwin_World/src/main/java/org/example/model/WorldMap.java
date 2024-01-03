@@ -3,6 +3,7 @@ package org.example.model;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public interface WorldMap extends MoveValidator {
 
@@ -42,7 +43,7 @@ public interface WorldMap extends MoveValidator {
      * @return True if the position is occupied.
      */
     default boolean isOccupied(Vector2d position) {
-        return objectAt(position) != null;
+        return !objectAt(position).isEmpty();
     }
 
     /**
@@ -62,4 +63,6 @@ public interface WorldMap extends MoveValidator {
     void unregisterObserver(MapChangeListener observer);
 
     void reproduction(List<Animal> simulationAnimalsList);
+
+    void consumption(Set<Grass> grassSet);
 }
