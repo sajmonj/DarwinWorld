@@ -16,7 +16,7 @@ public class Simulation extends AbstractSimulation {
             listAnimals.add(animal);
             this.map.place(animal);
         }
-        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassNum, map.getCurrentBounds());
+        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassNum, map.getCurrentBounds(), map);
         for (Vector2d position : grassPositionGenerator) {
             Grass grass = new Grass(position);
             setGrass.add(grass);
@@ -25,12 +25,14 @@ public class Simulation extends AbstractSimulation {
     }
 
     public void run() {
-        DayCycleSimulation dayCycleSimulation = new DayCycleSimulation(listAnimals, map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
+        DayCycleSimulation dayCycleSimulation = new DayCycleSimulation(listAnimals, setGrass, map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
 
         for (int i = 0; i < 5; ++i) {
             dayCycleSimulation.removeDeadAnimals();
             dayCycleSimulation.move();
+            dayCycleSimulation.consumption();
             dayCycleSimulation.reproduction();
+            dayCycleSimulation.grassGrowth();
         }
     }
     public List<Animal> getAnimalsList() {

@@ -8,11 +8,11 @@ import org.example.model.WorldMap;
 
 public class World {
     public static void main(String[] args) {
-        int animalEnergy = 100;
+        int animalEnergy = 3;
         int reproductionEnergy = 5;
         int grassEnergy = 3;
         int readyEnergy = 7;
-        int grassNum = 10;
+        int grassNum = 3;
         WorldMap map = new RectangularMap(5,5,1);
         ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
         map.registerObserver(consoleMapDisplay);
