@@ -1,6 +1,8 @@
-package org.example.model;
+package org.example.model.Animal;
 
-public class Animal implements WorldElement{
+import org.example.model.*;
+
+public class Animal implements WorldElement {
 
     private final Genotype animalGenotype;
     private Vector2d animalPosition;
