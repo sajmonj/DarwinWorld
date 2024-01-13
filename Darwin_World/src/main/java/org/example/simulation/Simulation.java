@@ -1,13 +1,11 @@
 package org.example.simulation;
 
 import org.example.model.*;
-import org.example.simulation.AbstractSimulation;
-import org.example.simulation.DayCycleSimulation;
 
 
 import java.util.List;
 
-public class Simulation extends AbstractSimulation {
+public class Simulation extends AbstractSimulation implements Runnable{
 
     public Simulation(int animalsNumber,int genNumbers, WorldMap map, int animalEnergy, int readyEnergy,
                       int reproductionEnergy, int grassEnergy, int grassNum) {

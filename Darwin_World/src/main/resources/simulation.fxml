@@ -1,74 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?import javafx.scene.control.Label?>
+
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
-
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="560.0" minWidth="720.0"
-            fx:controller="org.example.visualization.ConfigurationPresenter">
-
-    <top>
-        <VBox alignment="CENTER">
-            <Label text="Darwin World Configuration" style="-fx-font-size: 20; -fx-font-weight: bold;" />
-        </VBox>
-    </top>
+            minHeight="720.0" minWidth="850.0"
+            fx:controller="org.example.visualization.SimulationPresenter">
 
     <center>
-        <VBox alignment="CENTER" spacing="10" style="-fx-padding: 20;">
-            <HBox spacing="10">
-                <TextField fx:id="mapHeight" minWidth="200" />
-                <Label text="Map height"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="mapWidth" minWidth="200" />
-                <Label text="Map Width"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="animalsNumber" minWidth="200" />
-                <Label text="Number of animals"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="genNumbers" minWidth="200" />
-                <Label text="Numbers of gens"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="animalEnergy" minWidth="200" />
-                <Label text="Starting animal energy"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="readyEnergy" minWidth="200" />
-                <Label text="Energy needed to have offspring"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="reproductionEnergy" minWidth="200" />
-                <Label text="Cost of reproduction"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="grassNum" minWidth="200" />
-                <Label text="Numbers of grass"/>
-            </HBox>
-            <HBox spacing="10">
-                <TextField fx:id="grassEnergy" minWidth="200" />
-                <Label text="Grass energy consumption"/>
-            </HBox>
-            <HBox spacing="10">
-                <Button onAction="#onSimulationStartClicked" text="Start" />
-                <Button onAction="#onSimulationLoadClicked" text="Load" />
-                <Button onAction="#onSimulationSaveClicked" text="Save" />
-            </HBox>
-        </VBox>
-
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
     </center>
-
     <bottom>
-        <VBox spacing="10" alignment="CENTER">
-            <Label text="Authors: Szymon Janik, Łukasz Kluza" style="-fx-font-size: 14; -fx-text-fill: grey;" />
-        </VBox>
+        <HBox>
+            <Button fx:id="stop" text="Stop"/>
+            <Button fx:id="continue" text="Continue"/>
+        </HBox>
     </bottom>
-
 </BorderPane>
+
+
+

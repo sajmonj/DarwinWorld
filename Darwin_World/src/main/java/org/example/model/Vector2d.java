@@ -18,6 +18,12 @@ public class Vector2d {
     public int getY() {
         return y;
     }
+    public String xToString(){
+        return "%d".formatted(x);
+    }
+    public String yToString(){
+        return "%d".formatted(y);
+    }
 
     public String toString(){
         return "(%d,%d)".formatted(x,y);

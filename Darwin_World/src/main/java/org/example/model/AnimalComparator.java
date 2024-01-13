@@ -1,6 +1,4 @@
-package org.example.model.Animal;
-
-import org.example.model.Animal.Animal;
+package org.example.model;
 
 import java.util.Comparator;
 

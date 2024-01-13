@@ -4,6 +4,9 @@ import org.example.model.ConsoleMapDisplay;
 import org.example.model.RectangularMap;
 import org.example.model.WorldMap;
 import org.example.simulation.Simulation;
+import org.example.simulation.SimulationEngine;
+
+import java.util.List;
 
 
 public class World {
@@ -18,6 +21,8 @@ public class World {
         map.registerObserver(consoleMapDisplay);
         Simulation simulation = new Simulation(10,2,map, animalEnergy, readyEnergy,
                 reproductionEnergy, grassEnergy, grassNum);
-        simulation.run();
+        SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
+        simulationEngine.runAsyncInThreadPool();
+        simulationEngine.awaitSimulationsEnd();
     }
 }

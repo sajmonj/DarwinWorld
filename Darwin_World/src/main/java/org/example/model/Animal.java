@@ -1,4 +1,4 @@
-package org.example.model.Animal;
+package org.example.model;
 
 import org.example.model.*;
 

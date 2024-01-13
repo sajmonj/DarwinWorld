@@ -1,12 +1,16 @@
 package org.example.visualization;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.BorderPane;
 import org.example.data.SimulationConfiguration;
 import org.example.model.ConsoleMapDisplay;
 import org.example.model.RectangularMap;
 import org.example.model.WorldMap;
 import org.example.simulation.Simulation;
+
+import java.io.IOException;
 
 public class ConfigurationPresenter {
 
@@ -35,19 +39,28 @@ public class ConfigurationPresenter {
     public void onSimulationStartClicked(){
         onSimulationSaveClicked();
         System.out.println(configuration);
-        WorldMap map = new RectangularMap(configuration.getMapWidth(),configuration.getMapHeight(),1);
-        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
-        map.registerObserver(consoleMapDisplay);
-        Simulation simulation = new Simulation(configuration.getAnimalsNumber(), configuration.getGenNumbers(), map,
-                configuration.getAnimalEnergy(), configuration.getReadyEnergy(), configuration.getReproductionEnergy(),
-                configuration.getGrassEnergy(), configuration.getGrassNum());
-        simulation.run();
+//        FXMLLoader loader = new FXMLLoader();
+//        SimulationPresenter simulationPresenter = loader.getController();
+//        simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
+            BorderPane simulationWindow = loader.load();
+
+            SimulationPresenter simulationPresenter = loader.getController();
+            simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
+    @FXML
     public void onSimulationSaveClicked(){
         creatConfiguration();
         setConfiguration();
         configuration.save();
     }
+    @FXML
     public void onSimulationLoadClicked(){
         creatConfiguration();
         configuration.load();
