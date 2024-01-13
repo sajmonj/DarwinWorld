@@ -1,17 +1,18 @@
-package org.example;
+package org.example.simulation;
 
 import org.example.model.*;
+import org.example.simulation.AbstractSimulation;
+import org.example.simulation.DayCycleSimulation;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Simulation extends AbstractSimulation {
 
-    public Simulation(int animalNumbers,int genNumbers, WorldMap map, int animalEnergy, int readyEnergy,
+    public Simulation(int animalsNumber,int genNumbers, WorldMap map, int animalEnergy, int readyEnergy,
                       int reproductionEnergy, int grassEnergy, int grassNum) {
         super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
-        for(int i=0; i<animalNumbers; ++i){
+        for(int i=0; i<animalsNumber; ++i){
             Animal animal = new Animal(genNumbers, i, animalEnergy);
             listAnimals.add(animal);
             this.map.place(animal);

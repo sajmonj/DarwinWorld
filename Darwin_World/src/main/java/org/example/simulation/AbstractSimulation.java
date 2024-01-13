@@ -1,4 +1,4 @@
-package org.example;
+package org.example.simulation;
 
 import org.example.model.*;
 

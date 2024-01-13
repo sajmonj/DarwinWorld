@@ -1,6 +1,7 @@
-package org.example;
+package org.example.simulation;
 
 import org.example.model.*;
+import org.example.simulation.AbstractSimulation;
 
 import java.util.List;
 import java.util.Set;

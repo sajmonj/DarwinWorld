@@ -3,7 +3,7 @@ package org.example;
 import org.example.model.ConsoleMapDisplay;
 import org.example.model.RectangularMap;
 import org.example.model.WorldMap;
-
+import org.example.simulation.Simulation;
 
 
 public class World {
