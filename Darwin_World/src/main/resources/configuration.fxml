@@ -7,7 +7,6 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.layout.GridPane?>
 
-<?import org.example.data.Configuration?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="560.0" minWidth="720.0"
@@ -57,7 +56,11 @@
                 <TextField fx:id="grassEnergy" minWidth="200" />
                 <Label text="Grass energy consumption"/>
             </HBox>
-            <Button onAction="#onSimulationStartClicked" text="Start" />
+            <HBox spacing="10">
+                <Button onAction="#onSimulationStartClicked" text="Start" />
+                <Button onAction="#onSimulationLoadClicked" text="Load" />
+                <Button onAction="#onSimulationSaveClicked" text="Save" />
+            </HBox>
         </VBox>
 
     </center>
