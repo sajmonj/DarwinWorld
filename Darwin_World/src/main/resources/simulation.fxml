@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.GridPane?>
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="720.0" minWidth="850.0"
+            fx:controller="org.example.visualization.SimulationPresenter">
+
+    <center>
+        <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER" />
+    </center>
+    <bottom>
+        <HBox>
+            <Button fx:id="stop" onAction="#onStopClicked" text="Stop"/>
+            <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
+        </HBox>
+    </bottom>
+</BorderPane>
+
+
+
