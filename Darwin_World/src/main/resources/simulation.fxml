@@ -14,8 +14,8 @@
     </center>
     <bottom>
         <HBox>
-            <Button fx:id="stop" text="Stop"/>
-            <Button fx:id="continue" text="Continue"/>
+            <Button fx:id="stop" onAction="#onStopClicked" text="Stop"/>
+            <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
         </HBox>
     </bottom>
 </BorderPane>

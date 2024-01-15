@@ -2,13 +2,12 @@ package org.example.visualization;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
+import javafx.stage.Stage;
 import org.example.data.SimulationConfiguration;
-import org.example.model.ConsoleMapDisplay;
-import org.example.model.RectangularMap;
-import org.example.model.WorldMap;
-import org.example.simulation.Simulation;
+
 
 import java.io.IOException;
 
@@ -38,21 +37,23 @@ public class ConfigurationPresenter {
     @FXML
     public void onSimulationStartClicked(){
         onSimulationSaveClicked();
-        System.out.println(configuration);
-//        FXMLLoader loader = new FXMLLoader();
-//        SimulationPresenter simulationPresenter = loader.getController();
-//        simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
             BorderPane simulationWindow = loader.load();
 
             SimulationPresenter simulationPresenter = loader.getController();
-            simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
+            int ID = simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
+            Stage stage = new Stage();
+            stage.setTitle("Simulation "+ID);
+
+            Scene scene = new Scene(simulationWindow);
+            stage.setScene(scene);
+
+            stage.show();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
     @FXML
     public void onSimulationSaveClicked(){

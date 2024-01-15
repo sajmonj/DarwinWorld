@@ -20,7 +20,7 @@ public class World {
         ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
         map.registerObserver(consoleMapDisplay);
         Simulation simulation = new Simulation(10,2,map, animalEnergy, readyEnergy,
-                reproductionEnergy, grassEnergy, grassNum);
+                reproductionEnergy, grassEnergy, grassNum,1);
         SimulationEngine simulationEngine = new SimulationEngine(List.of(simulation));
         simulationEngine.runAsyncInThreadPool();
         simulationEngine.awaitSimulationsEnd();

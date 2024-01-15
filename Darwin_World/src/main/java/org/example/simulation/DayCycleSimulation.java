@@ -13,8 +13,9 @@ public class DayCycleSimulation extends AbstractSimulation {
     private final WorldMap map;
 
 
-    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, WorldMap map, int animalEnergy, int reproductionEnergy, int grassEnergy, int readyEnergy, int grassNum) {
-        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum);
+    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, WorldMap map, int animalEnergy,
+                              int reproductionEnergy, int grassEnergy, int readyEnergy, int grassNum, int ID) {
+        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum, ID);
         this.simulationAnimalsList = animalsList;
         grassSet = setGrass;
         this.map = map;

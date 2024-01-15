@@ -1,9 +1,6 @@
 package org.example.model;
 
-import org.example.model.*;
-
 public class Animal implements WorldElement {
-
     private final Genotype animalGenotype;
     private Vector2d animalPosition;
     private MapDirection animalDirection;
@@ -34,7 +31,6 @@ public class Animal implements WorldElement {
         animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
         incrementAge();
         energy--;
-        System.out.println("Id: " + ID + " " + animalPosition + " " + "E: " + energy);
     }
 
     public MapDirection getAnimalDirection() {
@@ -87,6 +83,11 @@ public class Animal implements WorldElement {
             case NORTHEAST -> "NE";
             case NORTHWEST-> "NW";
         };
+    }
+
+    @Override
+    public String toIcon() {
+        return "#800020";
     }
     public void incrementAge() {
         age++;
