@@ -1,5 +1,6 @@
 package org.example.simulation;
 
+import org.example.data.SimulationConfiguration;
 import org.example.model.*;
 
 
@@ -9,11 +10,10 @@ public class Simulation extends AbstractSimulation implements Runnable{
     private final DayCycleSimulation dayCycleSimulation;
     private volatile boolean shouldStop = false;
 
-    public Simulation(int animalsNumber,int genNumbers, WorldMap map, int animalEnergy, int readyEnergy,
-                      int reproductionEnergy, int grassEnergy, int grassNum, int ID) {
-        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum, ID);
-        for(int i=0; i<animalsNumber; ++i){
-            Animal animal = new Animal(genNumbers, i, animalEnergy);
+    public Simulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        super(configuration,worldMap, ID);
+        for(int i=0; i<configuration.getAnimalsNumber(); ++i){
+            Animal animal = new Animal(configuration, i);
             listAnimals.add(animal);
             this.map.place(animal);
         }
@@ -23,8 +23,7 @@ public class Simulation extends AbstractSimulation implements Runnable{
             setGrass.add(grass);
             this.map.place(grass);
         }
-        dayCycleSimulation = new DayCycleSimulation(listAnimals, setGrass, map, animalEnergy, reproductionEnergy,
-                grassEnergy, readyEnergy, grassNum, ID);
+        dayCycleSimulation = new DayCycleSimulation(listAnimals, setGrass, configuration, worldMap, ID);
     }
 
     @Override

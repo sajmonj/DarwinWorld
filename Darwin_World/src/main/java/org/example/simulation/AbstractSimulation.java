@@ -1,5 +1,6 @@
 package org.example.simulation;
 
+import org.example.data.SimulationConfiguration;
 import org.example.model.*;
 
 import java.util.*;
@@ -15,14 +16,13 @@ public class AbstractSimulation {
     protected final int grassNum;
     protected final int ID;
 
-    public AbstractSimulation(WorldMap map, int animalEnergy, int reproductionEnergy, int grassEnergy, int readyEnergy,
-                              int grassNum, int ID) {
-        this.map = map;
-        this.animalEnergy = animalEnergy;
-        this.reproductionEnergy = reproductionEnergy;
-        this.grassEnergy = grassEnergy;
-        this.readyEnergy = readyEnergy;
-        this.grassNum = grassNum;
+    public AbstractSimulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        this.map = worldMap;
+        this.animalEnergy = configuration.getAnimalEnergy();
+        this.reproductionEnergy = configuration.getReproductionEnergy();
+        this.grassEnergy = configuration.getGrassEnergy();
+        this.readyEnergy = configuration.getReadyEnergy();
+        this.grassNum = configuration.getGrassNum();
         this.ID = ID;
     }
     public int getID(){

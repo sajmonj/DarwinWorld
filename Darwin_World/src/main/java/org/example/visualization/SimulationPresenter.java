@@ -90,9 +90,7 @@ public class SimulationPresenter implements MapChangeListener {
         setOptions(configuration, mapType);
         increaseID();
         try {
-            simulation = new Simulation(configuration.getAnimalsNumber(), configuration.getGenNumbers(), worldMap,
-                    configuration.getAnimalEnergy(), configuration.getReadyEnergy(), configuration.getReproductionEnergy(),
-                    configuration.getGrassEnergy(), configuration.getGrassNum(), simulationID);
+            simulation = new Simulation(configuration, worldMap, simulationID);
             simulations.add(simulation);
 
             SimulationEngine simulationEngine = new SimulationEngine(simulations);

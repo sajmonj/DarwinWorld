@@ -1,32 +1,51 @@
 package org.example.model;
 
+import org.example.data.SimulationConfiguration;
+
+import java.util.HashSet;
+
 public class Animal implements WorldElement {
     private final Genotype animalGenotype;
+    private final int genNumbers;
     private Vector2d animalPosition;
     private MapDirection animalDirection;
     private int energy;
     private int numOfChildren;
     private int age;
     private final int ID;
-    public Animal(int genNumbers, int ID, int animalEnergy){
-        animalGenotype = new Genotype(genNumbers);
-        animalPosition = new Vector2d(3,3);
-        animalDirection = MapDirection.NORTH;
+    private final Animal parentA;
+    private final Animal parentB;
+    private final HashSet<Animal> descendants = new HashSet<>();
+
+    private final SimulationConfiguration configuration;
+
+    public Animal(SimulationConfiguration configuration, int ID) {
+        this.configuration = configuration;
         this.ID = ID;
-        energy = animalEnergy;
+        genNumbers = configuration.getGenNumbers();
+        parentA = null;
+        parentB = null;
+        animalGenotype = new Genotype(configuration.getGenNumbers());
+        animalPosition = new Vector2d(3, 3);
+        animalDirection = MapDirection.NORTH;
+        energy = configuration.getAnimalEnergy();
         age = 0;
         numOfChildren = 0;
     }
 
-    public Animal(Animal a, Animal b, int id){
+    public Animal(Animal a, Animal b, int id) {
         this.ID = id;
         this.age = 0;
         this.animalPosition = a.position();
-        animalGenotype = new Genotype(a,b);
+        this.configuration = a.configuration;
+        genNumbers = configuration.getGenNumbers();
+        parentA = b;
+        parentB = a;
+        animalGenotype = new Genotype(a, b);
         animalDirection = MapDirection.NORTH;
     }
 
-    void move(MoveValidator validator){
+    void move(MoveValidator validator) {
         animalDirection = animalDirection.rotation(animalGenotype.nextGen());
         animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
         incrementAge();
@@ -46,7 +65,7 @@ public class Animal implements WorldElement {
     }
 
     public String getName() {
-        return "Animal "+ID;
+        return "Animal " + ID;
     }
 
     @Override
@@ -66,14 +85,13 @@ public class Animal implements WorldElement {
         return age;
     }
 
-    public void increaseNumberOfChildren(){
+    public void increaseNumberOfChildren() {
         numOfChildren++;
     }
 
-
     @Override
-    public String toString(){
-        return switch (animalDirection){
+    public String toString() {
+        return switch (animalDirection) {
             case EAST -> "E";
             case WEST -> "W";
             case NORTH -> "N";
@@ -81,7 +99,7 @@ public class Animal implements WorldElement {
             case SOUTHEAST -> "SE";
             case SOUTHWEST -> "SW";
             case NORTHEAST -> "NE";
-            case NORTHWEST-> "NW";
+            case NORTHWEST -> "NW";
         };
     }
 
@@ -89,11 +107,16 @@ public class Animal implements WorldElement {
     public String toIcon() {
         return "#800020";
     }
+
+    public int getGenNumbers() {
+        return genNumbers;
+    }
+
     public void incrementAge() {
         age++;
     }
 
     public void addConsumptionEnergy() {
-        energy += 3;
+        energy += configuration.getGrassEnergy();
     }
 }

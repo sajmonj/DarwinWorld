@@ -1,5 +1,6 @@
 package org.example.simulation;
 
+import org.example.data.SimulationConfiguration;
 import org.example.model.*;
 import org.example.simulation.AbstractSimulation;
 
@@ -13,12 +14,12 @@ public class DayCycleSimulation extends AbstractSimulation {
     private final WorldMap map;
 
 
-    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, WorldMap map, int animalEnergy,
-                              int reproductionEnergy, int grassEnergy, int readyEnergy, int grassNum, int ID) {
-        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum, ID);
+    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, SimulationConfiguration configuration,
+                              WorldMap worldMap, int ID) {
+        super(configuration, worldMap, ID);
         this.simulationAnimalsList = animalsList;
         grassSet = setGrass;
-        this.map = map;
+        this.map = worldMap;
     }
 
     public void move(){
