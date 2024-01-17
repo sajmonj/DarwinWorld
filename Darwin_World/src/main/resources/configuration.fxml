@@ -48,8 +48,12 @@
                 <Label text="Cost of reproduction"/>
             </HBox>
             <HBox spacing="10">
+                <TextField fx:id="grassInitNum" minWidth="200" />
+                <Label text="Init number of grass"/>
+            </HBox>
+            <HBox spacing="10">
                 <TextField fx:id="grassNum" minWidth="200" />
-                <Label text="Numbers of grass"/>
+                <Label text="Number of grass"/>
             </HBox>
             <HBox spacing="10">
                 <TextField fx:id="grassEnergy" minWidth="200" />

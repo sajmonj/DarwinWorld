@@ -15,6 +15,7 @@ public class SimulationConfiguration {
     private int animalEnergy;
     private int readyEnergy;
     private int reproductionEnergy;
+    private int grassInitNumber;
     private int grassNum;
     private int grassEnergy;
 //    public SimulationConfiguration(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
@@ -24,7 +25,8 @@ public class SimulationConfiguration {
 //    }
 
     public void update(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
-                       int animalEnergy, int readyEnergy, int reproductionEnergy, int grassNum, int grassEnergy) {
+                       int animalEnergy, int readyEnergy, int reproductionEnergy, int grassInitNumber,
+                       int grassNum, int grassEnergy) {
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.animalsNumber = animalsNumber;
@@ -32,6 +34,7 @@ public class SimulationConfiguration {
         this.animalEnergy = animalEnergy;
         this.readyEnergy = readyEnergy;
         this.reproductionEnergy = reproductionEnergy;
+        this.grassInitNumber = grassInitNumber;
         this.grassNum = grassNum;
         this.grassEnergy = grassEnergy;
     }
@@ -48,9 +51,11 @@ public class SimulationConfiguration {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             SimulationConfiguration loadedConfig = objectMapper.readValue(new File(FILE_PATH), SimulationConfiguration.class);
+            System.out.println("LoadedConfig" + loadedConfig.getGrassInitNumber());
             update(loadedConfig.getMapHeight(), loadedConfig.getMapWidth(), loadedConfig.getAnimalsNumber(),
                     loadedConfig.getGenNumbers(), loadedConfig.getAnimalEnergy(), loadedConfig.getReadyEnergy(),
-                    loadedConfig.getReproductionEnergy(), loadedConfig.getGrassNum(), loadedConfig.getGrassEnergy()
+                    loadedConfig.getReproductionEnergy(), loadedConfig.getGrassInitNumber(), loadedConfig.getGrassNum(),
+                    loadedConfig.getGrassEnergy()
             );
             System.out.println("Configuration loaded from JSON file: " + FILE_PATH);
         } catch (IOException e) {
@@ -86,6 +91,10 @@ public class SimulationConfiguration {
         return reproductionEnergy;
     }
 
+    public int getGrassInitNumber() {
+        return grassInitNumber;
+    }
+
     public int getGrassNum() {
         return grassNum;
     }
@@ -103,6 +112,7 @@ public class SimulationConfiguration {
                 ", animalEnergy='" + animalEnergy + '\'' +
                 ", readyEnergy='" + readyEnergy + '\'' +
                 ", reproductionEnergy='" + reproductionEnergy + '\'' +
+                ", grassInitNumber='" + grassInitNumber + '\'' +
                 ", grassNum='" + grassNum + '\'' +
                 ", grassEnergy='" + grassEnergy + '\'' +
                 '}';

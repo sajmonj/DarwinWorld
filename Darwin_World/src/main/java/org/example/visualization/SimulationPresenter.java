@@ -125,7 +125,8 @@ public class SimulationPresenter implements MapChangeListener {
         simulation.continueSimulation();
     }
 
-    @FXML void onStopClicked(){
+    @FXML
+    public void onStopClicked(){
         simulation.stopSimulation();
     }
 

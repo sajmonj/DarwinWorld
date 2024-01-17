@@ -14,10 +14,12 @@ public class Genotype {
 
     public Genotype(int genNumbers){
         newGenotype(genNumbers);
+        System.out.println("place "+Gens.size() +" "+this.genNumbers);
         genotypeGenerate();
     }
 
     public Genotype (Animal a, Animal b){
+        System.out.println("A "+a.getGenNumbers());
         newGenotype(a.getGenNumbers());
         inheritGenotype(a, b);
     }
@@ -26,7 +28,7 @@ public class Genotype {
         Random random = new Random();
         int sumEnergy = a.getEnergy() + b.getEnergy();
         int numGensA = a.getEnergy()/sumEnergy*genNumbers;
-        int numGensB = genNumbers*numGensA;
+        int numGensB = genNumbers-numGensA;
         int maxi = max(numGensA,numGensB);
         int side = random.nextInt(2);
         int point = side == 0 ? maxi : genNumbers-maxi;
@@ -38,11 +40,14 @@ public class Genotype {
 
     private void newGenotype(int genNumbers) {
         this.genNumbers = genNumbers;
-        Gens = new ArrayList<>(genNumbers);
+        Gens = new ArrayList<>();
     }
     public void copyGens(int from, int to, Animal parent){
+        System.out.println("L"+Gens.size());
         for (int i = from; i<to; ++i){
-            Gens.set(i, parent.getAnimalGenotype().getGens(i));
+            System.out.println("I "+i);
+            System.out.println( "P "+parent.getAnimalGenotype().getGens(i));
+            Gens.add(parent.getAnimalGenotype().getGens(i));
         }
     }
     private void genotypeGenerate(){

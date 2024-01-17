@@ -28,6 +28,8 @@ public class ConfigurationPresenter {
     @FXML
     private TextField reproductionEnergy;
     @FXML
+    private TextField grassInitNum;
+    @FXML
     private TextField grassNum;
     @FXML
     private TextField grassEnergy;
@@ -83,11 +85,12 @@ public class ConfigurationPresenter {
         int energy = Integer.parseInt(animalEnergy.getText());
         int readyEnergyValue = Integer.parseInt(readyEnergy.getText());
         int reproductionEnergyValue = Integer.parseInt(reproductionEnergy.getText());
+        int grassInitNumber = Integer.parseInt(grassInitNum.getText());
         int grassNumber = Integer.parseInt(grassNum.getText());
         int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
 
         configuration.update(height, width, animals, generations, energy, readyEnergyValue,
-                reproductionEnergyValue, grassNumber, grassEnergyValue);
+                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue);
     }
     private void updateConfiguration(){
         mapHeight.setText(String.valueOf(configuration.getMapHeight()));
@@ -97,6 +100,7 @@ public class ConfigurationPresenter {
         animalEnergy.setText(String.valueOf(configuration.getAnimalEnergy()));
         readyEnergy.setText(String.valueOf(configuration.getReadyEnergy()));
         reproductionEnergy.setText(String.valueOf(configuration.getReproductionEnergy()));
+        grassInitNum.setText(String.valueOf(configuration.getGrassInitNumber()));
         grassNum.setText(String.valueOf(configuration.getGrassNum()));
         grassEnergy.setText(String.valueOf(configuration.getGrassEnergy()));
     }

@@ -17,7 +17,7 @@ public class Simulation extends AbstractSimulation implements Runnable{
             listAnimals.add(animal);
             this.map.place(animal);
         }
-        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassNum, map.getCurrentBounds(), map);
+        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassInitNum, map.getCurrentBounds(), map);
         for (Vector2d position : grassPositionGenerator) {
             Grass grass = new Grass(position);
             setGrass.add(grass);
@@ -32,16 +32,19 @@ public class Simulation extends AbstractSimulation implements Runnable{
     }
 
     private void StartSimulation() {
-        while (!shouldStop){
-            dayCycleSimulation.removeDeadAnimals();
-            dayCycleSimulation.move();
-            dayCycleSimulation.consumption();
-            dayCycleSimulation.reproduction();
-            dayCycleSimulation.grassGrowth();
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        System.out.println(shouldStop);
+        while (true){
+            if (!shouldStop){
+                dayCycleSimulation.removeDeadAnimals();
+                dayCycleSimulation.move();
+                dayCycleSimulation.consumption();
+                dayCycleSimulation.reproduction();
+                dayCycleSimulation.grassGrowth();
+                try {
+                    Thread.sleep(300);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
     }
@@ -49,9 +52,8 @@ public class Simulation extends AbstractSimulation implements Runnable{
     public void stopSimulation() {
         shouldStop = true;
     }
-    public void continueSimulation(){
+    public void continueSimulation() {
         shouldStop = false;
-        StartSimulation();
     }
     public List<Animal> getAnimalsList() {
         return listAnimals;

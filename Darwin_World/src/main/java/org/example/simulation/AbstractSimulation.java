@@ -13,6 +13,7 @@ public class AbstractSimulation {
     protected final int reproductionEnergy;
     protected final int grassEnergy;
     protected final int readyEnergy;
+    protected final int grassInitNum;
     protected final int grassNum;
     protected final int ID;
 
@@ -22,6 +23,7 @@ public class AbstractSimulation {
         this.reproductionEnergy = configuration.getReproductionEnergy();
         this.grassEnergy = configuration.getGrassEnergy();
         this.readyEnergy = configuration.getReadyEnergy();
+        this.grassInitNum = configuration.getGrassInitNumber();
         this.grassNum = configuration.getGrassNum();
         this.ID = ID;
     }
