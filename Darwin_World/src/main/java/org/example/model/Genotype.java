@@ -62,7 +62,7 @@ public class Genotype {
 
     @Override
     public String toString() {
-        return "Genotype{" + Gens + '}';
+        return Gens.toString();
     }
 
     public Gen getGens(int i) {

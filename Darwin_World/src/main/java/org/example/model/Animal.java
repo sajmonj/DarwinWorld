@@ -1,6 +1,7 @@
 package org.example.model;
 
 import org.example.data.SimulationConfiguration;
+import org.example.data.SimulationStatistics;
 
 import java.util.HashSet;
 import java.util.Random;

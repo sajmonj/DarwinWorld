@@ -1,6 +1,7 @@
 package org.example.simulation;
 
 import org.example.data.SimulationConfiguration;
+import org.example.data.SimulationStatistics;
 import org.example.model.*;
 
 
@@ -11,9 +12,9 @@ public class Simulation extends AbstractSimulation implements Runnable {
     private volatile boolean shouldStop = false;
 
     public Simulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
-        super(configuration,worldMap, ID);
+        super(configuration, worldMap, ID);
         for(int i=0; i<configuration.getAnimalsNumber(); ++i){
-            Animal animal = new Animal(configuration, i);
+            Animal animal = new Animal(configuration,i);
             listAnimals.add(animal);
             this.map.place(animal);
         }

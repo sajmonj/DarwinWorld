@@ -1,14 +1,17 @@
 package org.example.simulation;
 
 import org.example.data.SimulationConfiguration;
+import org.example.data.SimulationStatistics;
 import org.example.model.*;
 
 import java.util.*;
 
 public class AbstractSimulation {
+
     protected final WorldMap map;
     protected List<Animal> listAnimals;
     protected final Set<Grass> setGrass = new HashSet<>();
+    protected final SimulationStatistics simulationStatistics;
     protected final int animalEnergy;
     protected final int reproductionEnergy;
     protected final int grassEnergy;
@@ -27,6 +30,7 @@ public class AbstractSimulation {
         this.grassNum = configuration.getGrassNum();
         this.ID = ID;
         listAnimals = new ArrayList<>();
+        this.simulationStatistics = new SimulationStatistics(listAnimals, ID);
     }
     public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         this(configuration, worldMap, ID);
@@ -34,5 +38,9 @@ public class AbstractSimulation {
     }
     public int getID(){
         return ID;
+    }
+
+    public SimulationStatistics getSimulationStatistics() {
+        return simulationStatistics;
     }
 }

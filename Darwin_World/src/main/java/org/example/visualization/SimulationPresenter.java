@@ -11,6 +11,8 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
+import org.example.data.SimulationStatistics;
+import org.example.data.Statistics;
 import org.example.model.*;
 import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
@@ -20,7 +22,9 @@ import org.example.simulation.SimulationEngine;
 public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_SIZE = 15;
     private static final List<Simulation> simulations = new ArrayList<>();
+    private static int simulationID = 0;
     private Simulation simulation;
+    private SimulationStatistics simulationStatistics;
     @FXML
     private GridPane mapGrid;
     @FXML
@@ -37,12 +41,44 @@ public class SimulationPresenter implements MapChangeListener {
     private Label avgLife;
     @FXML
     private Label avgChildren;
+
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
+    private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
 
-    private void drawMap(WorldMap worldMap){
+    public int startSimulationPresenter(SimulationConfiguration configuration, String mapType) {
+        setOptions(configuration, mapType);
+        runStatistics();
+        increaseID();
+        try {
+            simulation = new Simulation(configuration, worldMap, simulationID);
+            simulationStatistics = simulation.getSimulationStatistics();
+
+            simulations.add(simulation);
+
+            SimulationEngine simulationEngine = new SimulationEngine(simulations);
+            simulationEngine.runAsyncInThreadPool();
+
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return simulation.getID();
+    }
+
+    public void runStatistics() {
+        mapLabelStatistics.put(Statistics.NUMBER_OF_ANIMALS, animals);
+        mapLabelStatistics.put(Statistics.FIELD_WITH_GRASS, grass);
+        mapLabelStatistics.put(Statistics.FREE_FIELDS, freeFields);
+        mapLabelStatistics.put(Statistics.MOST_POPULAR_GENOTYPE, genotype);
+        mapLabelStatistics.put(Statistics.AVG_ANIMALS_ENERGY, avgEnergy);
+        mapLabelStatistics.put(Statistics.AVG_LENGTH_OF_LIFE, avgLife);
+        mapLabelStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, avgChildren);
+    }
+
+    private void drawMap(){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Boundary currentBounds = worldMap.getCurrentBounds();
@@ -81,6 +117,7 @@ public class SimulationPresenter implements MapChangeListener {
         label.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal){
                 chosen = (Animal) worldElement;
+                mapChanged(worldMap,"");
             }
         });
     }
@@ -98,23 +135,6 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0));
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
-    }
-    private static int simulationID = 0;
-    public int startSimulationPresenter(SimulationConfiguration configuration, String mapType) {
-        setOptions(configuration, mapType);
-        increaseID();
-        try {
-            simulation = new Simulation(configuration, worldMap, simulationID);
-            simulations.add(simulation);
-
-            SimulationEngine simulationEngine = new SimulationEngine(simulations);
-            simulationEngine.runAsyncInThreadPool();
-
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return simulation.getID();
     }
 
     private void setOptions(SimulationConfiguration configuration, String mapType) {
@@ -147,7 +167,16 @@ public class SimulationPresenter implements MapChangeListener {
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(() -> {
-            drawMap(worldMap);
+            drawMap();
+            statisticsUpdate();
+        });
+    }
+
+    public void statisticsUpdate() {
+        simulationStatistics.updateStatistic();
+        Map<Statistics, Double> mapStatistics = simulationStatistics.getMapStatistics();
+        mapLabelStatistics.forEach((name, label) -> {
+            label.setText(mapStatistics.get(name).toString());
         });
     }
 }

@@ -83,9 +83,7 @@ public class SimulationConfiguration {
         return animalEnergy;
     }
 
-    public int getReadyEnergy() {
-        return readyEnergy;
-    }
+    public int getReadyEnergy() { return readyEnergy; }
 
     public int getReproductionEnergy() {
         return reproductionEnergy;
