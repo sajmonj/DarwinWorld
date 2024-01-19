@@ -42,6 +42,15 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label avgChildren;
 
+    @FXML
+    private Label animalId;
+    @FXML
+    private Label lengthOfLife;
+    @FXML
+    private Label energy;
+    @FXML
+    private Label numOfChildren;
+
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
@@ -97,10 +106,18 @@ public class SimulationPresenter implements MapChangeListener {
                 GridPane.setHalignment(label, HPos.CENTER);
                 if(chosen != null && chosen.position().equals(currentPosition.add(addVector))){
                     label.setStyle("-fx-background-color: #c9a2bf");
+                    displayAnimalStatistics(chosen);
                 }
                 addLabel(label, i, j);
             }
         }
+    }
+
+    private void displayAnimalStatistics(Animal animal) {
+        animalId.setText(Integer.toString(animal.getID()));
+        lengthOfLife.setText(Integer.toString(animal.getAge()));
+        energy.setText(Integer.toString(animal.getEnergy()));
+        numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
     }
 
     private void addLabel(Label label, int i, int j) {
