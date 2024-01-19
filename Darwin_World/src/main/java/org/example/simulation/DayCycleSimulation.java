@@ -9,34 +9,41 @@ import java.util.Set;
 
 
 public class DayCycleSimulation extends AbstractSimulation {
-    private final List<Animal> simulationAnimalsList;
     private final Set<Grass> grassSet;
     private final WorldMap map;
 
 
-    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, SimulationConfiguration configuration,
+    public DayCycleSimulation(List<Animal> animalList, Set<Grass> setGrass, SimulationConfiguration configuration,
                               WorldMap worldMap, int ID) {
-        super(configuration, worldMap, ID);
-        this.simulationAnimalsList = animalsList;
+        super(animalList, configuration, worldMap, ID);
         grassSet = setGrass;
         this.map = worldMap;
     }
 
     public void move(){
-        for(Animal animal : simulationAnimalsList){
+        for(Animal animal : listAnimals){
             map.move(animal);
         }
     }
 
     public void reproduction(){
-        map.reproduction(simulationAnimalsList);
+        map.reproduction(listAnimals);
     }
 
     public void consumption() {
         map.consumption(grassSet);
     }
+
     public void removeDeadAnimals(){
-        simulationAnimalsList.removeIf(map::removeDeadAnimals);
+        listAnimals.removeIf(map::removeDeadAnimals);
+//        for(Animal animal : listAnimals){
+//            if(map.removeDeadAnimals(animal)){
+//                listAnimals.remove(animal);
+//            }
+//            else if(animal.getEnergy() <=0){
+//                System.out.println(animal);
+//            }
+//        }
     }
 
     public void grassGrowth() {

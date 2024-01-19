@@ -6,7 +6,7 @@ import org.example.model.*;
 
 import java.util.List;
 
-public class Simulation extends AbstractSimulation implements Runnable{
+public class Simulation extends AbstractSimulation implements Runnable {
     private final DayCycleSimulation dayCycleSimulation;
     private volatile boolean shouldStop = false;
 
@@ -32,19 +32,21 @@ public class Simulation extends AbstractSimulation implements Runnable{
     }
 
     private void StartSimulation() {
-        System.out.println(shouldStop);
         while (true){
             if (!shouldStop){
+                System.out.println("List"+listAnimals);
+                System.out.println(map.getElements());
                 dayCycleSimulation.removeDeadAnimals();
                 dayCycleSimulation.move();
                 dayCycleSimulation.consumption();
                 dayCycleSimulation.reproduction();
                 dayCycleSimulation.grassGrowth();
                 try {
-                    Thread.sleep(300);
+                    Thread.sleep(400);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
+                map.mapChanged("");
             }
         }
     }

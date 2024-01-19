@@ -3,6 +3,7 @@ package org.example.model;
 import org.example.data.SimulationConfiguration;
 
 import java.util.HashSet;
+import java.util.Random;
 
 public class Animal implements WorldElement {
     private final Genotype animalGenotype;
@@ -16,17 +17,17 @@ public class Animal implements WorldElement {
     private final Animal parentA;
     private final Animal parentB;
     private final HashSet<Animal> descendants = new HashSet<>();
-
     private final SimulationConfiguration configuration;
 
     public Animal(SimulationConfiguration configuration, int ID) {
         this.configuration = configuration;
         this.ID = ID;
+        System.out.println(configuration);
         genNumbers = configuration.getGenNumbers();
         parentA = null;
         parentB = null;
         animalGenotype = new Genotype(configuration.getGenNumbers());
-        animalPosition = new Vector2d(3, 3);
+        animalPosition = generatePosition(configuration.getMapWidth(), configuration.getMapHeight());
         animalDirection = MapDirection.NORTH;
         energy = configuration.getAnimalEnergy();
         age = 0;
@@ -39,6 +40,7 @@ public class Animal implements WorldElement {
         this.animalPosition = a.position();
         this.configuration = a.configuration;
         genNumbers = configuration.getGenNumbers();
+        energy = 2*configuration.getReproductionEnergy();
         parentA = b;
         parentB = a;
         animalGenotype = new Genotype(a, b);
@@ -50,6 +52,11 @@ public class Animal implements WorldElement {
         animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
         incrementAge();
         energy--;
+    }
+
+    private Vector2d generatePosition (int x, int y) {
+        Random rand = new Random();
+        return new Vector2d(rand.nextInt(x), rand.nextInt(y));
     }
 
     public MapDirection getAnimalDirection() {
@@ -100,7 +107,7 @@ public class Animal implements WorldElement {
             case SOUTHWEST -> "SW";
             case NORTHEAST -> "NE";
             case NORTHWEST -> "NW";
-        };
+        }+" "+getEnergy() + " " + position();
     }
 
     @Override
@@ -118,5 +125,9 @@ public class Animal implements WorldElement {
 
     public void addConsumptionEnergy() {
         energy += configuration.getGrassEnergy();
+    }
+
+    public void subtractReproductionEnergy() {
+        energy -= configuration.getReproductionEnergy();
     }
 }

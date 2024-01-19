@@ -23,10 +23,24 @@ public class SimulationPresenter implements MapChangeListener {
     private Simulation simulation;
     @FXML
     private GridPane mapGrid;
+    @FXML
+    private Label animals;
+    @FXML
+    private Label grass;
+    @FXML
+    private Label freeFields;
+    @FXML
+    private Label genotype;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLife;
+    @FXML
+    private Label avgChildren;
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
 
-    private final HashSet<WorldElement> setAnimals = new HashSet<>();
+    private Animal choosen = null;
 
     private void drawMap(WorldMap worldMap){
         clearGrid();
@@ -45,6 +59,9 @@ public class SimulationPresenter implements MapChangeListener {
                     setIcon(label, worldMap.objectAt(currentPosition.add(addVector)));
                 }
                 GridPane.setHalignment(label, HPos.CENTER);
+                if(choosen != null && choosen.position().equals(currentPosition.add(addVector))){
+                    label.setStyle("-fx-background-color: #c9a2bf");
+                }
                 addLabel(label, i, j);
             }
         }
@@ -63,12 +80,9 @@ public class SimulationPresenter implements MapChangeListener {
         label.setStyle("-fx-background-color: "+ worldElement.toIcon());
         label.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal){
-                setAnimals.add(worldElement);
+                choosen = (Animal) worldElement;
             }
         });
-        if(setAnimals.contains(worldElement)){
-            label.setStyle("-fx-background-color: #c9a2bf");
-        }
     }
 
     private void addCells(int cols, int rows) {

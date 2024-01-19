@@ -14,8 +14,34 @@
     <center>
         <HBox>
             <VBox minWidth="250" alignment="CENTER_LEFT">
-                <Label fx:id="animals" text="Number of animals: "/>
-                <Label fx:id="grass" text="Fields with grass: "/>
+                <HBox>
+                    <Label text="Number of animals: " style="-fx-padding: 10"/>
+                    <Label fx:id="animals" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Fields with grass: " style="-fx-padding: 10"/>
+                    <Label fx:id="grass" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Free fields: " style="-fx-padding: 10"/>
+                    <Label fx:id="freeFields" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Most popular genotype: " style="-fx-padding: 10"/>
+                    <Label fx:id="genotype" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Avg animals energy: " style="-fx-padding: 10"/>
+                    <Label fx:id="avgEnergy" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Avg length of life: " style="-fx-padding: 10"/>
+                    <Label fx:id="avgLife" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Avg num of children: " style="-fx-padding: 10"/>
+                    <Label fx:id="avgChildren" text="-" style="-fx-padding: 10"/>
+                </HBox>
             </VBox>
             <VBox minWidth="600" alignment="CENTER">
             <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>

@@ -3,7 +3,7 @@ package org.example.model;
 import org.example.util.MapVisualizer;
 
 
-public class RectangularMap extends AbstractWorldMap{
+public class RectangularMap extends AbstractWorldMap {
     public RectangularMap(int width, int height, int Id) {
         super(Id, width, height);
         this.mapVisualizer = new MapVisualizer(this);

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class AbstractSimulation {
     protected final WorldMap map;
-    protected final List<Animal> listAnimals = new ArrayList<>();
+    protected List<Animal> listAnimals;
     protected final Set<Grass> setGrass = new HashSet<>();
     protected final int animalEnergy;
     protected final int reproductionEnergy;
@@ -26,6 +26,11 @@ public class AbstractSimulation {
         this.grassInitNum = configuration.getGrassInitNumber();
         this.grassNum = configuration.getGrassNum();
         this.ID = ID;
+        listAnimals = new ArrayList<>();
+    }
+    public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        this(configuration, worldMap, ID);
+        listAnimals = animalList;
     }
     public int getID(){
         return ID;
