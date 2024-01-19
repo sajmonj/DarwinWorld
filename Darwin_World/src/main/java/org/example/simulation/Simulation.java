@@ -34,15 +34,15 @@ public class Simulation extends AbstractSimulation implements Runnable {
     private void StartSimulation() {
         while (true){
             if (!shouldStop){
-                System.out.println("List"+listAnimals);
-                System.out.println(map.getElements());
+//                System.out.println("List"+listAnimals);
+//                System.out.println(map.getElements());
                 dayCycleSimulation.removeDeadAnimals();
                 dayCycleSimulation.move();
                 dayCycleSimulation.consumption();
                 dayCycleSimulation.reproduction();
                 dayCycleSimulation.grassGrowth();
                 try {
-                    Thread.sleep(400);
+                    Thread.sleep(500);
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

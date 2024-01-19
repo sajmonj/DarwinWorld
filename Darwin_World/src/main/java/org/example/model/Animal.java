@@ -22,7 +22,6 @@ public class Animal implements WorldElement {
     public Animal(SimulationConfiguration configuration, int ID) {
         this.configuration = configuration;
         this.ID = ID;
-        System.out.println(configuration);
         genNumbers = configuration.getGenNumbers();
         parentA = null;
         parentB = null;
@@ -107,7 +106,7 @@ public class Animal implements WorldElement {
             case SOUTHWEST -> "SW";
             case NORTHEAST -> "NE";
             case NORTHWEST -> "NW";
-        }+" "+getEnergy() + " " + position();
+        };
     }
 
     @Override

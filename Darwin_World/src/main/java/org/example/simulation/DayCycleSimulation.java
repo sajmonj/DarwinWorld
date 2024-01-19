@@ -36,14 +36,6 @@ public class DayCycleSimulation extends AbstractSimulation {
 
     public void removeDeadAnimals(){
         listAnimals.removeIf(map::removeDeadAnimals);
-//        for(Animal animal : listAnimals){
-//            if(map.removeDeadAnimals(animal)){
-//                listAnimals.remove(animal);
-//            }
-//            else if(animal.getEnergy() <=0){
-//                System.out.println(animal);
-//            }
-//        }
     }
 
     public void grassGrowth() {

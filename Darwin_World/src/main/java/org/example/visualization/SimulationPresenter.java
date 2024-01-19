@@ -40,7 +40,7 @@ public class SimulationPresenter implements MapChangeListener {
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
 
-    private Animal choosen = null;
+    private Animal chosen = null;
 
     private void drawMap(WorldMap worldMap){
         clearGrid();
@@ -59,7 +59,7 @@ public class SimulationPresenter implements MapChangeListener {
                     setIcon(label, worldMap.objectAt(currentPosition.add(addVector)));
                 }
                 GridPane.setHalignment(label, HPos.CENTER);
-                if(choosen != null && choosen.position().equals(currentPosition.add(addVector))){
+                if(chosen != null && chosen.position().equals(currentPosition.add(addVector))){
                     label.setStyle("-fx-background-color: #c9a2bf");
                 }
                 addLabel(label, i, j);
@@ -80,7 +80,7 @@ public class SimulationPresenter implements MapChangeListener {
         label.setStyle("-fx-background-color: "+ worldElement.toIcon());
         label.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal){
-                choosen = (Animal) worldElement;
+                chosen = (Animal) worldElement;
             }
         });
     }

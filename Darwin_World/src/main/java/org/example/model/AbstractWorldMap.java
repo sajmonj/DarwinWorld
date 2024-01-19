@@ -83,9 +83,6 @@ abstract class AbstractWorldMap implements WorldMap{
         b.subtractReproductionEnergy();
         place(animal);
         simulationAnimalsList.add(animal);
-
-        List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
-        objectsAtAnimalPosition.add(animal);
     }
 
     @Override
