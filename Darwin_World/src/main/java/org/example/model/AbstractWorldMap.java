@@ -13,8 +13,7 @@ abstract class AbstractWorldMap implements WorldMap{
     public Boundary getCurrentBounds() {
         return bounds;
     }
-    public abstract boolean canMoveTo(Vector2d position);
-    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector);
+    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal);
     private final int Id;
 
     public AbstractWorldMap(int id, int width, int height) {
@@ -27,6 +26,10 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
         mapElements.put(position, objectsAt);
+    }
+
+    public boolean canMoveTo(Vector2d position) {
+        return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
     }
 
     @Override

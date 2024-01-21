@@ -15,6 +15,14 @@
         <HBox>
             <VBox minWidth="250" alignment="CENTER_LEFT">
                 <HBox>
+                    <Label text="Selected map type: " style="-fx-padding: 10"/>
+                    <Label fx:id="mapType" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Selected genome type: " style="-fx-padding: 10"/>
+                    <Label fx:id="genomType" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
                     <Label text="Number of animals: " style="-fx-padding: 10"/>
                     <Label fx:id="animals" text="-" style="-fx-padding: 10"/>
                 </HBox>

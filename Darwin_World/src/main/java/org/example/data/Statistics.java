@@ -1,13 +1,15 @@
 package org.example.data;
 
 public enum Statistics {
-    NUMBER_OF_ANIMALS(0),
-    FIELD_WITH_GRASS(1),
-    FREE_FIELDS(2),
-    MOST_POPULAR_GENOTYPE(3),
-    AVG_ANIMALS_ENERGY(4),
-    AVG_LENGTH_OF_LIFE(5),
-    AVG_NUMBER_OF_CHILDREN(6);
+    MAP_TYPE(0),
+    GENOM_TYPE(1),
+    NUMBER_OF_ANIMALS(2),
+    FIELD_WITH_GRASS(3),
+    FREE_FIELDS(4),
+    MOST_POPULAR_GENOTYPE(5),
+    AVG_ANIMALS_ENERGY(6),
+    AVG_LENGTH_OF_LIFE(7),
+    AVG_NUMBER_OF_CHILDREN(8);
     private final int value;
 
     Statistics(int value) {

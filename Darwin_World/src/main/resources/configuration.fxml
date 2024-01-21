@@ -60,6 +60,16 @@
                 <Label text="Grass energy consumption"/>
             </HBox>
             <HBox spacing="10">
+                <Label text="Map type"/>
+                <Button fx:id="earth" onAction="#onEarthButtonClicked" text="Earth" />
+                <Button fx:id="hellPortal" onAction="#onHellPortalButtonClicked" text="Hell Portal" />
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Map type"/>
+                <Button fx:id="genotype" onAction="#onGenotypeButtonClicked" text="Normal genotype" />
+                <Button fx:id="backAndForward" onAction="#onBAFButtonClicked" text="Back and forward" />
+            </HBox>
+            <HBox spacing="10">
                 <Button onAction="#onSimulationStartClicked" text="Start" />
                 <Button onAction="#onSimulationLoadClicked" text="Load" />
                 <Button onAction="#onSimulationSaveClicked" text="Save" />

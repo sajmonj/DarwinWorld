@@ -11,12 +11,14 @@ public class SimulationStatistics {
     private final Map<Statistics, Double> mapStatistics = new HashMap<>();
     private final List<Animal> listAnimals;
 
-    public SimulationStatistics(List<Animal> listAnimals, int statisticID) {
+    public SimulationStatistics(List<Animal> listAnimals, int statisticID, int mapType, int genotype) {
         this.statisticID = statisticID;
         this.listAnimals = listAnimals;
         for(Statistics statistics : Statistics.values()){
             mapStatistics.put(statistics,0.0);
         }
+        mapStatistics.put(Statistics.MAP_TYPE, (double)mapType);
+        mapStatistics.put(Statistics.GENOM_TYPE, (double)genotype);
     }
     public void updateStatistic(){
         updateAnimalStatistic();

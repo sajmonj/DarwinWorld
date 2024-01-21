@@ -18,6 +18,8 @@ public class AbstractSimulation {
     protected final int readyEnergy;
     protected final int grassInitNum;
     protected final int grassNum;
+    protected final int mapType;
+    protected final int genotype;
     protected final int ID;
 
     public AbstractSimulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
@@ -28,9 +30,11 @@ public class AbstractSimulation {
         this.readyEnergy = configuration.getReadyEnergy();
         this.grassInitNum = configuration.getGrassInitNumber();
         this.grassNum = configuration.getGrassNum();
+        this.mapType = configuration.getMapType();
+        this.genotype = configuration.getGenotype();
         this.ID = ID;
         listAnimals = new ArrayList<>();
-        this.simulationStatistics = new SimulationStatistics(listAnimals, ID);
+        this.simulationStatistics = new SimulationStatistics(listAnimals, ID, mapType, genotype);
     }
     public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         this(configuration, worldMap, ID);

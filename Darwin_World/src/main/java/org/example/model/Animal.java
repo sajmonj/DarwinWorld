@@ -26,7 +26,7 @@ public class Animal implements WorldElement {
         genNumbers = configuration.getGenNumbers();
         parentA = null;
         parentB = null;
-        animalGenotype = new Genotype(configuration.getGenNumbers());
+        animalGenotype = new Genotype(configuration.getGenNumbers(), configuration.getGenotype());
         animalPosition = generatePosition(configuration.getMapWidth(), configuration.getMapHeight());
         animalDirection = MapDirection.NORTH;
         energy = configuration.getAnimalEnergy();
@@ -43,13 +43,13 @@ public class Animal implements WorldElement {
         energy = 2*configuration.getReproductionEnergy();
         parentA = b;
         parentB = a;
-        animalGenotype = new Genotype(a, b);
+        animalGenotype = new Genotype(a, b, configuration.getGenotype());
         animalDirection = MapDirection.NORTH;
     }
 
     void move(MoveValidator validator) {
         animalDirection = animalDirection.rotation(animalGenotype.nextGen());
-        animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector());
+        animalPosition = validator.moveTo(animalPosition, animalDirection.toUnitVector(), this);
         incrementAge();
         energy--;
     }
@@ -129,5 +129,9 @@ public class Animal implements WorldElement {
 
     public void subtractReproductionEnergy() {
         energy -= configuration.getReproductionEnergy();
+    }
+
+    public void kill() {
+        energy = (-1)*configuration.getGrassEnergy()-1;
     }
 }

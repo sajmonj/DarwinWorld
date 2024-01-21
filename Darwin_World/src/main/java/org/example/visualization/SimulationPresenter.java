@@ -28,6 +28,10 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private GridPane mapGrid;
     @FXML
+    private Label mapType;
+    @FXML
+    private Label genomType;
+    @FXML
     private Label animals;
     @FXML
     private Label grass;
@@ -41,7 +45,6 @@ public class SimulationPresenter implements MapChangeListener {
     private Label avgLife;
     @FXML
     private Label avgChildren;
-
     @FXML
     private Label animalId;
     @FXML
@@ -57,7 +60,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private Animal chosen = null;
 
-    public int startSimulationPresenter(SimulationConfiguration configuration, String mapType) {
+    public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
         runStatistics();
         increaseID();
@@ -78,6 +81,8 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void runStatistics() {
+        mapLabelStatistics.put(Statistics.MAP_TYPE, mapType);
+        mapLabelStatistics.put(Statistics.GENOM_TYPE, genomType);
         mapLabelStatistics.put(Statistics.NUMBER_OF_ANIMALS, animals);
         mapLabelStatistics.put(Statistics.FIELD_WITH_GRASS, grass);
         mapLabelStatistics.put(Statistics.FREE_FIELDS, freeFields);
@@ -154,12 +159,12 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getRowConstraints().clear();
     }
 
-    private void setOptions(SimulationConfiguration configuration, String mapType) {
+    private void setOptions(SimulationConfiguration configuration, int mapType) {
         //        Kiedyś bedzie działać lepiej
-        if(Objects.equals(mapType, "RectangularMap")){
-            worldMap = new RectangularMap(configuration.getMapWidth(), configuration.getMapHeight(),1);
+        if(mapType == 1){
+            worldMap = new RectangularMap(1, configuration.getMapWidth(), configuration.getMapHeight());
         }else {
-            worldMap = new RectangularMap(configuration.getMapWidth(), configuration.getMapHeight(),2);
+            worldMap = new HellPortal(2, configuration.getMapWidth(), configuration.getMapHeight());
         }
         worldMap.registerObserver(this);
         this.configuration = configuration;
@@ -193,7 +198,25 @@ public class SimulationPresenter implements MapChangeListener {
         simulationStatistics.updateStatistic();
         Map<Statistics, Double> mapStatistics = simulationStatistics.getMapStatistics();
         mapLabelStatistics.forEach((name, label) -> {
-            label.setText(mapStatistics.get(name).toString());
+            if(name == Statistics.MAP_TYPE) {
+                if(mapStatistics.get(name) == 1) {
+                    label.setText("Earth");
+                }
+                else {
+                    label.setText(("Hell Portal"));
+                }
+            }
+            else if(name == Statistics.GENOM_TYPE) {
+                if(mapStatistics.get(name) == 1) {
+                    label.setText("Normal genome");
+                }
+                else {
+                    label.setText(("Back and Forward"));
+                }
+            }
+            else {
+                label.setText(mapStatistics.get(name).toString());
+            }
         });
     }
 }

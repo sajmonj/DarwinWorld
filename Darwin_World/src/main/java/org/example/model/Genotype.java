@@ -8,16 +8,30 @@ import static java.lang.Math.max;
 
 public class Genotype {
 
-    private int currentGen = -1;
+    private int currentGen;
     private int genNumbers;
+    private int selectedType;
+    private int genotypeDirection;
     private List<Gen> Gens;
 
-    public Genotype(int genNumbers){
+    public Genotype(int genNumbers, int genotype){
+        selectedType = genotype;
+        if(genotype == 1) {
+            genotypeDirection = 1;
+            currentGen = -1;
+        }
+        else if(genotype == 2) {
+            genotypeDirection = -1;
+            currentGen = 1;
+        }
         newGenotype(genNumbers);
         genotypeGenerate();
     }
 
-    public Genotype (Animal a, Animal b){
+    public Genotype (Animal a, Animal b, int genotype){
+        selectedType = genotype;
+        if(genotype == 1) genotypeDirection = 1;
+        else if(genotype == 2) genotypeDirection = -1;
         newGenotype(a.getGenNumbers());
         inheritGenotype(a, b);
     }
@@ -52,7 +66,12 @@ public class Genotype {
         IntStream.range(0, genNumbers).forEach(i -> Gens.add(values.get(random.nextInt(values.size()))));
     }
     public Gen nextGen(){
-        currentGen += 1;
+        if(selectedType == 2) {
+            if(currentGen == 0 || currentGen == genNumbers-1) {
+                genotypeDirection *= (-1);
+            }
+        }
+        currentGen += genotypeDirection;
         return Gens.get(currentGen%genNumbers);
     }
 
