@@ -1,7 +1,6 @@
 package org.example.simulation;
 
 import org.example.data.SimulationConfiguration;
-import org.example.data.SimulationStatistics;
 import org.example.model.*;
 
 
@@ -35,9 +34,7 @@ public class Simulation extends AbstractSimulation implements Runnable {
     private void StartSimulation() {
         while (true){
             if (!shouldStop){
-//                System.out.println("List"+listAnimals);
-//                System.out.println(map.getElements());
-                dayCycleSimulation.removeDeadAnimals();
+                dayCycleSimulation.removeDeadAnimals(day);
                 dayCycleSimulation.move();
                 dayCycleSimulation.consumption();
                 dayCycleSimulation.reproduction();
@@ -47,7 +44,8 @@ public class Simulation extends AbstractSimulation implements Runnable {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                map.mapChanged("");
+                map.mapChanged(day);
+                day++;
             }
         }
     }

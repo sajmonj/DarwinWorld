@@ -26,7 +26,7 @@ public interface WorldMap extends MoveValidator {
      *
      * @param animal The animal to remove for the map.
      */
-    boolean removeDeadAnimals(Animal animal);
+    void removeDeadAnimals(Animal animal, int day);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
@@ -66,5 +66,5 @@ public interface WorldMap extends MoveValidator {
 
     void consumption(Set<Grass> grassSet);
 
-    void mapChanged(String message);
+    void mapChanged(int day);
 }

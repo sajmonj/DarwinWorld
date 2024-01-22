@@ -78,6 +78,10 @@ public class ConfigurationPresenter {
         creatConfiguration();
         configuration.load();
         updateConfiguration();
+        if (selectedMapType == 1) onEarthButtonClicked();
+        else if (selectedMapType == 2) onHellPortalButtonClicked();
+        if (selectedGenotype == 1) onGenotypeButtonClicked();
+        else if (selectedGenotype == 2) onBAFButtonClicked();
     }
     @FXML
     public void onEarthButtonClicked(){

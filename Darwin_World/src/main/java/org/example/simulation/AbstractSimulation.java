@@ -9,6 +9,7 @@ import java.util.*;
 public class AbstractSimulation {
 
     protected final WorldMap map;
+    protected Integer day;
     protected List<Animal> listAnimals;
     protected final Set<Grass> setGrass = new HashSet<>();
     protected final SimulationStatistics simulationStatistics;
@@ -34,6 +35,7 @@ public class AbstractSimulation {
         this.genotype = configuration.getGenotype();
         this.ID = ID;
         listAnimals = new ArrayList<>();
+        day = 1;
         this.simulationStatistics = new SimulationStatistics(listAnimals, ID, mapType, genotype);
     }
     public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
