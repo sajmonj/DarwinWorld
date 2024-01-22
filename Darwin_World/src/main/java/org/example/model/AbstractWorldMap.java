@@ -13,13 +13,12 @@ abstract class AbstractWorldMap implements WorldMap{
     public Boundary getCurrentBounds() {
         return bounds;
     }
-    public abstract boolean canMoveTo(Vector2d position);
-    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector);
+    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal);
     private final int Id;
 
     public AbstractWorldMap(int id, int width, int height) {
         Id = id;
-        bounds = new Boundary(new Vector2d(0,0),new Vector2d(width, height));
+        bounds = new Boundary(new Vector2d(1,1),new Vector2d(width, height));
     }
     @Override
     public void place(WorldElement element) {
@@ -27,9 +26,10 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
         mapElements.put(position, objectsAt);
-        if(element.getClass().equals(Animal.class)){
-            mapChanged("Place animal, position: " + position);
-        }
+    }
+
+    public boolean canMoveTo(Vector2d position) {
+        return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
     }
 
     @Override
@@ -42,7 +42,6 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAtOldPosition = mapElements.get(oldPosition);
         objectsAtOldPosition.remove(animal);
         mapElements.put(newPosition, objectsAt);
-        mapChanged("Move "+ animal.getName() + "from: " + oldPosition + " to: " + newPosition + " direction: "+ animal.getAnimalDirection());
     }
 
     @Override
@@ -50,7 +49,6 @@ abstract class AbstractWorldMap implements WorldMap{
         if(animal.getEnergy() <= 0){
             List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
             objectsAtAnimalPosition.remove(animal);
-            mapChanged("Dead: " + animal.getName());
             return true;
         }
         return false;
@@ -73,10 +71,9 @@ abstract class AbstractWorldMap implements WorldMap{
 
         AnimalComparator animalComparator = new AnimalComparator();
         mapAnimals.forEach((position, elements) -> {
-
             if(elements.size()>1){
                 elements.sort(animalComparator);
-                bornAnimal(elements.get(0), elements.get(1), simulationAnimalsList);
+                if(elements.get(1).getEnergy() >= 8)bornAnimal(elements.get(0), elements.get(1), simulationAnimalsList);
             }
         });
     }
@@ -85,6 +82,8 @@ abstract class AbstractWorldMap implements WorldMap{
         Animal animal =  new Animal(a,b, simulationAnimalsList.size());
         a.increaseNumberOfChildren();
         b.increaseNumberOfChildren();
+        a.subtractReproductionEnergy();
+        b.subtractReproductionEnergy();
         place(animal);
         simulationAnimalsList.add(animal);
     }
@@ -117,8 +116,6 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAtGrassPosition = mapElements.get(grass.position());
         objectsAtGrassPosition.remove(grass);
 
-        mapChanged(animal.getName() + " ate grass on position: " + grass.position());
-
         animal.addConsumptionEnergy();
     }
 
@@ -150,7 +147,7 @@ abstract class AbstractWorldMap implements WorldMap{
         observers.remove(observer);
     }
 
-    protected void mapChanged(String message) {
+    public void mapChanged(String message) {
         for (MapChangeListener observer : observers) {
             observer.mapChanged(this, message);
         }

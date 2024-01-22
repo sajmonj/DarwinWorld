@@ -7,10 +7,13 @@ public class AnimalComparator implements Comparator<Animal> {
     public int compare(Animal a, Animal b) {
         if(a.getEnergy() == b.getEnergy()){
             if (a.getAge() == b.getAge()){
-                return Integer.compare(a.getID(),b.getID());
+                if (a.getNumOfChildren() == b.getNumOfChildren()) {
+                    return Integer.compare(b.getID(), a.getID());
+                }
+                return Integer.compare(b.getNumOfChildren(), a.getNumOfChildren());
             }
-            return Integer.compare(a.getAge(),b.getAge());
+            return Integer.compare(b.getAge(),a.getAge());
         }
-        return Integer.compare(a.getEnergy(), b.getEnergy());
+        return Integer.compare(b.getEnergy(), a.getEnergy());
     }
 }

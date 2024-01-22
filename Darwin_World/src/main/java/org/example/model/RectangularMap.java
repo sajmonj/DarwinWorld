@@ -2,24 +2,17 @@ package org.example.model;
 
 import org.example.util.MapVisualizer;
 
+import java.util.List;
 
-public class RectangularMap extends AbstractWorldMap{
-    public RectangularMap(int width, int height, int Id) {
-        super(Id, width, height);
+
+public class RectangularMap extends AbstractWorldMap {
+    public RectangularMap(int id, int width, int height) {
+        super(id, width, height);
         this.mapVisualizer = new MapVisualizer(this);
     }
 
-    public boolean canMoveTo(Vector2d position) {
-        return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
-    }
-
     @Override
-    public boolean isOccupied(Vector2d position) {
-        return super.isOccupied(position);
-    }
-
-    @Override
-    public Vector2d moveTo(Vector2d position, Vector2d directionVector) {
+    public Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal) {
         if(canMoveTo(position.add(directionVector))){
             return position.add(directionVector);
         }

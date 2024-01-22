@@ -1,5 +1,7 @@
 package org.example.model;
 
+import org.example.data.SimulationStatistics;
+
 public class ConsoleMapDisplay implements  MapChangeListener{
     private int totalUpdates = 0;
 

@@ -3,6 +3,7 @@ package org.example.visualization;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -28,10 +29,21 @@ public class ConfigurationPresenter {
     @FXML
     private TextField reproductionEnergy;
     @FXML
+    private TextField grassInitNum;
+    @FXML
     private TextField grassNum;
     @FXML
     private TextField grassEnergy;
-
+    @FXML
+    private Button earth;
+    @FXML
+    private Button hellPortal;
+    @FXML
+    private Button genotype;
+    @FXML
+    private Button backAndForward;
+    private int selectedMapType;
+    private int selectedGenotype;
     private SimulationConfiguration configuration = null;
 
     @FXML
@@ -42,7 +54,7 @@ public class ConfigurationPresenter {
             BorderPane simulationWindow = loader.load();
 
             SimulationPresenter simulationPresenter = loader.getController();
-            int ID = simulationPresenter.startSimulationPresenter(configuration, "RectangularMap");
+            int ID = simulationPresenter.startSimulationPresenter(configuration, selectedMapType);
             Stage stage = new Stage();
             stage.setTitle("Simulation "+ID);
 
@@ -67,6 +79,39 @@ public class ConfigurationPresenter {
         configuration.load();
         updateConfiguration();
     }
+    @FXML
+    public void onEarthButtonClicked(){
+        selectedMapType = 1;
+        setButtonStyle(earth, true);
+        setButtonStyle(hellPortal, false);
+    }
+    @FXML
+    public void onHellPortalButtonClicked(){
+        selectedMapType = 2;
+        setButtonStyle(hellPortal, true);
+        setButtonStyle(earth, false);
+    }
+
+    @FXML
+    public void onGenotypeButtonClicked(){
+        selectedGenotype = 1;
+        setButtonStyle(genotype, true);
+        setButtonStyle(backAndForward, false);
+    }
+    @FXML
+    public void onBAFButtonClicked(){
+        selectedGenotype = 2;
+        setButtonStyle(backAndForward, true);
+        setButtonStyle(genotype, false);
+    }
+
+    private void setButtonStyle(Button button, boolean isActive) {
+        if (isActive) {
+            button.setStyle("-fx-background-color: lightblue; -fx-font-weight: bold;");
+        } else {
+            button.setStyle("");
+        }
+    }
 
     private void creatConfiguration() {
         if(configuration == null){
@@ -83,11 +128,14 @@ public class ConfigurationPresenter {
         int energy = Integer.parseInt(animalEnergy.getText());
         int readyEnergyValue = Integer.parseInt(readyEnergy.getText());
         int reproductionEnergyValue = Integer.parseInt(reproductionEnergy.getText());
+        int grassInitNumber = Integer.parseInt(grassInitNum.getText());
         int grassNumber = Integer.parseInt(grassNum.getText());
         int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
+        int mapType = selectedMapType;
+        int genotype = selectedGenotype;
 
         configuration.update(height, width, animals, generations, energy, readyEnergyValue,
-                reproductionEnergyValue, grassNumber, grassEnergyValue);
+                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, mapType, genotype );
     }
     private void updateConfiguration(){
         mapHeight.setText(String.valueOf(configuration.getMapHeight()));
@@ -97,7 +145,10 @@ public class ConfigurationPresenter {
         animalEnergy.setText(String.valueOf(configuration.getAnimalEnergy()));
         readyEnergy.setText(String.valueOf(configuration.getReadyEnergy()));
         reproductionEnergy.setText(String.valueOf(configuration.getReproductionEnergy()));
+        grassInitNum.setText(String.valueOf(configuration.getGrassInitNumber()));
         grassNum.setText(String.valueOf(configuration.getGrassNum()));
         grassEnergy.setText(String.valueOf(configuration.getGrassEnergy()));
+        selectedMapType = configuration.getMapType();
+        selectedGenotype = configuration.getGenotype();
     }
 }

@@ -11,6 +11,8 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
+import org.example.data.SimulationStatistics;
+import org.example.data.Statistics;
 import org.example.model.*;
 import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
@@ -20,15 +22,77 @@ import org.example.simulation.SimulationEngine;
 public class SimulationPresenter implements MapChangeListener {
     private static final int CELL_SIZE = 15;
     private static final List<Simulation> simulations = new ArrayList<>();
+    private static int simulationID = 0;
     private Simulation simulation;
+    private SimulationStatistics simulationStatistics;
     @FXML
     private GridPane mapGrid;
+    @FXML
+    private Label mapType;
+    @FXML
+    private Label genomType;
+    @FXML
+    private Label animals;
+    @FXML
+    private Label grass;
+    @FXML
+    private Label freeFields;
+    @FXML
+    private Label genotype;
+    @FXML
+    private Label avgEnergy;
+    @FXML
+    private Label avgLife;
+    @FXML
+    private Label avgChildren;
+    @FXML
+    private Label animalId;
+    @FXML
+    private Label lengthOfLife;
+    @FXML
+    private Label energy;
+    @FXML
+    private Label numOfChildren;
+
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
+    private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
-    private final HashSet<WorldElement> setAnimals = new HashSet<>();
+    private Animal chosen = null;
 
-    private void drawMap(WorldMap worldMap){
+    public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
+        setOptions(configuration, mapType);
+        runStatistics();
+        increaseID();
+        try {
+            simulation = new Simulation(configuration, worldMap, simulationID);
+            simulationStatistics = simulation.getSimulationStatistics();
+
+            simulations.add(simulation);
+
+            SimulationEngine simulationEngine = new SimulationEngine(simulations);
+            simulationEngine.runAsyncInThreadPool();
+
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        }
+        return simulation.getID();
+    }
+
+    public void runStatistics() {
+        mapLabelStatistics.put(Statistics.MAP_TYPE, mapType);
+        mapLabelStatistics.put(Statistics.GENOM_TYPE, genomType);
+        mapLabelStatistics.put(Statistics.NUMBER_OF_ANIMALS, animals);
+        mapLabelStatistics.put(Statistics.FIELD_WITH_GRASS, grass);
+        mapLabelStatistics.put(Statistics.FREE_FIELDS, freeFields);
+        mapLabelStatistics.put(Statistics.MOST_POPULAR_GENOTYPE, genotype);
+        mapLabelStatistics.put(Statistics.AVG_ANIMALS_ENERGY, avgEnergy);
+        mapLabelStatistics.put(Statistics.AVG_LENGTH_OF_LIFE, avgLife);
+        mapLabelStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, avgChildren);
+    }
+
+    private void drawMap(){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Boundary currentBounds = worldMap.getCurrentBounds();
@@ -45,9 +109,20 @@ public class SimulationPresenter implements MapChangeListener {
                     setIcon(label, worldMap.objectAt(currentPosition.add(addVector)));
                 }
                 GridPane.setHalignment(label, HPos.CENTER);
+                if(chosen != null && chosen.position().equals(currentPosition.add(addVector))){
+                    label.setStyle("-fx-background-color: #c9a2bf");
+                    displayAnimalStatistics(chosen);
+                }
                 addLabel(label, i, j);
             }
         }
+    }
+
+    private void displayAnimalStatistics(Animal animal) {
+        animalId.setText(Integer.toString(animal.getID()));
+        lengthOfLife.setText(Integer.toString(animal.getAge()));
+        energy.setText(Integer.toString(animal.getEnergy()));
+        numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
     }
 
     private void addLabel(Label label, int i, int j) {
@@ -63,12 +138,10 @@ public class SimulationPresenter implements MapChangeListener {
         label.setStyle("-fx-background-color: "+ worldElement.toIcon());
         label.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal){
-                setAnimals.add(worldElement);
+                chosen = (Animal) worldElement;
+                mapChanged(worldMap,"");
             }
         });
-        if(setAnimals.contains(worldElement)){
-            label.setStyle("-fx-background-color: #c9a2bf");
-        }
     }
 
     private void addCells(int cols, int rows) {
@@ -85,32 +158,13 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.getColumnConstraints().clear();
         mapGrid.getRowConstraints().clear();
     }
-    private static int simulationID = 0;
-    public int startSimulationPresenter(SimulationConfiguration configuration, String mapType) {
-        setOptions(configuration, mapType);
-        increaseID();
-        try {
-            simulation = new Simulation(configuration.getAnimalsNumber(), configuration.getGenNumbers(), worldMap,
-                    configuration.getAnimalEnergy(), configuration.getReadyEnergy(), configuration.getReproductionEnergy(),
-                    configuration.getGrassEnergy(), configuration.getGrassNum(), simulationID);
-            simulations.add(simulation);
 
-            SimulationEngine simulationEngine = new SimulationEngine(simulations);
-            simulationEngine.runAsyncInThreadPool();
-
-
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        }
-        return simulation.getID();
-    }
-
-    private void setOptions(SimulationConfiguration configuration, String mapType) {
+    private void setOptions(SimulationConfiguration configuration, int mapType) {
         //        Kiedyś bedzie działać lepiej
-        if(Objects.equals(mapType, "RectangularMap")){
-            worldMap = new RectangularMap(configuration.getMapWidth(), configuration.getMapHeight(),1);
+        if(mapType == 1){
+            worldMap = new RectangularMap(1, configuration.getMapWidth(), configuration.getMapHeight());
         }else {
-            worldMap = new RectangularMap(configuration.getMapWidth(), configuration.getMapHeight(),2);
+            worldMap = new HellPortal(2, configuration.getMapWidth(), configuration.getMapHeight());
         }
         worldMap.registerObserver(this);
         this.configuration = configuration;
@@ -127,14 +181,42 @@ public class SimulationPresenter implements MapChangeListener {
         simulation.continueSimulation();
     }
 
-    @FXML void onStopClicked(){
+    @FXML
+    public void onStopClicked(){
         simulation.stopSimulation();
     }
 
     @Override
     public void mapChanged(WorldMap worldMap, String message) {
         Platform.runLater(() -> {
-            drawMap(worldMap);
+            drawMap();
+            statisticsUpdate();
+        });
+    }
+
+    public void statisticsUpdate() {
+        simulationStatistics.updateStatistic();
+        Map<Statistics, Double> mapStatistics = simulationStatistics.getMapStatistics();
+        mapLabelStatistics.forEach((name, label) -> {
+            if(name == Statistics.MAP_TYPE) {
+                if(mapStatistics.get(name) == 1) {
+                    label.setText("Earth");
+                }
+                else {
+                    label.setText(("Hell Portal"));
+                }
+            }
+            else if(name == Statistics.GENOM_TYPE) {
+                if(mapStatistics.get(name) == 1) {
+                    label.setText("Normal genome");
+                }
+                else {
+                    label.setText(("Back and Forward"));
+                }
+            }
+            else {
+                label.setText(mapStatistics.get(name).toString());
+            }
         });
     }
 }

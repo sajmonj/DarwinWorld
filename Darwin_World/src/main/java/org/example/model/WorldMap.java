@@ -65,4 +65,6 @@ public interface WorldMap extends MoveValidator {
     void reproduction(List<Animal> simulationAnimalsList);
 
     void consumption(Set<Grass> grassSet);
+
+    void mapChanged(String message);
 }

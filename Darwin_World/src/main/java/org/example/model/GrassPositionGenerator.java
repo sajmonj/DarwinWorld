@@ -8,6 +8,7 @@ import java.util.Random;
 import static java.lang.Math.sqrt;
 
 public class GrassPositionGenerator implements Iterable<Vector2d> {
+    private static final int EQUATORMULTIPLIER = 16;
     private final List<Vector2d> grids = new ArrayList<>();
     private final List<Vector2d> selectedGrids = new ArrayList<>();
     private final int howManyToGenerate;
@@ -36,7 +37,7 @@ public class GrassPositionGenerator implements Iterable<Vector2d> {
                     grids.add(position);
                     if (y >= (boundaries.upperRight().getY() / 2 - boundaries.upperRight().getY() * 0.2 / 2)
                             && y <= (boundaries.upperRight().getY() / 2 + boundaries.upperRight().getY() * 0.2 / 2)) {
-                        for (int i = 0; i < 16; i++) {
+                        for (int i = 0; i < EQUATORMULTIPLIER; i++) {
                             grids.add(position);
                         }
                     }
@@ -52,6 +53,7 @@ public class GrassPositionGenerator implements Iterable<Vector2d> {
             grids.removeIf(selectedGrid::equals);
         }
     }
+
     @Override
     public Iterator<Vector2d> iterator() {
         return this.selectedGrids.iterator();

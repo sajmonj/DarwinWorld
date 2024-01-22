@@ -1,30 +1,30 @@
 package org.example.simulation;
 
+import org.example.data.SimulationConfiguration;
+import org.example.data.SimulationStatistics;
 import org.example.model.*;
 
 
 import java.util.List;
 
-public class Simulation extends AbstractSimulation implements Runnable{
+public class Simulation extends AbstractSimulation implements Runnable {
     private final DayCycleSimulation dayCycleSimulation;
     private volatile boolean shouldStop = false;
 
-    public Simulation(int animalsNumber,int genNumbers, WorldMap map, int animalEnergy, int readyEnergy,
-                      int reproductionEnergy, int grassEnergy, int grassNum, int ID) {
-        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum, ID);
-        for(int i=0; i<animalsNumber; ++i){
-            Animal animal = new Animal(genNumbers, i, animalEnergy);
+    public Simulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        super(configuration, worldMap, ID);
+        for(int i=0; i<configuration.getAnimalsNumber(); ++i){
+            Animal animal = new Animal(configuration,i);
             listAnimals.add(animal);
             this.map.place(animal);
         }
-        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassNum, map.getCurrentBounds(), map);
+        GrassPositionGenerator grassPositionGenerator = new GrassPositionGenerator(grassInitNum, map.getCurrentBounds(), map);
         for (Vector2d position : grassPositionGenerator) {
             Grass grass = new Grass(position);
             setGrass.add(grass);
             this.map.place(grass);
         }
-        dayCycleSimulation = new DayCycleSimulation(listAnimals, setGrass, map, animalEnergy, reproductionEnergy,
-                grassEnergy, readyEnergy, grassNum, ID);
+        dayCycleSimulation = new DayCycleSimulation(listAnimals, setGrass, configuration, worldMap, ID);
     }
 
     @Override
@@ -33,16 +33,21 @@ public class Simulation extends AbstractSimulation implements Runnable{
     }
 
     private void StartSimulation() {
-        while (!shouldStop){
-            dayCycleSimulation.removeDeadAnimals();
-            dayCycleSimulation.move();
-            dayCycleSimulation.consumption();
-            dayCycleSimulation.reproduction();
-            dayCycleSimulation.grassGrowth();
-            try {
-                Thread.sleep(300);
-            } catch (InterruptedException e) {
-                throw new RuntimeException(e);
+        while (true){
+            if (!shouldStop){
+//                System.out.println("List"+listAnimals);
+//                System.out.println(map.getElements());
+                dayCycleSimulation.removeDeadAnimals();
+                dayCycleSimulation.move();
+                dayCycleSimulation.consumption();
+                dayCycleSimulation.reproduction();
+                dayCycleSimulation.grassGrowth();
+                try {
+                    Thread.sleep(200);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                map.mapChanged("");
             }
         }
     }
@@ -50,9 +55,8 @@ public class Simulation extends AbstractSimulation implements Runnable{
     public void stopSimulation() {
         shouldStop = true;
     }
-    public void continueSimulation(){
+    public void continueSimulation() {
         shouldStop = false;
-        StartSimulation();
     }
     public List<Animal> getAnimalsList() {
         return listAnimals;

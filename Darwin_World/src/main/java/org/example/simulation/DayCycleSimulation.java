@@ -1,5 +1,7 @@
 package org.example.simulation;
 
+import org.example.data.SimulationConfiguration;
+import org.example.data.SimulationStatistics;
 import org.example.model.*;
 import org.example.simulation.AbstractSimulation;
 
@@ -8,34 +10,33 @@ import java.util.Set;
 
 
 public class DayCycleSimulation extends AbstractSimulation {
-    private final List<Animal> simulationAnimalsList;
     private final Set<Grass> grassSet;
     private final WorldMap map;
 
 
-    public DayCycleSimulation(List<Animal> animalsList, Set<Grass> setGrass, WorldMap map, int animalEnergy,
-                              int reproductionEnergy, int grassEnergy, int readyEnergy, int grassNum, int ID) {
-        super(map, animalEnergy, reproductionEnergy, grassEnergy, readyEnergy, grassNum, ID);
-        this.simulationAnimalsList = animalsList;
+    public DayCycleSimulation(List<Animal> animalList, Set<Grass> setGrass,
+                              SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        super(animalList, configuration, worldMap, ID);
         grassSet = setGrass;
-        this.map = map;
+        this.map = worldMap;
     }
 
     public void move(){
-        for(Animal animal : simulationAnimalsList){
+        for(Animal animal : listAnimals){
             map.move(animal);
         }
     }
 
     public void reproduction(){
-        map.reproduction(simulationAnimalsList);
+        map.reproduction(listAnimals);
     }
 
     public void consumption() {
         map.consumption(grassSet);
     }
+
     public void removeDeadAnimals(){
-        simulationAnimalsList.removeIf(map::removeDeadAnimals);
+        listAnimals.removeIf(map::removeDeadAnimals);
     }
 
     public void grassGrowth() {
