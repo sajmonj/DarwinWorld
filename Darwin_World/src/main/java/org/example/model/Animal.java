@@ -4,6 +4,7 @@ import org.example.data.SimulationConfiguration;
 import org.example.data.SimulationStatistics;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Random;
 
 public class Animal implements WorldElement {
@@ -15,8 +16,10 @@ public class Animal implements WorldElement {
     private int numOfChildren;
     private int age;
     private final int ID;
+    private Integer dayOfDeath;
     private final Animal parentA;
     private final Animal parentB;
+
     private final HashSet<Animal> descendants = new HashSet<>();
     private final SimulationConfiguration configuration;
 
@@ -26,9 +29,11 @@ public class Animal implements WorldElement {
         genNumbers = configuration.getGenNumbers();
         parentA = null;
         parentB = null;
+        dayOfDeath = null;
         animalGenotype = new Genotype(configuration.getGenNumbers(), configuration.getGenotype());
         animalPosition = generatePosition(configuration.getMapWidth(), configuration.getMapHeight());
-        animalDirection = MapDirection.NORTH;
+        animalDirection=generateOrientation();
+        System.out.println("AnimalDirection " + animalDirection);
         energy = configuration.getAnimalEnergy();
         age = 0;
         numOfChildren = 0;
@@ -43,8 +48,9 @@ public class Animal implements WorldElement {
         energy = 2*configuration.getReproductionEnergy();
         parentA = b;
         parentB = a;
+        dayOfDeath = null;
         animalGenotype = new Genotype(a, b, configuration.getGenotype());
-        animalDirection = MapDirection.NORTH;
+        animalDirection = generateOrientation();
     }
 
     void move(MoveValidator validator) {
@@ -57,6 +63,12 @@ public class Animal implements WorldElement {
     private Vector2d generatePosition (int x, int y) {
         Random rand = new Random();
         return new Vector2d(rand.nextInt(x), rand.nextInt(y));
+    }
+
+    private MapDirection generateOrientation() {
+        Random rand = new Random();
+        MapDirection[] directions = MapDirection.values();
+        return directions[rand.nextInt(directions.length)];
     }
 
     public MapDirection getAnimalDirection() {
@@ -96,9 +108,18 @@ public class Animal implements WorldElement {
         numOfChildren++;
     }
 
+    public void setDayOfDeath(Integer dayOfDeath) {
+//        System.out.println(getID() + " " + dayOfDeath);
+        this.dayOfDeath = dayOfDeath;
+    }
+
+    public Optional<Integer> getDayOfDeath() {
+        return Optional.ofNullable(dayOfDeath);
+    }
+
     @Override
     public String toString() {
-        return switch (animalDirection) {
+        return getID()+ " " +switch (animalDirection) {
             case EAST -> "E";
             case WEST -> "W";
             case NORTH -> "N";
@@ -107,7 +128,7 @@ public class Animal implements WorldElement {
             case SOUTHWEST -> "SW";
             case NORTHEAST -> "NE";
             case NORTHWEST -> "NW";
-        };
+        } + getEnergy();
     }
 
     @Override

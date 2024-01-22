@@ -65,7 +65,7 @@
                 <Button fx:id="hellPortal" onAction="#onHellPortalButtonClicked" text="Hell Portal" />
             </HBox>
             <HBox spacing="10">
-                <Label text="Map type"/>
+                <Label text="Genotype"/>
                 <Button fx:id="genotype" onAction="#onGenotypeButtonClicked" text="Normal genotype" />
                 <Button fx:id="backAndForward" onAction="#onBAFButtonClicked" text="Back and forward" />
             </HBox>

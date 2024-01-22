@@ -45,13 +45,14 @@ abstract class AbstractWorldMap implements WorldMap{
     }
 
     @Override
-    public boolean removeDeadAnimals(Animal animal) {
-        if(animal.getEnergy() <= 0){
+    public void removeDeadAnimals(Animal animal, int day) {
+        if(animal.getEnergy() <= 0 && animal.getDayOfDeath().isEmpty()){
+            System.out.println(animal.getID());
+            animal.setDayOfDeath(day);
             List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
             objectsAtAnimalPosition.remove(animal);
-            return true;
+            System.out.println(objectsAtAnimalPosition);
         }
-        return false;
     }
 
     @Override
@@ -147,9 +148,9 @@ abstract class AbstractWorldMap implements WorldMap{
         observers.remove(observer);
     }
 
-    public void mapChanged(String message) {
+    public void mapChanged(int day) {
         for (MapChangeListener observer : observers) {
-            observer.mapChanged(this, message);
+            observer.mapChanged(this, day);
         }
     }
 }

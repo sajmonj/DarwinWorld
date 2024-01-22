@@ -23,7 +23,7 @@ public class DayCycleSimulation extends AbstractSimulation {
 
     public void move(){
         for(Animal animal : listAnimals){
-            map.move(animal);
+            if(animal.getDayOfDeath().isEmpty()) map.move(animal);
         }
     }
 
@@ -35,8 +35,8 @@ public class DayCycleSimulation extends AbstractSimulation {
         map.consumption(grassSet);
     }
 
-    public void removeDeadAnimals(){
-        listAnimals.removeIf(map::removeDeadAnimals);
+    public void removeDeadAnimals(int day) {
+        listAnimals.forEach(animal -> map.removeDeadAnimals(animal, day));
     }
 
     public void grassGrowth() {

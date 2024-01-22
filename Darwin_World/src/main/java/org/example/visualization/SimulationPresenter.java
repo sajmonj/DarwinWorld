@@ -32,7 +32,11 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label genomType;
     @FXML
-    private Label animals;
+    private Label day;
+    @FXML
+    private Label allAnimals;
+    @FXML
+    private Label livingAnimals;
     @FXML
     private Label grass;
     @FXML
@@ -53,6 +57,8 @@ public class SimulationPresenter implements MapChangeListener {
     private Label energy;
     @FXML
     private Label numOfChildren;
+    @FXML
+    private Label deathDate;
 
     private WorldMap worldMap;
     private SimulationConfiguration configuration;
@@ -81,9 +87,11 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void runStatistics() {
+        mapLabelStatistics.put(Statistics.DAY, day);
         mapLabelStatistics.put(Statistics.MAP_TYPE, mapType);
         mapLabelStatistics.put(Statistics.GENOM_TYPE, genomType);
-        mapLabelStatistics.put(Statistics.NUMBER_OF_ANIMALS, animals);
+        mapLabelStatistics.put(Statistics.NUMBER_OF_ALL_ANIMALS, allAnimals);
+        mapLabelStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, livingAnimals);
         mapLabelStatistics.put(Statistics.FIELD_WITH_GRASS, grass);
         mapLabelStatistics.put(Statistics.FREE_FIELDS, freeFields);
         mapLabelStatistics.put(Statistics.MOST_POPULAR_GENOTYPE, genotype);
@@ -92,7 +100,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapLabelStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, avgChildren);
     }
 
-    private void drawMap(){
+    private void drawMap(int day){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Boundary currentBounds = worldMap.getCurrentBounds();
@@ -106,7 +114,7 @@ public class SimulationPresenter implements MapChangeListener {
                 Label label = new Label();
 
                 if(worldMap.isOccupied(currentPosition.add(addVector))){
-                    setIcon(label, worldMap.objectAt(currentPosition.add(addVector)));
+                    setIcon(label, worldMap.objectAt(currentPosition.add(addVector)), day);
                 }
                 GridPane.setHalignment(label, HPos.CENTER);
                 if(chosen != null && chosen.position().equals(currentPosition.add(addVector))){
@@ -123,6 +131,10 @@ public class SimulationPresenter implements MapChangeListener {
         lengthOfLife.setText(Integer.toString(animal.getAge()));
         energy.setText(Integer.toString(animal.getEnergy()));
         numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
+        if(animal.getDayOfDeath().isPresent()) {
+            deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
+        }
+        else deathDate.setText("-");
     }
 
     private void addLabel(Label label, int i, int j) {
@@ -133,13 +145,13 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.add(label, i, j);
     }
 
-    private void setIcon(Label label, List<WorldElement> worldElements) {
+    private void setIcon(Label label, List<WorldElement> worldElements, int day) {
         WorldElement worldElement = worldElements.get(0);
         label.setStyle("-fx-background-color: "+ worldElement.toIcon());
         label.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal){
                 chosen = (Animal) worldElement;
-                mapChanged(worldMap,"");
+                mapChanged(worldMap, day);
             }
         });
     }
@@ -187,15 +199,15 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     @Override
-    public void mapChanged(WorldMap worldMap, String message) {
+    public void mapChanged(WorldMap worldMap, int day) {
         Platform.runLater(() -> {
-            drawMap();
-            statisticsUpdate();
+            drawMap(day);
+            statisticsUpdate(day);
         });
     }
 
-    public void statisticsUpdate() {
-        simulationStatistics.updateStatistic();
+    public void statisticsUpdate(int day) {
+        simulationStatistics.updateStatistic(day);
         Map<Statistics, Double> mapStatistics = simulationStatistics.getMapStatistics();
         mapLabelStatistics.forEach((name, label) -> {
             if(name == Statistics.MAP_TYPE) {

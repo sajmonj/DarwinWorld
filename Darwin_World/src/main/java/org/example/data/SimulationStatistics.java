@@ -20,23 +20,30 @@ public class SimulationStatistics {
         mapStatistics.put(Statistics.MAP_TYPE, (double)mapType);
         mapStatistics.put(Statistics.GENOM_TYPE, (double)genotype);
     }
-    public void updateStatistic(){
-        updateAnimalStatistic();
+    public void updateStatistic(int day){
+        updateAnimalStatistic(day);
     }
-    private void updateAnimalStatistic(){
+    private void updateAnimalStatistic(int day){
         double numberOfChildren = 0;
         double animalsEnergy = 0;
         double animalsLife = 0;
+        double numOfLivingAnimals = 0;
 
         for(Animal animal : listAnimals){
-            numberOfChildren += animal.getNumOfChildren();
-            animalsEnergy += animal.getEnergy();
-            animalsLife += animal.getAge();
+            if(animal.getDayOfDeath().isEmpty()) {
+                animalsEnergy += animal.getEnergy();
+                numberOfChildren += animal.getNumOfChildren();
+                numOfLivingAnimals++;
+            }
+            else animalsLife += animal.getAge();
         }
-        mapStatistics.put(Statistics.NUMBER_OF_ANIMALS, (double) listAnimals.size());
-        mapStatistics.put(Statistics.AVG_ANIMALS_ENERGY,(double) Math.round(animalsEnergy*100/listAnimals.size())/100);
+        System.out.println("Day" + day);
+        mapStatistics.put(Statistics.DAY, (double) day);
+        mapStatistics.put(Statistics.NUMBER_OF_ALL_ANIMALS, (double) listAnimals.size());
+        mapStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, (double) numOfLivingAnimals);
+        mapStatistics.put(Statistics.AVG_ANIMALS_ENERGY,(double) Math.round(animalsEnergy*100/numOfLivingAnimals)/100);
         mapStatistics.put(Statistics.AVG_LENGTH_OF_LIFE,(double) Math.round(animalsLife*100/listAnimals.size())/100);
-        mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, (double) Math.round(numberOfChildren*100/listAnimals.size())/100);
+        mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, (double) Math.round(numberOfChildren*100/numOfLivingAnimals)/100);
     }
     public Map<Statistics, Double> getMapStatistics() {
         return mapStatistics;
