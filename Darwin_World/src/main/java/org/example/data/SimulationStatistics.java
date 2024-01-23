@@ -42,7 +42,7 @@ public class SimulationStatistics {
         }
         mapStatistics.put(Statistics.DAY, (double) day);
         mapStatistics.put(Statistics.NUMBER_OF_ALL_ANIMALS, (double) listAnimals.size());
-        mapStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, (double) numOfLivingAnimals);
+        mapStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, numOfLivingAnimals);
         mapStatistics.put(Statistics.AVG_ANIMALS_ENERGY,(double) Math.round(animalsEnergy*100/numOfLivingAnimals)/100);
         mapStatistics.put(Statistics.AVG_LENGTH_OF_LIFE,(double) Math.round(animalsLife*100/listAnimals.size())/100);
         mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, (double) Math.round(numberOfChildren*100/numOfLivingAnimals)/100);

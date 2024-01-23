@@ -19,6 +19,8 @@ public class SimulationConfiguration {
     private int grassNum;
     private int grassEnergy;
     private int speed;
+    private int minMutations;
+    private int maxMutations;
     private int mapType;
     private int genotype;
 //    public SimulationConfiguration(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
@@ -29,7 +31,8 @@ public class SimulationConfiguration {
 
     public void update(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
                        int animalEnergy, int readyEnergy, int reproductionEnergy, int grassInitNumber,
-                       int grassNum, int grassEnergy,int speed, int mapType, int genotype) {
+                       int grassNum, int grassEnergy, int minMutations, int maxMutations,int speed, int mapType, int genotype) {
+
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
         this.animalsNumber = animalsNumber;
@@ -41,6 +44,8 @@ public class SimulationConfiguration {
         this.grassNum = grassNum;
         this.grassEnergy = grassEnergy;
         this.speed = speed;
+        this.minMutations = minMutations;
+        this.maxMutations = maxMutations;
         this.mapType = mapType;
         this.genotype = genotype;
     }
@@ -61,7 +66,7 @@ public class SimulationConfiguration {
             update(loadedConfig.getMapHeight(), loadedConfig.getMapWidth(), loadedConfig.getAnimalsNumber(),
                     loadedConfig.getGenNumbers(), loadedConfig.getAnimalEnergy(), loadedConfig.getReadyEnergy(),
                     loadedConfig.getReproductionEnergy(), loadedConfig.getGrassInitNumber(), loadedConfig.getGrassNum(),
-                    loadedConfig.getGrassEnergy(),loadedConfig.getSpeed(), loadedConfig.getMapType(), loadedConfig.getGenotype()
+                    loadedConfig.getGrassEnergy(), loadedConfig.getMinMutations(), loadedConfig.getMaxMutations(), loadedConfig.getSpeed(), loadedConfig.getMapType(), loadedConfig.getGenotype()
             );
             System.out.println("Configuration loaded from JSON file: " + FILE_PATH);
         } catch (IOException e) {
@@ -72,43 +77,39 @@ public class SimulationConfiguration {
     public int getMapHeight() {
         return mapHeight;
     }
-
     public int getMapWidth() {
         return mapWidth;
     }
-
     public int getAnimalsNumber() {
         return animalsNumber;
     }
-
     public int getGenNumbers() {
         return genNumbers;
     }
-
     public int getAnimalEnergy() {
         return animalEnergy;
     }
-
     public int getReadyEnergy() { return readyEnergy; }
-
     public int getReproductionEnergy() {
         return reproductionEnergy;
     }
-
     public int getGrassInitNumber() {
         return grassInitNumber;
     }
-
     public int getGrassNum() {
         return grassNum;
     }
-
     public int getGrassEnergy() {
         return grassEnergy;
     }
-
     public int getSpeed() {
         return speed;
+    }
+    public int getMinMutations() {
+        return  minMutations;
+    }
+    public int getMaxMutations() {
+        return maxMutations;
     }
     public int getMapType() {
         return mapType;
@@ -129,7 +130,10 @@ public class SimulationConfiguration {
                 ", grassInitNumber='" + grassInitNumber + '\'' +
                 ", grassNum='" + grassNum + '\'' +
                 ", grassEnergy='" + grassEnergy + '\'' +
-                ", mapType= '" + mapType + '\'' +
+                ", minMutations='" + minMutations + '\'' +
+                ", maxMutations='" + maxMutations + '\'' +
+                ", mapType='" + mapType + '\'' +
+                ", genotype='" + genotype + '\'' +
                 '}';
     }
 }

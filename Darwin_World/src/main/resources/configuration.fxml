@@ -62,6 +62,12 @@
                 <Label text="Grass energy consumption"/>
             </HBox>
             <HBox spacing="10">
+                <TextField fx:id="minMutations" minWidth="100" />
+                <Label text="Min"/>
+                <TextField fx:id="maxMutations" minWidth="100" />
+                <Label text="Max number of mutations" />
+            </HBox>
+            <HBox spacing="10">
                 <Label text="Speed simulation"/>
                 <Slider fx:id="speed" minWidth="300" min="50" max="750" value="50" showTickLabels="true" showTickMarks="true"/>
             </HBox>
