@@ -33,7 +33,6 @@ public class Animal implements WorldElement {
         animalGenotype = new Genotype(configuration.getGenNumbers(), configuration.getGenotype());
         animalPosition = generatePosition(configuration.getMapWidth(), configuration.getMapHeight());
         animalDirection=generateOrientation();
-        System.out.println("AnimalDirection " + animalDirection);
         energy = configuration.getAnimalEnergy();
         age = 0;
         numOfChildren = 0;
@@ -49,8 +48,10 @@ public class Animal implements WorldElement {
         parentA = b;
         parentB = a;
         dayOfDeath = null;
-        animalGenotype = new Genotype(a, b, configuration.getGenotype());
         animalDirection = generateOrientation();
+        MutationsGenerator mutationsGenerator = new MutationsGenerator(configuration.getMinMutations(),
+                configuration.getMaxMutations(), genNumbers, new Genotype(a, b, configuration.getGenotype()));
+        animalGenotype = mutationsGenerator.mutatedGenotype();
     }
 
     void move(MoveValidator validator) {

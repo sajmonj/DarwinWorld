@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -34,6 +35,10 @@ public class ConfigurationPresenter {
     private TextField grassNum;
     @FXML
     private TextField grassEnergy;
+    @FXML
+    private TextField minMutations;
+    @FXML
+    private TextField maxMutations;
     @FXML
     private Button earth;
     @FXML
@@ -135,11 +140,14 @@ public class ConfigurationPresenter {
         int grassInitNumber = Integer.parseInt(grassInitNum.getText());
         int grassNumber = Integer.parseInt(grassNum.getText());
         int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
+        int minimumMutations = Integer.parseInt(minMutations.getText());
+        int maximumMutations = Integer.parseInt(maxMutations.getText());
         int mapType = selectedMapType;
         int genotype = selectedGenotype;
 
         configuration.update(height, width, animals, generations, energy, readyEnergyValue,
-                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, mapType, genotype );
+                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, minimumMutations,
+                maximumMutations, mapType, genotype );
     }
     private void updateConfiguration(){
         mapHeight.setText(String.valueOf(configuration.getMapHeight()));
@@ -152,6 +160,8 @@ public class ConfigurationPresenter {
         grassInitNum.setText(String.valueOf(configuration.getGrassInitNumber()));
         grassNum.setText(String.valueOf(configuration.getGrassNum()));
         grassEnergy.setText(String.valueOf(configuration.getGrassEnergy()));
+        minMutations.setText(String.valueOf(configuration.getMinMutations()));
+        maxMutations.setText(String.valueOf(configuration.getMaxMutations()));
         selectedMapType = configuration.getMapType();
         selectedGenotype = configuration.getGenotype();
     }

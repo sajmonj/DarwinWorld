@@ -60,6 +60,12 @@
                 <Label text="Grass energy consumption"/>
             </HBox>
             <HBox spacing="10">
+                <TextField fx:id="minMutations" minWidth="100" />
+                <Label text="Min"/>
+                <TextField fx:id="maxMutations" minWidth="100" />
+                <Label text="Max number of mutations" />
+            </HBox>
+            <HBox spacing="10">
                 <Label text="Map type"/>
                 <Button fx:id="earth" onAction="#onEarthButtonClicked" text="Earth" />
                 <Button fx:id="hellPortal" onAction="#onHellPortalButtonClicked" text="Hell Portal" />
