@@ -10,14 +10,19 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import org.example.data.SimulationStatistics;
 import org.example.data.Statistics;
 import org.example.model.*;
 import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.SimulationEngine;
+
+import static java.lang.Math.ceil;
+import static java.lang.Math.max;
 
 
 public class SimulationPresenter implements MapChangeListener {
@@ -62,15 +67,25 @@ public class SimulationPresenter implements MapChangeListener {
     private Label deathDate;
 
     private WorldMap worldMap;
+    private Boundary boundaries;
+    private int cols;
+    private int rows;
+    private Boundary preferredAreaBounds;
     private SimulationConfiguration configuration;
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
+    private boolean isPreferredAreaShown;
 
     public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
         runStatistics();
         increaseID();
+        boundaries = worldMap.getCurrentBounds();
+        cols = Math.abs(boundaries.upperRight().x()-boundaries.lowerLeft().x())+1;
+        rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
+        preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
+                new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
         try {
             simulation = new Simulation(configuration, worldMap, simulationID);
             simulationStatistics = simulation.getSimulationStatistics();
@@ -104,25 +119,39 @@ public class SimulationPresenter implements MapChangeListener {
     private void drawMap(int day){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
-        Boundary currentBounds = worldMap.getCurrentBounds();
-        int cols = Math.abs(currentBounds.upperRight().x()-currentBounds.lowerLeft().x())+1;
-        int rows = Math.abs(currentBounds.upperRight().y()-currentBounds.lowerLeft().y())+1;
-        Vector2d currentPosition = new Vector2d(currentBounds.lowerLeft().x(),currentBounds.upperRight().y());
+        Vector2d currentPosition = new Vector2d(boundaries.lowerLeft().x(),boundaries.upperRight().y());
         addCells(cols, rows);
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
+                showPreferredArea(i, j);
                 Vector2d addVector = new Vector2d(i,-j);
                 addIcon(day, currentPosition, addVector, i, j);
             }
         }
     }
 
+    private void showPreferredArea(int i, int j) {
+        Vector2d cords = new Vector2d(i +1, j +1);
+        if(cords.follows(preferredAreaBounds.lowerLeft())
+                && cords.precedes(preferredAreaBounds.upperRight()) && isPreferredAreaShown) {
+//            System.out.println(cords + " " + preferredAreaBounds);
+            addBackground(new Rectangle(10.0, 10.0), i, boundaries.upperRight().y()- j -1);
+        }
+    }
+
+    private StackPane setCellBackground() {
+        StackPane cell = new StackPane();
+        cell.setStyle("-fx-background-color: " + "rgba(248,225,56,0.42)" + ";");
+        return cell;
+    }
+
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
         if(worldMap.isOccupied(currentPosition.add(addVector))){
             Circle circle = new Circle(5);
+//            System.out.println("WM" + worldMap.objectAt(currentPosition.add(addVector)));
             setIcon(circle, worldMap.objectAt(currentPosition.add(addVector)), day);
             GridPane.setHalignment(circle, HPos.CENTER);
-            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector)) && chosen.getDayOfDeath().isEmpty()){
+            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
                 circle.setFill(Color.ORANGE);
                 displayAnimalStatistics(Optional.ofNullable(chosen));
             }
@@ -131,11 +160,11 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void displayAnimalStatistics(Optional<Animal> optionalAnimal) {
-        if(optionalAnimal.isPresent()){
+        if(optionalAnimal.isPresent()) {
             Animal animal = optionalAnimal.orElseThrow();
             animalId.setText(Integer.toString(animal.getID()));
             lengthOfLife.setText(Integer.toString(animal.getAge()));
-            energy.setText(Integer.toString(animal.getEnergy()));
+            energy.setText(Integer.toString(max(0, animal.getEnergy())));
             numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
             if(animal.getDayOfDeath().isPresent()) {
                 deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
@@ -156,18 +185,27 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.add(circle, i, j);
     }
 
+    private void addBackground(Rectangle cell, int i, int j) {
+        GridPane.setHalignment(cell, HPos.CENTER);
+        cell.setFill(Color.PEACHPUFF.deriveColor(1,1,1,0.4));
+        mapGrid.add(cell, i, j);
+    }
+
     private void setIcon(Circle circle, List<WorldElement> worldElements, int day) {
-        WorldElement worldElement = worldElements.get(0);
-        circle.setFill(worldElement.toIcon());
-        circle.setOnMouseClicked(event -> {
-            if(worldElement instanceof Animal animal){
-                chosen = animal.equals(chosen) ? null : animal;
-                if(chosen == null){
-                    displayAnimalStatistics(Optional.empty());
+        if(!worldElements.isEmpty()) {
+            WorldElement worldElement = worldElements.get(0);
+
+            circle.setFill(worldElement.toIcon());
+            circle.setOnMouseClicked(event -> {
+                if (worldElement instanceof Animal animal) {
+                    chosen = animal.equals(chosen) ? null : animal;
+                    if (chosen == null) {
+                        displayAnimalStatistics(Optional.empty());
+                    }
+                    mapChanged(worldMap, day);
                 }
-                mapChanged(worldMap, day);
-            }
-        });
+            });
+        }
     }
 
     private void addCells(int cols, int rows) {
@@ -202,13 +240,18 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     @FXML
-    public void onContinueClicked(){
+    private void onContinueClicked(){
         simulation.continueSimulation();
     }
 
     @FXML
-    public void onStopClicked(){
+    private void onStopClicked(){
         simulation.stopSimulation();
+    }
+
+    @FXML
+    public void onShowPreferredAreaClick(){
+        isPreferredAreaShown = !isPreferredAreaShown;
     }
 
     @Override

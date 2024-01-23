@@ -45,8 +45,8 @@ public class GrassPositionGenerator implements Iterable<Vector2d> {
     private void addGrassPositions(Vector2d position, int y) {
         if(!map.isOccupied(position)) {
             grids.add(position);
-            if (y >= (boundaries.upperRight().y() / 2 - boundaries.upperRight().y() * 0.2 / 2)
-                    && y <= (boundaries.upperRight().y() / 2 + boundaries.upperRight().y() * 0.2 / 2)) {
+            if (y >= (boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1)
+                    && y <= (boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2))) {
                 for (int i = 0; i < EQUATORMULTIPLIER; i++) {
                     grids.add(position);
                 }

@@ -93,6 +93,7 @@
         <HBox>
             <Button fx:id="stop" onAction="#onStopClicked" text="Stop"/>
             <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
+            <Button fx:id="prefferedArea" onAction="#onShowPreferredAreaClick" text="Show preferred area" />
         </HBox>
     </bottom>
 </BorderPane>
