@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -36,9 +37,9 @@ public class ConfigurationPresenter {
     @FXML
     private TextField grassEnergy;
     @FXML
-    private TextField minMutations;
+    private Spinner<Integer> minMutations = new Spinner<Integer>(0, 10, 0);
     @FXML
-    private TextField maxMutations;
+    private Spinner<Integer> maxMutations = new Spinner<Integer>(0,10,3);
     @FXML
     private Button earth;
     @FXML
@@ -133,19 +134,25 @@ public class ConfigurationPresenter {
         int height = Integer.parseInt(mapHeight.getText());
         int width = Integer.parseInt(mapWidth.getText());
         int animals = Integer.parseInt(animalsNumber.getText());
-        int generations = Integer.parseInt(genNumbers.getText());
+        int genNumber = Integer.parseInt(genNumbers.getText());
         int energy = Integer.parseInt(animalEnergy.getText());
         int readyEnergyValue = Integer.parseInt(readyEnergy.getText());
         int reproductionEnergyValue = Integer.parseInt(reproductionEnergy.getText());
         int grassInitNumber = Integer.parseInt(grassInitNum.getText());
         int grassNumber = Integer.parseInt(grassNum.getText());
         int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
-        int minimumMutations = Integer.parseInt(minMutations.getText());
-        int maximumMutations = Integer.parseInt(maxMutations.getText());
+        int minimumMutations = minMutations.getValue();
+        int maximumMutations = maxMutations.getValue();
         int mapType = selectedMapType;
         int genotype = selectedGenotype;
 
-        configuration.update(height, width, animals, generations, energy, readyEnergyValue,
+        SpinnerValueFactory<Integer> maxMutationsValueFactory = maxMutations.getValueFactory();
+        SpinnerValueFactory<Integer> minMutationsValueFactory = minMutations.getValueFactory();
+
+        maxMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, maxMutationsValueFactory.getValue()));
+        minMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, minMutationsValueFactory.getValue()));
+
+        configuration.update(height, width, animals, genNumber, energy, readyEnergyValue,
                 reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, minimumMutations,
                 maximumMutations, mapType, genotype );
     }
@@ -160,9 +167,16 @@ public class ConfigurationPresenter {
         grassInitNum.setText(String.valueOf(configuration.getGrassInitNumber()));
         grassNum.setText(String.valueOf(configuration.getGrassNum()));
         grassEnergy.setText(String.valueOf(configuration.getGrassEnergy()));
-        minMutations.setText(String.valueOf(configuration.getMinMutations()));
-        maxMutations.setText(String.valueOf(configuration.getMaxMutations()));
+        minMutations.getValueFactory().setValue(configuration.getMinMutations());
+        maxMutations.getValueFactory().setValue(configuration.getMaxMutations());
         selectedMapType = configuration.getMapType();
         selectedGenotype = configuration.getGenotype();
+
+        SpinnerValueFactory<Integer> maxMutationsValueFactory = maxMutations.getValueFactory();
+        SpinnerValueFactory<Integer> minMutationsValueFactory = minMutations.getValueFactory();
+
+        maxMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, configuration.getGenNumbers(), maxMutationsValueFactory.getValue()));
+        minMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, configuration.getGenNumbers(), minMutationsValueFactory.getValue()));
+
     }
 }
