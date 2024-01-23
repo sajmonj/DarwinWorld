@@ -1,46 +1,43 @@
 package org.example.model;
 
 import org.example.data.SimulationConfiguration;
-import org.example.data.SimulationStatistics;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Random;
 
 public class Animal implements WorldElement {
+    private final HashSet<Animal> descendants = new HashSet<>();
+    private final SimulationConfiguration configuration;
     private final Genotype animalGenotype;
+    private final Animal parentA;
+    private final Animal parentB;
+    private final int ID;
     private final int genNumbers;
-    private Vector2d animalPosition;
-    private MapDirection animalDirection;
     private int energy;
     private int numOfChildren;
     private int age;
-    private final int ID;
+    private Vector2d animalPosition;
+    private MapDirection animalDirection;
     private Integer dayOfDeath;
-    private final Animal parentA;
-    private final Animal parentB;
-
-    private final HashSet<Animal> descendants = new HashSet<>();
-    private final SimulationConfiguration configuration;
 
     public Animal(SimulationConfiguration configuration, int ID) {
         this.configuration = configuration;
         this.ID = ID;
-        genNumbers = configuration.getGenNumbers();
         parentA = null;
         parentB = null;
         dayOfDeath = null;
-        animalGenotype = new Genotype(configuration.getGenNumbers(), configuration.getGenotype());
+        genNumbers = configuration.getGenNumbers();
+        animalGenotype = new Genotype(genNumbers, configuration.getGenotype());
         animalPosition = generatePosition(configuration.getMapWidth(), configuration.getMapHeight());
         animalDirection=generateOrientation();
-        System.out.println("AnimalDirection " + animalDirection);
         energy = configuration.getAnimalEnergy();
         age = 0;
         numOfChildren = 0;
     }
 
-    public Animal(Animal a, Animal b, int id) {
-        this.ID = id;
+    public Animal(Animal a, Animal b, int ID) {
+        this.ID = ID;
         this.age = 0;
         this.animalPosition = a.position();
         this.configuration = a.configuration;
@@ -109,7 +106,6 @@ public class Animal implements WorldElement {
     }
 
     public void setDayOfDeath(Integer dayOfDeath) {
-//        System.out.println(getID() + " " + dayOfDeath);
         this.dayOfDeath = dayOfDeath;
     }
 
@@ -119,7 +115,7 @@ public class Animal implements WorldElement {
 
     @Override
     public String toString() {
-        return getID()+ " " +switch (animalDirection) {
+        return switch (animalDirection) {
             case EAST -> "E";
             case WEST -> "W";
             case NORTH -> "N";
@@ -128,7 +124,7 @@ public class Animal implements WorldElement {
             case SOUTHWEST -> "SW";
             case NORTHEAST -> "NE";
             case NORTHWEST -> "NW";
-        } + getEnergy();
+        };
     }
 
     @Override

@@ -6,19 +6,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 abstract class AbstractWorldMap implements WorldMap{
+    private final int ID;
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     protected final Map<Vector2d, List<WorldElement>> mapElements = new HashMap<>();
     protected MapVisualizer mapVisualizer;
+    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal);
+
     public Boundary getCurrentBounds() {
         return bounds;
     }
-    public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal);
-    private final int Id;
-
-    public AbstractWorldMap(int id, int width, int height) {
-        Id = id;
+    public AbstractWorldMap(int ID, int width, int height) {
+        this.ID = ID;
         bounds = new Boundary(new Vector2d(1,1),new Vector2d(width, height));
+    }
+    public boolean canMoveTo(Vector2d position) {
+        return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
     }
     @Override
     public void place(WorldElement element) {
@@ -26,10 +29,6 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
         mapElements.put(position, objectsAt);
-    }
-
-    public boolean canMoveTo(Vector2d position) {
-        return bounds.lowerLeft().precedes(position) && bounds.upperRight().follows(position);
     }
 
     @Override
@@ -47,11 +46,9 @@ abstract class AbstractWorldMap implements WorldMap{
     @Override
     public void removeDeadAnimals(Animal animal, int day) {
         if(animal.getEnergy() <= 0 && animal.getDayOfDeath().isEmpty()){
-            System.out.println(animal.getID());
             animal.setDayOfDeath(day);
             List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
             objectsAtAnimalPosition.remove(animal);
-            System.out.println(objectsAtAnimalPosition);
         }
     }
 
@@ -137,8 +134,8 @@ abstract class AbstractWorldMap implements WorldMap{
     }
 
     @Override
-    public int getId() {
-        return Id;
+    public int getID() {
+        return ID;
     }
 
     public void registerObserver(MapChangeListener observer) {

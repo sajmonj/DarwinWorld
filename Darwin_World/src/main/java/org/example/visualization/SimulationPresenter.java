@@ -104,9 +104,9 @@ public class SimulationPresenter implements MapChangeListener {
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Boundary currentBounds = worldMap.getCurrentBounds();
-        int cols = Math.abs(currentBounds.upperRight().getX()-currentBounds.lowerLeft().getX())+1;
-        int rows = Math.abs(currentBounds.upperRight().getY()-currentBounds.lowerLeft().getY())+1;
-        Vector2d currentPosition = new Vector2d(currentBounds.lowerLeft().getX(),currentBounds.upperRight().getY());
+        int cols = Math.abs(currentBounds.upperRight().x()-currentBounds.lowerLeft().x())+1;
+        int rows = Math.abs(currentBounds.upperRight().y()-currentBounds.lowerLeft().y())+1;
+        Vector2d currentPosition = new Vector2d(currentBounds.lowerLeft().x(),currentBounds.upperRight().y());
         addCells(cols, rows);
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {

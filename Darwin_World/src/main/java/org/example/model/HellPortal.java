@@ -8,8 +8,8 @@ import java.util.stream.Stream;
 
 public class HellPortal extends AbstractWorldMap {
 
-    public HellPortal(int id, int width, int height) {
-        super(id, width, height);
+    public HellPortal(int ID, int width, int height) {
+        super(ID, width, height);
     }
 
     @Override
@@ -28,21 +28,19 @@ public class HellPortal extends AbstractWorldMap {
             if(!isOccupied(field)) freeFields.add(field);
         });
 
-//        System.out.println("FreeFields"+freeFields);
+        return animalRelocation(animal, freeFields);
+    }
 
+    private Vector2d animalRelocation(Animal animal, List<Vector2d> freeFields) {
         int numOfFreeFields = freeFields.size();
         if(numOfFreeFields > 0) {
 
             int newPositionIndex = generatePosition(numOfFreeFields);
             animal.subtractReproductionEnergy();
 
-//            System.out.println(freeFields.get(newPositionIndex));
-//            System.out.println(freeFields);
-
             return freeFields.get(newPositionIndex);
         }
         else {
-//            System.out.println("KILLLLLLL");
             animal.kill();
             return animal.position();
         }
