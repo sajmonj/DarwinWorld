@@ -5,6 +5,8 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Slider?>
+
 
 <?import javafx.scene.control.Spinner?>
 <BorderPane xmlns="http://javafx.com/javafx"
@@ -71,6 +73,10 @@
                         <Spinner fx:id="maxMutations" minWidth="30" min="0" max="10" initialValue="3" onMouseClicked="#handleSpinnerClick"/>
                     </VBox>
                 </HBox>
+            </HBox>
+            <HBox spacing="10">
+                <Label text="Speed simulation"/>
+                <Slider fx:id="speed" minWidth="300" min="50" max="750" value="50" showTickLabels="true" showTickMarks="true"/>
             </HBox>
             <HBox spacing="10">
                 <Label text="Map type"/>

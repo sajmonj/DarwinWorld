@@ -40,7 +40,7 @@ public class Simulation extends AbstractSimulation implements Runnable {
                 dayCycleSimulation.reproduction();
                 dayCycleSimulation.grassGrowth();
                 try {
-                    Thread.sleep(200);
+                    Thread.sleep(super.getSpeed());
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }

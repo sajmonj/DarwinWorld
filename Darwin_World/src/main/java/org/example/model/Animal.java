@@ -1,5 +1,7 @@
 package org.example.model;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import org.example.data.SimulationConfiguration;
 
 import java.util.HashSet;
@@ -130,8 +132,26 @@ public class Animal implements WorldElement {
     }
 
     @Override
-    public String toIcon() {
-        return "#800020";
+    public Paint toIcon() {
+        Color baseColor = Color.web("#800020");
+
+        if(energy <= 0){
+            return Color.BLACK;
+        }
+
+        double saturation = switch (energy/50+1){
+            case 1 -> 0.1;
+            case 2 -> 0.2;
+            case 3 -> 0.3;
+            case 4 -> 0.4;
+            case 5 -> 0.5;
+            case 6 -> 0.6;
+            case 7 -> 0.7;
+            case 8 -> 0.8;
+            default -> 0.9;
+        };
+        return baseColor.deriveColor(0, saturation, 1.2, 1);
+
     }
 
     public int getGenNumbers() {

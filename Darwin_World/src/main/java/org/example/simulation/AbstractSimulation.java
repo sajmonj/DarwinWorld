@@ -19,6 +19,7 @@ public class AbstractSimulation {
     protected final int readyEnergy;
     protected final int grassInitNum;
     protected final int grassNum;
+    protected final int speed;
     protected final int mapType;
     protected final int genotype;
     protected final int ID;
@@ -34,6 +35,7 @@ public class AbstractSimulation {
         this.grassNum = configuration.getGrassNum();
         this.mapType = configuration.getMapType();
         this.genotype = configuration.getGenotype();
+        this.speed = configuration.getSpeed();
         this.ID = ID;
         this.simulationStatistics = new SimulationStatistics(listAnimals, ID, mapType, genotype);
         day = 1;
@@ -44,6 +46,10 @@ public class AbstractSimulation {
     }
     public int getID(){
         return ID;
+    }
+
+    public int getSpeed() {
+        return speed;
     }
 
     public SimulationStatistics getSimulationStatistics() {

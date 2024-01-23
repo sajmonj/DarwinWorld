@@ -1,6 +1,8 @@
 package org.example.data;
 
 import org.example.model.Animal;
+
+import javax.sound.midi.Soundbank;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,6 +19,7 @@ public class SimulationStatistics {
         for(Statistics statistics : Statistics.values()){
             mapStatistics.put(statistics,0.0);
         }
+
         mapStatistics.put(Statistics.MAP_TYPE, (double)mapType);
         mapStatistics.put(Statistics.GENOM_TYPE, (double)genotype);
     }
@@ -37,7 +40,6 @@ public class SimulationStatistics {
             }
             else animalsLife += animal.getAge();
         }
-        System.out.println("Day" + day);
         mapStatistics.put(Statistics.DAY, (double) day);
         mapStatistics.put(Statistics.NUMBER_OF_ALL_ANIMALS, (double) listAnimals.size());
         mapStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, numOfLivingAnimals);
@@ -45,6 +47,7 @@ public class SimulationStatistics {
         mapStatistics.put(Statistics.AVG_LENGTH_OF_LIFE,(double) Math.round(animalsLife*100/listAnimals.size())/100);
         mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, (double) Math.round(numberOfChildren*100/numOfLivingAnimals)/100);
     }
+
     public Map<Statistics, Double> getMapStatistics() {
         return mapStatistics;
     }
