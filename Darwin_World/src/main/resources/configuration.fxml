@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Slider?>
 
 
+<?import javafx.scene.control.Spinner?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="560.0" minWidth="720.0"
@@ -62,10 +63,16 @@
                 <Label text="Grass energy consumption"/>
             </HBox>
             <HBox spacing="10">
-                <TextField fx:id="minMutations" minWidth="100" />
-                <Label text="Min"/>
-                <TextField fx:id="maxMutations" minWidth="100" />
-                <Label text="Max number of mutations" />
+                <HBox spacing="10">
+                    <VBox>
+                        <Label text="Min number of Mutations"/>
+                        <Spinner fx:id="minMutations" minWidth="30" min="0" max="10" initialValue="0" onMouseClicked="#handleSpinnerClick"/>
+                    </VBox>
+                    <VBox>
+                        <Label text="Max number of mutations"/>
+                        <Spinner fx:id="maxMutations" minWidth="30" min="0" max="10" initialValue="3" onMouseClicked="#handleSpinnerClick"/>
+                    </VBox>
+                </HBox>
             </HBox>
             <HBox spacing="10">
                 <Label text="Speed simulation"/>

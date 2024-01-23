@@ -19,6 +19,7 @@ public class MutationsGenerator {
     }
 
     public Genotype mutatedGenotype() {
+        System.out.println(minMutations + " " + maxMutations + "!!!!");
         int numberOfMutatedGens = numberOfMutations();
         List<Integer> gensSelectedToMutation = selectedGens(numberOfMutatedGens);
         Gen[] gens = Gen.values();
