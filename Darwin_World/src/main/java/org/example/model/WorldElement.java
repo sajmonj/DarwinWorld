@@ -9,7 +9,7 @@ public interface WorldElement {
 
      * @return return world element position.
      */
-    Vector2d position();
+    Vector2d getPosition();
     /**
      * Icon of world element
      *

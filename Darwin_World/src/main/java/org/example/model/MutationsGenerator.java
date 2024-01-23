@@ -37,7 +37,7 @@ public class MutationsGenerator {
         List<Integer> gensIndexes = new ArrayList<>();
         List<Integer> gensSelectedToMutation = new ArrayList<>();
 
-        for (int index=0; index < genNumbers; index++) {
+        for (int index = 0; index < genNumbers; index++) {
             gensIndexes.add(index);
         }
         for (int i=0; i < numberOfMutatedGens; i++) {

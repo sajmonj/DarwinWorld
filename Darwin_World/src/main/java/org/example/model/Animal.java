@@ -38,19 +38,19 @@ public class Animal implements WorldElement {
         numOfChildren = 0;
     }
 
-    public Animal(Animal a, Animal b, int ID) {
+    public Animal(Animal firstAnimal, Animal secondAnimal, int ID) {
         this.ID = ID;
         this.age = 0;
-        this.animalPosition = a.position();
-        this.configuration = a.configuration;
+        this.animalPosition = firstAnimal.getPosition();
+        this.configuration = firstAnimal.configuration;
         genNumbers = configuration.getGenNumbers();
         energy = 2*configuration.getReproductionEnergy();
-        parentA = b;
-        parentB = a;
+        parentA = firstAnimal;
+        parentB = secondAnimal;
         dayOfDeath = null;
         animalDirection = generateOrientation();
         MutationsGenerator mutationsGenerator = new MutationsGenerator(configuration.getMinMutations(),
-                configuration.getMaxMutations(), genNumbers, new Genotype(a, b, configuration.getGenotype()));
+                configuration.getMaxMutations(), genNumbers, new Genotype(firstAnimal, secondAnimal, configuration.getGenotype()));
         animalGenotype = mutationsGenerator.mutatedGenotype();
     }
 
@@ -89,7 +89,7 @@ public class Animal implements WorldElement {
     }
 
     @Override
-    public Vector2d position() {
+    public Vector2d getPosition() {
         return animalPosition;
     }
 
@@ -103,6 +103,14 @@ public class Animal implements WorldElement {
 
     public int getAge() {
         return age;
+    }
+
+    public Animal getParentA() {
+        return parentA;
+    }
+
+    public Animal getParentB() {
+        return parentB;
     }
 
     public void increaseNumberOfChildren() {
