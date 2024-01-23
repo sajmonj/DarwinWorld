@@ -46,8 +46,10 @@ public class Animal implements WorldElement {
         parentA = b;
         parentB = a;
         dayOfDeath = null;
-        animalGenotype = new Genotype(a, b, configuration.getGenotype());
         animalDirection = generateOrientation();
+        MutationsGenerator mutationsGenerator = new MutationsGenerator(configuration.getMinMutations(),
+                configuration.getMaxMutations(), genNumbers, new Genotype(a, b, configuration.getGenotype()));
+        animalGenotype = mutationsGenerator.mutatedGenotype();
     }
 
     void move(MoveValidator validator) {

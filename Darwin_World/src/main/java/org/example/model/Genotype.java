@@ -77,4 +77,7 @@ public class Genotype {
     public Gen getGens(int i) {
         return Gens.get(i);
     }
+    public void setGens(int i, Gen val) {
+        Gens.set(i, val);
+    }
 }
