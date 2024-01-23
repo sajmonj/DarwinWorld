@@ -1,7 +1,17 @@
 package org.example.model;
 
 public interface WorldElement {
+
+    /**
+     * Position of world element
+
+     * @return return world element position.
+     */
     Vector2d position();
-    String toString();
+    /**
+     * Icon of world element
+
+     * @return return world element icon.
+     */
     String toIcon();
 }

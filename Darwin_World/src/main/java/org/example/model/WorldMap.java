@@ -11,7 +11,7 @@ public interface WorldMap extends MoveValidator {
     /**
      * Return Map Id.
      */
-    int getId();
+    int getID();
 
     /**
      * Place a World Element on the map.
@@ -47,24 +47,66 @@ public interface WorldMap extends MoveValidator {
     }
 
     /**
-     * Return an animal at a given position.
+     * Return list of animals at a given position.
      *
-     * @param position The position of the animal.
-     * @return animal or null if the position is not occupied.
+     * @param position The position of the animals.
+     * @return return list of animals or null if the position is not occupied.
      */
     List<WorldElement> objectAt(Vector2d position);
 
+    /**
+     * Return map of world elements from the maps.
+     *
+     * @return return map of world element.
+     */
+
     Map<Vector2d, List<WorldElement>> getElements();
+
+    /**
+     * Return current bounds of map.
+     *
+     * @return return current bounds of map.
+     */
 
     Boundary getCurrentBounds();
 
+    /**
+     * register a observer
+     *
+     * @param observer to register
+     */
+
     void registerObserver(MapChangeListener observer);
+
+    /**
+     * unregister a observer
+     *
+     * @param observer to register
+     */
 
     void unregisterObserver(MapChangeListener observer);
 
+    /**
+     * Animals reproduction
+     *
+     * @param simulationAnimalsList is a list of animals
+     */
+
     void reproduction(List<Animal> simulationAnimalsList);
 
+    /**
+     * Animals consume grass
+     *
+     * @param grassSet is a set of grass
+     */
+
     void consumption(Set<Grass> grassSet);
+
+    /**
+     * Update tha map
+     *
+     * @param day Day of the simulation.
+     */
 
     void mapChanged(int day);
 }

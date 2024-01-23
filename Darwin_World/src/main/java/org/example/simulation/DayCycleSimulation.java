@@ -13,9 +13,8 @@ public class DayCycleSimulation extends AbstractSimulation {
     private final Set<Grass> grassSet;
     private final WorldMap map;
 
-
-    public DayCycleSimulation(List<Animal> animalList, Set<Grass> setGrass,
-                              SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+    public DayCycleSimulation(List<Animal> animalList, Set<Grass> setGrass, SimulationConfiguration configuration,
+                              WorldMap worldMap, int ID) {
         super(animalList, configuration, worldMap, ID);
         grassSet = setGrass;
         this.map = worldMap;

@@ -24,6 +24,7 @@ public class AbstractSimulation {
     protected final int ID;
 
     public AbstractSimulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+        listAnimals = new ArrayList<>();
         this.map = worldMap;
         this.animalEnergy = configuration.getAnimalEnergy();
         this.reproductionEnergy = configuration.getReproductionEnergy();
@@ -34,9 +35,8 @@ public class AbstractSimulation {
         this.mapType = configuration.getMapType();
         this.genotype = configuration.getGenotype();
         this.ID = ID;
-        listAnimals = new ArrayList<>();
-        day = 1;
         this.simulationStatistics = new SimulationStatistics(listAnimals, ID, mapType, genotype);
+        day = 1;
     }
     public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         this(configuration, worldMap, ID);

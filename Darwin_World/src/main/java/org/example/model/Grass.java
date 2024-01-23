@@ -1,7 +1,5 @@
 package org.example.model;
 
-import javafx.scene.paint.Color;
-
 import java.util.Objects;
 
 public record Grass(Vector2d position) implements WorldElement {
@@ -15,7 +13,6 @@ public record Grass(Vector2d position) implements WorldElement {
     public String toIcon() {
         return "#3A9D23";
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
