@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -42,6 +43,8 @@ public class ConfigurationPresenter {
     private Button genotype;
     @FXML
     private Button backAndForward;
+    @FXML
+    private Slider speed;
     private int selectedMapType;
     private int selectedGenotype;
     private SimulationConfiguration configuration = null;
@@ -135,11 +138,12 @@ public class ConfigurationPresenter {
         int grassInitNumber = Integer.parseInt(grassInitNum.getText());
         int grassNumber = Integer.parseInt(grassNum.getText());
         int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
+        int speedValue = (int) speed.getValue();
         int mapType = selectedMapType;
         int genotype = selectedGenotype;
 
         configuration.update(height, width, animals, generations, energy, readyEnergyValue,
-                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, mapType, genotype );
+                reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, speedValue, mapType, genotype );
     }
     private void updateConfiguration(){
         mapHeight.setText(String.valueOf(configuration.getMapHeight()));
@@ -152,6 +156,7 @@ public class ConfigurationPresenter {
         grassInitNum.setText(String.valueOf(configuration.getGrassInitNumber()));
         grassNum.setText(String.valueOf(configuration.getGrassNum()));
         grassEnergy.setText(String.valueOf(configuration.getGrassEnergy()));
+        speed.setValue(configuration.getSpeed());
         selectedMapType = configuration.getMapType();
         selectedGenotype = configuration.getGenotype();
     }

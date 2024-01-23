@@ -11,6 +11,9 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import org.example.data.SimulationStatistics;
 import org.example.data.Statistics;
 import org.example.model.*;
@@ -111,46 +114,59 @@ public class SimulationPresenter implements MapChangeListener {
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
                 Vector2d addVector = new Vector2d(i,-j);
-                Label label = new Label();
-
-                if(worldMap.isOccupied(currentPosition.add(addVector))){
-                    setIcon(label, worldMap.objectAt(currentPosition.add(addVector)), day);
-                }
-                GridPane.setHalignment(label, HPos.CENTER);
-                if(chosen != null && chosen.position().equals(currentPosition.add(addVector))){
-                    label.setStyle("-fx-background-color: #c9a2bf");
-                    displayAnimalStatistics(chosen);
-                }
-                addLabel(label, i, j);
+                addIcon(day, currentPosition, addVector, i, j);
             }
         }
     }
 
-    private void displayAnimalStatistics(Animal animal) {
-        animalId.setText(Integer.toString(animal.getID()));
-        lengthOfLife.setText(Integer.toString(animal.getAge()));
-        energy.setText(Integer.toString(animal.getEnergy()));
-        numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
-        if(animal.getDayOfDeath().isPresent()) {
-            deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
+    private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
+        if(worldMap.isOccupied(currentPosition.add(addVector))){
+            Circle circle = new Circle(5);
+            setIcon(circle, worldMap.objectAt(currentPosition.add(addVector)), day);
+            GridPane.setHalignment(circle, HPos.CENTER);
+            if(chosen != null && chosen.position().equals(currentPosition.add(addVector)) && chosen.getDayOfDeath().isEmpty()){
+                circle.setFill(Color.ORANGE);
+                displayAnimalStatistics(Optional.ofNullable(chosen));
+            }
+            addLabel(circle, i, j);
         }
-        else deathDate.setText("-");
     }
 
-    private void addLabel(Label label, int i, int j) {
-        GridPane.setHalignment(label, HPos.CENTER);
-        label.setPrefWidth(CELL_SIZE);
-        label.setPrefHeight(CELL_SIZE);
-        label.setPadding(Insets.EMPTY);
-        mapGrid.add(label, i, j);
+    private void displayAnimalStatistics(Optional<Animal> optionalAnimal) {
+        if(optionalAnimal.isPresent()){
+            Animal animal = optionalAnimal.orElseThrow();
+            animalId.setText(Integer.toString(animal.getID()));
+            lengthOfLife.setText(Integer.toString(animal.getAge()));
+            energy.setText(Integer.toString(animal.getEnergy()));
+            numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
+            if(animal.getDayOfDeath().isPresent()) {
+                deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
+            }
+            else deathDate.setText("-");
+        }
+        else {
+            animalId.setText("-");
+            lengthOfLife.setText("-");
+            energy.setText("-");
+            numOfChildren.setText("-");
+            deathDate.setText("-");
+        }
     }
 
-    private void setIcon(Label label, List<WorldElement> worldElements, int day) {
+    private void addLabel(Circle circle, int i, int j) {
+        GridPane.setHalignment(circle, HPos.CENTER);
+        mapGrid.add(circle, i, j);
+    }
+
+    private void setIcon(Circle circle, List<WorldElement> worldElements, int day) {
         WorldElement worldElement = worldElements.get(0);
-        label.setStyle("-fx-background-color: "+ worldElement.toIcon());
-        label.setOnMouseClicked(event -> {
-            if(worldElement instanceof Animal){
-                chosen = (Animal) worldElement;
+        circle.setFill(worldElement.toIcon());
+        circle.setOnMouseClicked(event -> {
+            if(worldElement instanceof Animal animal){
+                chosen = animal.equals(chosen) ? null : animal;
+                if(chosen == null){
+                    displayAnimalStatistics(Optional.empty());
+                }
                 mapChanged(worldMap, day);
             }
         });
@@ -172,7 +188,6 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void setOptions(SimulationConfiguration configuration, int mapType) {
-        //        Kiedyś bedzie działać lepiej
         if(mapType == 1){
             worldMap = new RectangularMap(1, configuration.getMapWidth(), configuration.getMapHeight());
         }else {

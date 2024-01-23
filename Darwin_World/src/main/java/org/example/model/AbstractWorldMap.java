@@ -145,6 +145,7 @@ abstract class AbstractWorldMap implements WorldMap{
         observers.remove(observer);
     }
 
+    @Override
     public void mapChanged(int day) {
         for (MapChangeListener observer : observers) {
             observer.mapChanged(this, day);

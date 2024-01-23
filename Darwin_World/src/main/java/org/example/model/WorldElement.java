@@ -1,5 +1,7 @@
 package org.example.model;
 
+import javafx.scene.paint.Paint;
+
 public interface WorldElement {
 
     /**
@@ -10,8 +12,8 @@ public interface WorldElement {
     Vector2d position();
     /**
      * Icon of world element
-
+     *
      * @return return world element icon.
      */
-    String toIcon();
+    Paint toIcon();
 }
