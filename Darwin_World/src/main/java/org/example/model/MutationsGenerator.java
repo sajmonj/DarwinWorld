@@ -7,19 +7,18 @@ import java.util.Random;
 public class MutationsGenerator {
     int minMutations;
     int maxMutations;
-    int genNubers;
+    int genNumbers;
     Genotype genotype;
     Random random = new Random();
 
-    public MutationsGenerator(int minMutations, int maxMutations, int genNubers, Genotype genotype) {
+    public MutationsGenerator(int minMutations, int maxMutations, int genNumbers, Genotype genotype) {
         this.minMutations = minMutations;
         this.maxMutations = maxMutations;
-        this.genNubers = genNubers;
+        this.genNumbers = genNumbers;
         this.genotype = genotype;
     }
 
     public Genotype mutatedGenotype() {
-        System.out.println(minMutations + " " + maxMutations + "!!!!");
         int numberOfMutatedGens = numberOfMutations();
         List<Integer> gensSelectedToMutation = selectedGens(numberOfMutatedGens);
         Gen[] gens = Gen.values();
@@ -38,7 +37,7 @@ public class MutationsGenerator {
         List<Integer> gensIndexes = new ArrayList<>();
         List<Integer> gensSelectedToMutation = new ArrayList<>();
 
-        for (int index=0; index < genNubers; index++) {
+        for (int index = 0; index < genNumbers; index++) {
             gensIndexes.add(index);
         }
         for (int i=0; i < numberOfMutatedGens; i++) {

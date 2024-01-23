@@ -13,6 +13,11 @@ public record Grass(Vector2d position) implements WorldElement {
     }
 
     @Override
+    public Vector2d getPosition() {
+        return position;
+    }
+
+    @Override
     public Paint toIcon() {
         return Color.web("#3A9D23");
     }

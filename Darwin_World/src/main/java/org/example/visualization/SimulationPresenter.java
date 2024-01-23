@@ -3,7 +3,6 @@ package org.example.visualization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -12,7 +11,6 @@ import javafx.scene.layout.RowConstraints;
 import java.util.*;
 
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import org.example.data.SimulationStatistics;
 import org.example.data.Statistics;
@@ -124,7 +122,7 @@ public class SimulationPresenter implements MapChangeListener {
             Circle circle = new Circle(5);
             setIcon(circle, worldMap.objectAt(currentPosition.add(addVector)), day);
             GridPane.setHalignment(circle, HPos.CENTER);
-            if(chosen != null && chosen.position().equals(currentPosition.add(addVector)) && chosen.getDayOfDeath().isEmpty()){
+            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector)) && chosen.getDayOfDeath().isEmpty()){
                 circle.setFill(Color.ORANGE);
                 displayAnimalStatistics(Optional.ofNullable(chosen));
             }
