@@ -7,12 +7,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.example.data.SimulationConfiguration;
 
 
 import java.io.IOException;
+
+import static java.lang.Math.min;
 
 public class ConfigurationPresenter {
 
@@ -146,11 +149,7 @@ public class ConfigurationPresenter {
         int mapType = selectedMapType;
         int genotype = selectedGenotype;
 
-        SpinnerValueFactory<Integer> maxMutationsValueFactory = maxMutations.getValueFactory();
-        SpinnerValueFactory<Integer> minMutationsValueFactory = minMutations.getValueFactory();
-
-        maxMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, maxMutationsValueFactory.getValue()));
-        minMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, minMutationsValueFactory.getValue()));
+        handleSpinnerBoundaries(genNumber, minimumMutations, maximumMutations);
 
         configuration.update(height, width, animals, genNumber, energy, readyEnergyValue,
                 reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, minimumMutations,
@@ -172,11 +171,28 @@ public class ConfigurationPresenter {
         selectedMapType = configuration.getMapType();
         selectedGenotype = configuration.getGenotype();
 
+        handleSpinnerBoundaries(configuration.getGenNumbers(), minMutations.getValue(), maxMutations.getValue());
+    }
+
+    @FXML
+    private void handleSpinnerBoundaries(int genNumber, int minimumMutations, int maximumMutations) {
+
         SpinnerValueFactory<Integer> maxMutationsValueFactory = maxMutations.getValueFactory();
         SpinnerValueFactory<Integer> minMutationsValueFactory = minMutations.getValueFactory();
 
-        maxMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, configuration.getGenNumbers(), maxMutationsValueFactory.getValue()));
-        minMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, configuration.getGenNumbers(), minMutationsValueFactory.getValue()));
+        maxMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, maxMutationsValueFactory.getValue()));
+        minMutations.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, genNumber, minMutationsValueFactory.getValue()));
 
+        maximumMutations = min(maximumMutations, genNumber);
+        minimumMutations = min(minimumMutations, genNumber);
+
+        maxMutations.getValueFactory().setValue(maximumMutations);
+        minMutations.getValueFactory().setValue(minimumMutations);
+    }
+
+    @FXML
+    private void handleSpinnerClick() {
+        int genNumber = Integer.parseInt(genNumbers.getText());
+        handleSpinnerBoundaries(genNumber, minMutations.getValue(), maxMutations.getValue());
     }
 }

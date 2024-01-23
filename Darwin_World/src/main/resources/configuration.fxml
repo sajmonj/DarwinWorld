@@ -64,11 +64,11 @@
                 <HBox spacing="10">
                     <VBox>
                         <Label text="Min number of Mutations"/>
-                        <Spinner fx:id="minMutations" minWidth="30" min="0" max="10" initialValue="0" />
+                        <Spinner fx:id="minMutations" minWidth="30" min="0" max="10" initialValue="0" onMouseClicked="#handleSpinnerClick"/>
                     </VBox>
                     <VBox>
                         <Label text="Max number of mutations"/>
-                        <Spinner fx:id="maxMutations" minWidth="30" min="0" max="10" initialValue="3"/>
+                        <Spinner fx:id="maxMutations" minWidth="30" min="0" max="10" initialValue="3" onMouseClicked="#handleSpinnerClick"/>
                     </VBox>
                 </HBox>
             </HBox>
