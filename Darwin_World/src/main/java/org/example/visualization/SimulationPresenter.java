@@ -111,7 +111,7 @@ public class SimulationPresenter implements MapChangeListener {
 
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            System.err.println("Illegal argument!");
         }
         return simulation.getID();
     }
@@ -145,7 +145,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void showPreferredArea(int i, int j) {
-        Vector2d cords = new Vector2d(i +1, j +1);
+        Vector2d cords = new Vector2d(i + 1, j + 1);
         if(cords.follows(preferredAreaBounds.lowerLeft())
                 && cords.precedes(preferredAreaBounds.upperRight()) && isPreferredAreaShown) {
             addBackground(new Rectangle(cellSize, cellSize), i, j);
@@ -156,16 +156,20 @@ public class SimulationPresenter implements MapChangeListener {
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
         if(worldMap.isOccupied(currentPosition.add(addVector)) && !worldMap.objectAt(currentPosition.add(addVector)).isEmpty()){
             Circle circle = new Circle((double) cellSize/3);
-            WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
-            setIcon(circle, worldElement , day);
-            GridPane.setHalignment(circle, HPos.CENTER);
-            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
-                circle.setFill(Color.ORANGE);
-//                displayAnimalStatistics(Optional.ofNullable(chosen));
-            } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
-                circle.setFill(Color.BLUE);
+            try {
+                WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
+                setIcon(circle, worldElement , day);
+                GridPane.setHalignment(circle, HPos.CENTER);
+                if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
+                    circle.setFill(Color.ORANGE);
+    //                displayAnimalStatistics(Optional.ofNullable(chosen));
+                } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
+                    circle.setFill(Color.BLUE);
+                }
+                addLabel(circle, i, j);
+            } catch(IndexOutOfBoundsException e){
+                System.err.println("Index out of bounds");
             }
-            addLabel(circle, i, j);
         }
     }
 
@@ -279,7 +283,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void statisticsUpdate(int day) {
-        simulationStatistics.updateStatistics(day, worldMap);
+        simulationStatistics.updateStatistic(day, worldMap);
         popularGens = simulationStatistics.getPopularGens();
 
         Platform.runLater(this::displayedStatisticsUpdate);

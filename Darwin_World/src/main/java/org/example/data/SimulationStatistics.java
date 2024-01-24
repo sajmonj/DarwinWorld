@@ -34,7 +34,7 @@ public class SimulationStatistics {
         mapStatistics.put(Statistics.MAP_TYPE, String.valueOf(mapType));
         mapStatistics.put(Statistics.GENOM_TYPE, String.valueOf(genotype));
     }
-    public synchronized void updateStatistic(int day, WorldMap worldMap){
+    public void updateStatistic(int day, WorldMap worldMap){
         double numberOfChildren = 0;
         double animalsEnergy = 0;
         double animalsLife = 0;

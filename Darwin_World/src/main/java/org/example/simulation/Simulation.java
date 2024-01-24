@@ -28,7 +28,11 @@ public class Simulation extends AbstractSimulation implements Runnable {
 
     @Override
     public void run() {
-        StartSimulation();
+        try {
+            StartSimulation();
+        } catch (RuntimeException e) {
+            System.err.println("Simulation interrupted!");
+        }
     }
 
     private void StartSimulation() {
@@ -52,8 +56,6 @@ public class Simulation extends AbstractSimulation implements Runnable {
         finally {
             simulationStatistics.closeFile();
         }
-
-
     }
 
     public void stopSimulation() {
