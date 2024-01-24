@@ -1,5 +1,7 @@
 package org.example.data;
 
+import java.util.StringJoiner;
+
 public enum Statistics {
     MAP_TYPE(0),
     GENOM_TYPE(1),
@@ -21,4 +23,20 @@ public enum Statistics {
     public int getValue() {
         return value;
     }
+
+    public static String getHeaders() {
+        StringJoiner headers = new StringJoiner(",");
+
+        int skippedCount = 0;
+        for (Statistics stat : values()) {
+            if (skippedCount < 2) {
+                skippedCount++;
+                continue;
+            }
+            headers.add(stat.name());
+        }
+
+        return headers.toString();
+    }
+
 }

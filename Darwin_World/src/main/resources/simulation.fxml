@@ -94,6 +94,9 @@
             <Button fx:id="stop" onAction="#onStopClicked" text="Stop"/>
             <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
             <Button fx:id="prefferedArea" onAction="#onShowPreferredAreaClick" text="Show preferred area" />
+            <Button fx:id="trackGens" onAction="#onTrackGens" text="Gens tracking" />
+            <Button fx:id="saveCsv" onAction="#saveToCsv" text="Save to CSV" />
+
         </HBox>
     </bottom>
 </BorderPane>
