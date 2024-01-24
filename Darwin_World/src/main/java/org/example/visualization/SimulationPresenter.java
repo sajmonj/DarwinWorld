@@ -26,7 +26,7 @@ import static java.lang.Math.max;
 
 
 public class SimulationPresenter implements MapChangeListener {
-    private static final int CELL_SIZE = 15;
+    private int cellSize;
     private static final List<Simulation> simulations = new ArrayList<>();
     private static int simulationID = 0;
     private Simulation simulation;
@@ -84,6 +84,7 @@ public class SimulationPresenter implements MapChangeListener {
         boundaries = worldMap.getCurrentBounds();
         cols = Math.abs(boundaries.upperRight().x()-boundaries.lowerLeft().x())+1;
         rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
+        cellSize = 600/max(cols, rows);
         preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
                 new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
         try {
@@ -135,7 +136,7 @@ public class SimulationPresenter implements MapChangeListener {
         if(cords.follows(preferredAreaBounds.lowerLeft())
                 && cords.precedes(preferredAreaBounds.upperRight()) && isPreferredAreaShown) {
 //            System.out.println(cords + " " + preferredAreaBounds);
-            addBackground(new Rectangle(10.0, 10.0), i, boundaries.upperRight().y()- j -1);
+            addBackground(new Rectangle(cellSize, cellSize), i, boundaries.upperRight().y()- j -1);
         }
     }
 
@@ -147,7 +148,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
         if(worldMap.isOccupied(currentPosition.add(addVector))){
-            Circle circle = new Circle(5);
+            Circle circle = new Circle((double) cellSize/3);
 //            System.out.println("WM" + worldMap.objectAt(currentPosition.add(addVector)));
             setIcon(circle, worldMap.objectAt(currentPosition.add(addVector)), day);
             GridPane.setHalignment(circle, HPos.CENTER);
@@ -210,10 +211,10 @@ public class SimulationPresenter implements MapChangeListener {
 
     private void addCells(int cols, int rows) {
         for (int i = 0; i < cols; i++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_SIZE));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         }
         for (int i = 0; i < rows; i++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_SIZE));
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         }
     }
 
