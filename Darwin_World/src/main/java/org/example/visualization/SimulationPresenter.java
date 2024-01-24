@@ -127,9 +127,9 @@ public class SimulationPresenter implements MapChangeListener {
         addCells(cols, rows);
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
-                showPreferredArea(i, j);
+                showPreferredArea(i, boundaries.upperRight().y()-j-1);
                 Vector2d addVector = new Vector2d(i,-j);
-                addIcon(day, currentPosition, addVector, i, j);
+                addIcon(day, currentPosition, addVector, i, boundaries.upperRight().y()-j-1);
             }
         }
     }
@@ -138,16 +138,10 @@ public class SimulationPresenter implements MapChangeListener {
         Vector2d cords = new Vector2d(i +1, j +1);
         if(cords.follows(preferredAreaBounds.lowerLeft())
                 && cords.precedes(preferredAreaBounds.upperRight()) && isPreferredAreaShown) {
-//            System.out.println(cords + " " + preferredAreaBounds);
-            addBackground(new Rectangle(cellSize, cellSize), i, boundaries.upperRight().y()- j -1);
+            addBackground(new Rectangle(cellSize, cellSize), i, j);
         }
     }
 
-    private StackPane setCellBackground() {
-        StackPane cell = new StackPane();
-        cell.setStyle("-fx-background-color: " + "rgba(248,225,56,0.42)" + ";");
-        return cell;
-    }
 
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
         if(worldMap.isOccupied(currentPosition.add(addVector)) && !worldMap.objectAt(currentPosition.add(addVector)).isEmpty()){
@@ -273,7 +267,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     public void statisticsUpdate(int day) {
-        simulationStatistics.updateStatistic(day);
+        simulationStatistics.updateStatistic(day, worldMap);
         popularGens = simulationStatistics.getPopularGens();
 
         Map<Statistics, String> mapStatistics = simulationStatistics.getMapStatistics();

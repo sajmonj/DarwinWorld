@@ -37,7 +37,7 @@ public class AbstractSimulation {
         this.genotype = configuration.getGenotype();
         this.speed = configuration.getSpeed();
         this.ID = ID;
-        this.simulationStatistics = new SimulationStatistics(listAnimals, ID, mapType, genotype);
+        this.simulationStatistics = new SimulationStatistics(listAnimals, setGrass, ID, mapType, genotype);
         day = 1;
     }
     public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
