@@ -1,5 +1,6 @@
 package org.example.model;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -10,11 +11,11 @@ import java.util.Optional;
 
 public class AnimalTest {
 
-    private static SimulationConfiguration configuration;
-    private static Animal animal;
+    private SimulationConfiguration configuration;
+    private Animal animal;
 
-    @BeforeAll
-    public static void setUp() {
+    @BeforeEach
+    public void setUp() {
         // Initialize the SimulationConfiguration and Animal objects for testing
         configuration = new SimulationConfiguration();
         configuration.load();
@@ -30,7 +31,7 @@ public class AnimalTest {
         assertEquals(0, animal.getNumOfChildren());
         assertEquals(configuration.getAnimalEnergy(), animal.getEnergy());
         assertEquals("Animal 1", animal.getName());
-        assertEquals(0, animal.getGenNumbers());
+        assertEquals(configuration.getGenNumbers(), animal.getGenNumbers());
         assertEquals(Optional.empty(), animal.getDayOfDeath());
     }
 

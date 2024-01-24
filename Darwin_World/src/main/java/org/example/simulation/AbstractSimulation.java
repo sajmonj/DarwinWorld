@@ -48,6 +48,10 @@ public class AbstractSimulation {
         return ID;
     }
 
+    public Integer getDay() {
+        return day;
+    }
+
     public int getSpeed() {
         return speed;
     }

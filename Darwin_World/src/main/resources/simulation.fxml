@@ -23,8 +23,8 @@
         <HBox>
             <VBox minWidth="250" alignment="CENTER_LEFT">
                 <HBox>
-                    <Label fx:id="mapType" text="-" style="-fx-font-size: 15"/>
-                    <Label fx:id="genomType" text="-" style="-fx-font-size: 15"/>
+                    <Label fx:id="mapType" text="-" style="-fx-font-size: 15; -fx-padding: 0 5 0 10 "/>
+                    <Label fx:id="genomType" text="-" style="-fx-font-size: 15; -fx-padding: 0 10 0 5"/>
                 </HBox>
                 <HBox>
                     <Label text="Number of all animals: " style="-fx-padding: 10"/>
@@ -95,8 +95,6 @@
             <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
             <Button fx:id="prefferedArea" onAction="#onShowPreferredAreaClick" text="Show preferred area" />
             <Button fx:id="trackGens" onAction="#onTrackGens" text="Gens tracking" />
-            <Button fx:id="saveCsv" onAction="#saveToCsv" text="Save to CSV" />
-
         </HBox>
     </bottom>
 </BorderPane>
