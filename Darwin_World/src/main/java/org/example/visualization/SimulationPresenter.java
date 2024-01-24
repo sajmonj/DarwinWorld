@@ -10,7 +10,6 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -21,7 +20,6 @@ import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.SimulationEngine;
 
-import static java.lang.Math.ceil;
 import static java.lang.Math.max;
 
 
@@ -64,7 +62,11 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label energy;
     @FXML
+    private Label consumedGrass;
+    @FXML
     private Label numOfChildren;
+    @FXML
+    private Label numOfDescendants;
     @FXML
     private Label deathDate;
 
@@ -166,7 +168,9 @@ public class SimulationPresenter implements MapChangeListener {
             animalGens.setText(animal.getAnimalGens().toString());
             lengthOfLife.setText(Integer.toString(animal.getAge()));
             energy.setText(Integer.toString(max(0, animal.getEnergy())));
+            consumedGrass.setText(Integer.toString(animal.getConsumedGrass()));
             numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
+            numOfDescendants.setText(Integer.toString(animal.getNumOfDescendants()));
             if(animal.getDayOfDeath().isPresent()) {
                 deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
             }
@@ -177,7 +181,9 @@ public class SimulationPresenter implements MapChangeListener {
             animalGens.setText("-");
             lengthOfLife.setText("-");
             energy.setText("-");
+            consumedGrass.setText("-");
             numOfChildren.setText("-");
+            numOfDescendants.setText("-");
             deathDate.setText("-");
         }
     }
@@ -192,6 +198,7 @@ public class SimulationPresenter implements MapChangeListener {
         circle.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal animal){
                 chosen = animal.equals(chosen) ? null : animal;
+                if(chosen != null) chosen.changeTracking();
                 mapChanged(worldMap,day);
             }
         });
