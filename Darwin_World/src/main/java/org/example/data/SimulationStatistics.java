@@ -1,20 +1,30 @@
 package org.example.data;
 
+import org.example.model.Animal;
+import org.example.model.Gen;
+import org.example.model.Genotype;
+import org.yaml.snakeyaml.events.Event;
 import org.example.model.*;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 public class SimulationStatistics {
+    private final String filePath;
+    private final int statisticID;
 
     private final Map<List<Gen>, Integer> mapGens = new HashMap<>();
+    private final Map<Statistics, String> mapStatistics = new HashMap<>();
+    private final List<List<String>> listStatistics= new ArrayList<>();
+    private final List<Animal> listAnimals;
     private List<Gen> popularGens = null;
     private int counterGenotype = 0;
-    private final int statisticID;
-    private final Map<Statistics, String> mapStatistics = new HashMap<>();
-    private final List<Animal> listAnimals;
+    private FileWriter writer;
     private final Set<Grass> grassSet;
 
     public SimulationStatistics(List<Animal> listAnimals, Set<Grass> grassSet, int statisticID, int mapType, int genotype) {
@@ -24,6 +34,7 @@ public class SimulationStatistics {
         for(Statistics statistics : Statistics.values()){
             mapStatistics.put(statistics,"-");
         }
+        filePath = "statistics" + statisticID+".csv";
 
         mapStatistics.put(Statistics.MAP_TYPE, String.valueOf(mapType));
         mapStatistics.put(Statistics.GENOM_TYPE, String.valueOf(genotype));
@@ -63,6 +74,15 @@ public class SimulationStatistics {
         mapStatistics.put(Statistics.AVG_ANIMALS_ENERGY, String.valueOf((double) Math.round(animalsEnergy*100/numOfLivingAnimals)/100));
         mapStatistics.put(Statistics.AVG_LENGTH_OF_LIFE, String.valueOf((double)Math.round(animalsLife*100/listAnimals.size())/100));
         mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, String.valueOf((double)Math.round(numberOfChildren*100/numOfLivingAnimals)/100));
+        listStatistics.add(List.of(String.valueOf(day),
+                String.valueOf(listAnimals.size()),
+                String.valueOf(numOfLivingAnimals),
+                String.valueOf(grassSet.size()),
+                String.valueOf(freeFields),
+                popularGens.toString(),
+                String.valueOf((double) Math.round(animalsEnergy*100/numOfLivingAnimals)/100),
+                String.valueOf((double)Math.round(animalsLife*100/listAnimals.size())/100),
+                String.valueOf((double)Math.round(numberOfChildren*100/numOfLivingAnimals)/100)));
     }
 
     private void updateGenotype(Genotype animalGenotype) {
@@ -72,6 +92,32 @@ public class SimulationStatistics {
         if(tempCounterGenotype > counterGenotype){
             counterGenotype = tempCounterGenotype;
             popularGens = animalGenotype.getGens();
+        }
+    }
+
+    public void saveStatisticsToCsv() {
+        openFile();
+        for(List<String> dayStatistics : listStatistics){
+            try {
+                writer.write(CsvGenerator.generateCsvLine(dayStatistics) + "\n");
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        try {
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println("Statistics have been saved to the CSV file.");
+    }
+
+    private void openFile() {
+        try{
+            writer = new FileWriter(filePath);
+            writer.write(Statistics.getHeaders() + "\n");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

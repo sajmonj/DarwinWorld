@@ -192,9 +192,7 @@ public class SimulationPresenter implements MapChangeListener {
         circle.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal animal){
                 chosen = animal.equals(chosen) ? null : animal;
-                if(chosen == null){
-                    mapChanged(worldMap, day);
-                }
+                mapChanged(worldMap,day);
             }
         });
    }
@@ -245,7 +243,15 @@ public class SimulationPresenter implements MapChangeListener {
     private void onStopClicked(){
         simulation.stopSimulation();
     }
+    @FXML
+    private void onTrackGens(){
 
+    }
+
+    @FXML
+    private void saveToCsv(){
+        simulationStatistics.saveStatisticsToCsv();
+    }
     @FXML
     public void onShowPreferredAreaClick(){
         isPreferredAreaShown = !isPreferredAreaShown;
