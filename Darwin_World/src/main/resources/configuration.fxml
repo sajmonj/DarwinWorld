@@ -6,9 +6,9 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.control.Slider?>
-
-
+<?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Spinner?>
+
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             minHeight="560.0" minWidth="720.0"
@@ -87,6 +87,9 @@
                 <Label text="Genotype"/>
                 <Button fx:id="genotype" onAction="#onGenotypeButtonClicked" text="Normal genotype" />
                 <Button fx:id="backAndForward" onAction="#onBAFButtonClicked" text="Back and forward" />
+            </HBox>
+            <HBox>
+                <CheckBox fx:id="toCSV" text="Save to CSV"/>
             </HBox>
             <HBox spacing="10">
                 <Button onAction="#onSimulationStartClicked" text="Start" />

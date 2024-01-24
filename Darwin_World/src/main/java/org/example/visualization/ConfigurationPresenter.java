@@ -3,11 +3,7 @@ package org.example.visualization;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -54,6 +50,8 @@ public class ConfigurationPresenter {
     private Button backAndForward;
     @FXML
     private Slider speed;
+    @FXML
+    private CheckBox toCSV;
     private int selectedMapType;
     private int selectedGenotype;
     private SimulationConfiguration configuration = null;
@@ -72,6 +70,10 @@ public class ConfigurationPresenter {
 
             Scene scene = new Scene(simulationWindow);
             stage.setScene(scene);
+
+            stage.setOnHiding(event -> {
+                simulationPresenter.endSimulation();
+            });
 
             stage.show();
 
@@ -152,12 +154,13 @@ public class ConfigurationPresenter {
         int speedValue = (int) speed.getValue();
         int mapType = selectedMapType;
         int genotype = selectedGenotype;
+        boolean toCVS = Boolean.parseBoolean(String.valueOf(toCSV.isSelected()));
 
         handleSpinnerBoundaries(genNumber, minimumMutations, maximumMutations);
 
         configuration.update(height, width, animals, genNumber, energy, readyEnergyValue,
                 reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, minimumMutations,
-                maximumMutations, speedValue,mapType, genotype );
+                maximumMutations, speedValue,mapType, genotype, toCVS);
     }
     private void updateConfiguration(){
         mapHeight.setText(String.valueOf(configuration.getMapHeight()));
@@ -175,6 +178,7 @@ public class ConfigurationPresenter {
         speed.setValue(configuration.getSpeed());
         selectedMapType = configuration.getMapType();
         selectedGenotype = configuration.getGenotype();
+        toCSV.setSelected(configuration.getToCSV());
 
         handleSpinnerBoundaries(configuration.getGenNumbers(), minMutations.getValue(), maxMutations.getValue());
     }
