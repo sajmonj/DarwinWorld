@@ -44,7 +44,7 @@
                 </HBox>
                 <VBox>
                     <Label text="Most popular genotype: " style="-fx-padding: 10"/>
-                    <Label fx:id="genotype" text="-" style="-fx-padding: 10"/>
+                    <Label fx:id="genotype" text="-" style="-fx-padding: 10; -fx-font-size: 12; -fx-font-family: 'system-ui'; -fx-font-weight: lighter" />
                 </VBox>
                 <HBox>
                     <Label text="Avg animals energy: " style="-fx-padding: 10"/>
@@ -65,7 +65,7 @@
                 </HBox>
                 <VBox>
                     <Label text="Animal's Gens: " style="-fx-padding: 10"/>
-                    <Label fx:id="animalGens" text="-" style="-fx-padding: 10"/>
+                    <GridPane fx:id="animalGens" alignment="CENTER"/>
                 </VBox>
                 <HBox>
                     <Label text="Length of life: " style="-fx-padding: 10"/>

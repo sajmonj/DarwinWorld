@@ -65,6 +65,14 @@ public class Genotype {
         return Gens.get(currentGen%genNumbers);
     }
 
+    public int nextGenIndex(){
+        int genotypeDirectionCopy = genotypeDirection;
+        if(selectedType == 2 && (currentGen == 0 || currentGen == genNumbers-1)) {
+            genotypeDirectionCopy *= (-1);
+        }
+        return (currentGen+genotypeDirectionCopy)%genNumbers;
+    }
+
     public int getGenNumbers() {
         return genNumbers;
     }
