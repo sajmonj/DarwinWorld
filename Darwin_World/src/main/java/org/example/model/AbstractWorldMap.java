@@ -124,7 +124,7 @@ abstract class AbstractWorldMap implements WorldMap{
         return !animalList.isEmpty();
     }
 
-    private List<Animal> getAnimals(List<WorldElement> elements) {
+    public List<Animal> getAnimals(List<WorldElement> elements) {
         List<Animal> animalList = elements.stream()
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)

@@ -62,6 +62,7 @@ public interface WorldMap extends MoveValidator {
 
     Map<Vector2d, List<WorldElement>> getElements();
 
+    List<Animal> getAnimals(List<WorldElement> elements);
     /**
      * Return current bounds of map.
      *
