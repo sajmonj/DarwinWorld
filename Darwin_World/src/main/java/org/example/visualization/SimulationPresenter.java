@@ -10,8 +10,10 @@ import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
 
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import org.example.data.SimulationStatistics;
 import org.example.data.Statistics;
 import org.example.model.*;
@@ -19,9 +21,12 @@ import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.SimulationEngine;
 
+import static java.lang.Math.ceil;
+import static java.lang.Math.max;
+
 
 public class SimulationPresenter implements MapChangeListener {
-    private static final int CELL_SIZE = 15;
+    private int cellSize;
     private static final List<Simulation> simulations = new ArrayList<>();
     private static int simulationID = 0;
     private Simulation simulation;
@@ -64,17 +69,27 @@ public class SimulationPresenter implements MapChangeListener {
     private Label deathDate;
 
     private WorldMap worldMap;
+    private Boundary boundaries;
+    private int cols;
+    private int rows;
+    private Boundary preferredAreaBounds;
     private SimulationConfiguration configuration;
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
     private List<Gen> popularGens = null;
-
+    private boolean isPreferredAreaShown;
 
     public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
         runStatistics();
         increaseID();
+        boundaries = worldMap.getCurrentBounds();
+        cols = Math.abs(boundaries.upperRight().x()-boundaries.lowerLeft().x())+1;
+        rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
+        cellSize = 600/max(cols, rows);
+        preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
+                new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
         try {
             simulation = new Simulation(configuration, worldMap, simulationID);
             simulationStatistics = simulation.getSimulationStatistics();
@@ -108,27 +123,39 @@ public class SimulationPresenter implements MapChangeListener {
     private void drawMap(int day){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
-        Boundary currentBounds = worldMap.getCurrentBounds();
-        int cols = Math.abs(currentBounds.upperRight().x()-currentBounds.lowerLeft().x())+1;
-        int rows = Math.abs(currentBounds.upperRight().y()-currentBounds.lowerLeft().y())+1;
-        Vector2d currentPosition = new Vector2d(currentBounds.lowerLeft().x(),currentBounds.upperRight().y());
+        Vector2d currentPosition = new Vector2d(boundaries.lowerLeft().x(),boundaries.upperRight().y());
         addCells(cols, rows);
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
+                showPreferredArea(i, j);
                 Vector2d addVector = new Vector2d(i,-j);
                 addIcon(day, currentPosition, addVector, i, j);
             }
         }
     }
 
+    private void showPreferredArea(int i, int j) {
+        Vector2d cords = new Vector2d(i +1, j +1);
+        if(cords.follows(preferredAreaBounds.lowerLeft())
+                && cords.precedes(preferredAreaBounds.upperRight()) && isPreferredAreaShown) {
+//            System.out.println(cords + " " + preferredAreaBounds);
+            addBackground(new Rectangle(cellSize, cellSize), i, boundaries.upperRight().y()- j -1);
+        }
+    }
+
+    private StackPane setCellBackground() {
+        StackPane cell = new StackPane();
+        cell.setStyle("-fx-background-color: " + "rgba(248,225,56,0.42)" + ";");
+        return cell;
+    }
+
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
-        if(worldMap.isOccupied(currentPosition.add(addVector))){
-//            System.out.println(worldMap.isOccupied(currentPosition.add(addVector)));
-            Circle circle = new Circle(5);
+        if(worldMap.isOccupied(currentPosition.add(addVector)) && !worldMap.objectAt(currentPosition.add(addVector)).isEmpty()){
+            Circle circle = new Circle((double) cellSize/3);
             WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
             setIcon(circle, worldElement , day);
             GridPane.setHalignment(circle, HPos.CENTER);
-            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector)) && chosen.getDayOfDeath().isEmpty()){
+            if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
                 circle.setFill(Color.ORANGE);
 //                displayAnimalStatistics(Optional.ofNullable(chosen));
             } else if (worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
@@ -139,12 +166,12 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void displayAnimalStatistics(Optional<Animal> optionalAnimal) {
-        if(optionalAnimal.isPresent()){
+        if(optionalAnimal.isPresent()) {
             Animal animal = optionalAnimal.orElseThrow();
             animalId.setText(Integer.toString(animal.getID()));
             animalGens.setText(animal.getAnimalGens().toString());
             lengthOfLife.setText(Integer.toString(animal.getAge()));
-            energy.setText(Integer.toString(animal.getEnergy()));
+            energy.setText(Integer.toString(max(0, animal.getEnergy())));
             numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
             if(animal.getDayOfDeath().isPresent()) {
                 deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
@@ -173,19 +200,23 @@ public class SimulationPresenter implements MapChangeListener {
                 chosen = animal.equals(chosen) ? null : animal;
                 if(chosen == null){
                     mapChanged(worldMap, day);
-//                    displayAnimalStatistics(Optional.empty());
                 }
-                mapChanged(worldMap, day);
             }
         });
+   }
+
+    private void addBackground(Rectangle cell, int i, int j) {
+        GridPane.setHalignment(cell, HPos.CENTER);
+        cell.setFill(Color.PEACHPUFF.deriveColor(1,1,1,0.4));
+        mapGrid.add(cell, i, j);
     }
 
     private void addCells(int cols, int rows) {
         for (int i = 0; i < cols; i++) {
-            mapGrid.getColumnConstraints().add(new ColumnConstraints(CELL_SIZE));
+            mapGrid.getColumnConstraints().add(new ColumnConstraints(cellSize));
         }
         for (int i = 0; i < rows; i++) {
-            mapGrid.getRowConstraints().add(new RowConstraints(CELL_SIZE));
+            mapGrid.getRowConstraints().add(new RowConstraints(cellSize));
         }
     }
 
@@ -212,13 +243,18 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     @FXML
-    public void onContinueClicked(){
+    private void onContinueClicked(){
         simulation.continueSimulation();
     }
 
     @FXML
-    public void onStopClicked(){
+    private void onStopClicked(){
         simulation.stopSimulation();
+    }
+
+    @FXML
+    public void onShowPreferredAreaClick(){
+        isPreferredAreaShown = !isPreferredAreaShown;
     }
 
     @Override

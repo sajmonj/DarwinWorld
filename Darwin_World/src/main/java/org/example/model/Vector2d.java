@@ -13,11 +13,11 @@ public record Vector2d(int x, int y) {
         return "(%d,%d)".formatted(x, y);
     }
 
-    boolean precedes(Vector2d other) {
+    public boolean precedes(Vector2d other) {
         return this.x <= other.x && this.y <= other.y;
     }
 
-    boolean follows(Vector2d other) {
+    public boolean follows(Vector2d other) {
         return this.x >= other.x && this.y >= other.y;
     }
 
