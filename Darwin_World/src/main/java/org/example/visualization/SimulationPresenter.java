@@ -58,6 +58,8 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label animalId;
     @FXML
+    private Label animalGens;
+    @FXML
     private Label lengthOfLife;
     @FXML
     private Label energy;
@@ -75,6 +77,7 @@ public class SimulationPresenter implements MapChangeListener {
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
+    private List<Gen> popularGens = null;
     private boolean isPreferredAreaShown;
 
     public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
@@ -147,14 +150,16 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void addIcon(int day, Vector2d currentPosition, Vector2d addVector, int i, int j) {
-        if(worldMap.isOccupied(currentPosition.add(addVector))){
+        if(worldMap.isOccupied(currentPosition.add(addVector)) && !worldMap.objectAt(currentPosition.add(addVector)).isEmpty()){
             Circle circle = new Circle((double) cellSize/3);
-//            System.out.println("WM" + worldMap.objectAt(currentPosition.add(addVector)));
-            setIcon(circle, worldMap.objectAt(currentPosition.add(addVector)), day);
+            WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
+            setIcon(circle, worldElement , day);
             GridPane.setHalignment(circle, HPos.CENTER);
             if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
                 circle.setFill(Color.ORANGE);
-                displayAnimalStatistics(Optional.ofNullable(chosen));
+//                displayAnimalStatistics(Optional.ofNullable(chosen));
+            } else if (worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
+                circle.setFill(Color.BLUE);
             }
             addLabel(circle, i, j);
         }
@@ -164,6 +169,7 @@ public class SimulationPresenter implements MapChangeListener {
         if(optionalAnimal.isPresent()) {
             Animal animal = optionalAnimal.orElseThrow();
             animalId.setText(Integer.toString(animal.getID()));
+            animalGens.setText(animal.getAnimalGens().toString());
             lengthOfLife.setText(Integer.toString(animal.getAge()));
             energy.setText(Integer.toString(max(0, animal.getEnergy())));
             numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
@@ -174,6 +180,7 @@ public class SimulationPresenter implements MapChangeListener {
         }
         else {
             animalId.setText("-");
+            animalGens.setText("-");
             lengthOfLife.setText("-");
             energy.setText("-");
             numOfChildren.setText("-");
@@ -186,27 +193,22 @@ public class SimulationPresenter implements MapChangeListener {
         mapGrid.add(circle, i, j);
     }
 
+    private void setIcon(Circle circle, WorldElement worldElement, int day) {
+        circle.setFill(worldElement.toIcon());
+        circle.setOnMouseClicked(event -> {
+            if(worldElement instanceof Animal animal){
+                chosen = animal.equals(chosen) ? null : animal;
+                if(chosen == null){
+                    mapChanged(worldMap, day);
+                }
+            }
+        });
+   }
+
     private void addBackground(Rectangle cell, int i, int j) {
         GridPane.setHalignment(cell, HPos.CENTER);
         cell.setFill(Color.PEACHPUFF.deriveColor(1,1,1,0.4));
         mapGrid.add(cell, i, j);
-    }
-
-    private void setIcon(Circle circle, List<WorldElement> worldElements, int day) {
-        if(!worldElements.isEmpty()) {
-            WorldElement worldElement = worldElements.get(0);
-
-            circle.setFill(worldElement.toIcon());
-            circle.setOnMouseClicked(event -> {
-                if (worldElement instanceof Animal animal) {
-                    chosen = animal.equals(chosen) ? null : animal;
-                    if (chosen == null) {
-                        displayAnimalStatistics(Optional.empty());
-                    }
-                    mapChanged(worldMap, day);
-                }
-            });
-        }
     }
 
     private void addCells(int cols, int rows) {
@@ -260,15 +262,18 @@ public class SimulationPresenter implements MapChangeListener {
         Platform.runLater(() -> {
             drawMap(day);
             statisticsUpdate(day);
+            displayAnimalStatistics(Optional.ofNullable(chosen));
         });
     }
 
     public void statisticsUpdate(int day) {
         simulationStatistics.updateStatistic(day);
-        Map<Statistics, Double> mapStatistics = simulationStatistics.getMapStatistics();
-        mapLabelStatistics.forEach((name, label) -> {
+        popularGens = simulationStatistics.getPopularGens();
+
+        Map<Statistics, String> mapStatistics = simulationStatistics.getMapStatistics();
+                mapLabelStatistics.forEach((name, label) -> {
             if(name == Statistics.MAP_TYPE) {
-                if(mapStatistics.get(name) == 1) {
+                if(Objects.equals(mapStatistics.get(name), "1")) {
                     label.setText("Earth");
                 }
                 else {
@@ -276,7 +281,7 @@ public class SimulationPresenter implements MapChangeListener {
                 }
             }
             else if(name == Statistics.GENOM_TYPE) {
-                if(mapStatistics.get(name) == 1) {
+                if(Objects.equals(mapStatistics.get(name), "1")) {
                     label.setText("Normal genome");
                 }
                 else {
@@ -284,7 +289,7 @@ public class SimulationPresenter implements MapChangeListener {
                 }
             }
             else {
-                label.setText(mapStatistics.get(name).toString());
+                label.setText(mapStatistics.get(name));
             }
         });
     }

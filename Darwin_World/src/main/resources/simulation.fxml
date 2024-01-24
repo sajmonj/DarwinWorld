@@ -8,27 +8,23 @@
 <?import javafx.scene.control.Label?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="720.0" minWidth="900.0"
+            minHeight="720.0" minWidth="960.0"
             fx:controller="org.example.visualization.SimulationPresenter">
 
     <top>
-        <VBox alignment="CENTER">
-            <Label text="Darwin World" style="-fx-font-size: 20; -fx-font-weight: bold;" />
-        </VBox>
+        <HBox alignment="CENTER">
+            <Label text="Darwin World " style="-fx-font-size: 20; -fx-font-weight: bold;" />
+            <Label text=" Day: " style="-fx-font-size: 15;" />
+            <Label fx:id="day" style="-fx-font-size: 15;" text="-"/>
+        </HBox>
     </top>
 
     <center>
         <HBox>
             <VBox minWidth="250" alignment="CENTER_LEFT">
                 <HBox>
-                    <Label fx:id="mapType" text="-" style="-fx-padding: 10; -fx-font-size: 25"/>
-                </HBox>
-                <HBox>
-                    <Label fx:id="genomType" text="-" style="-fx-padding: 10; -fx-font-size: 20"/>
-                </HBox>
-                <HBox>
-                    <Label text="Day: " style="-fx-padding: 10"/>
-                    <Label fx:id="day" text="-" style="-fx-padding: 10"/>
+                    <Label fx:id="mapType" text="-" style="-fx-font-size: 15"/>
+                    <Label fx:id="genomType" text="-" style="-fx-font-size: 15"/>
                 </HBox>
                 <HBox>
                     <Label text="Number of all animals: " style="-fx-padding: 10"/>
@@ -46,10 +42,10 @@
                     <Label text="Free fields: " style="-fx-padding: 10"/>
                     <Label fx:id="freeFields" text="-" style="-fx-padding: 10"/>
                 </HBox>
-                <HBox>
+                <VBox>
                     <Label text="Most popular genotype: " style="-fx-padding: 10"/>
                     <Label fx:id="genotype" text="-" style="-fx-padding: 10"/>
-                </HBox>
+                </VBox>
                 <HBox>
                     <Label text="Avg animals energy: " style="-fx-padding: 10"/>
                     <Label fx:id="avgEnergy" text="-" style="-fx-padding: 10"/>
@@ -67,6 +63,10 @@
                     <Label text="Animal ID: " style="-fx-padding: 10"/>
                     <Label fx:id="animalId" text="-" style="-fx-padding: 10"/>
                 </HBox>
+                <VBox>
+                    <Label text="Animal's Gens: " style="-fx-padding: 10"/>
+                    <Label fx:id="animalGens" text="-" style="-fx-padding: 10"/>
+                </VBox>
                 <HBox>
                     <Label text="Length of life: " style="-fx-padding: 10"/>
                     <Label fx:id="lengthOfLife" text="-" style="-fx-padding: 10"/>
