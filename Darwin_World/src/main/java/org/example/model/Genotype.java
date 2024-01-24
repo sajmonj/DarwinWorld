@@ -71,7 +71,13 @@ public class Genotype {
 
     @Override
     public String toString() {
-        return Gens.toString();
+        StringBuilder result = new StringBuilder();
+        for (Gen gen : Gens) {
+            result.append(gen.toString());
+            result.append(' ');
+
+        }
+        return result.toString();
     }
 
     public Gen getGens(int i) {
@@ -79,5 +85,21 @@ public class Genotype {
     }
     public void setGens(int i, Gen val) {
         Gens.set(i, val);
+    }
+
+    public List<Gen> getGens() {
+        return Gens;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Genotype genotype)) return false;
+        return selectedType == genotype.selectedType && currentGen == genotype.currentGen && genNumbers == genotype.genNumbers && genotypeDirection == genotype.genotypeDirection && Objects.equals(Gens, genotype.Gens);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(selectedType, currentGen, genNumbers, genotypeDirection, Gens);
     }
 }

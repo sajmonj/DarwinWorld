@@ -1,1 +1,1 @@
-{"mapHeight":40,"mapWidth":40,"animalsNumber":25,"genNumbers":5,"animalEnergy":35,"readyEnergy":13,"reproductionEnergy":10,"grassInitNumber":10,"grassNum":13,"grassEnergy":15,"speed":93,"minMutations":2,"maxMutations":5,"mapType":1,"genotype":1}
+{"mapHeight":40,"mapWidth":40,"animalsNumber":25,"genNumbers":13,"animalEnergy":12,"readyEnergy":13,"reproductionEnergy":10,"grassInitNumber":10,"grassNum":10,"grassEnergy":15,"speed":50,"minMutations":0,"maxMutations":6,"mapType":1,"genotype":1}

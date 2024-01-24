@@ -5,6 +5,7 @@ import javafx.scene.paint.Paint;
 import org.example.data.SimulationConfiguration;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -78,6 +79,9 @@ public class Animal implements WorldElement {
 
     public Genotype getAnimalGenotype() {
         return animalGenotype;
+    }
+    public List<Gen> getAnimalGens() {
+        return animalGenotype.getGens();
     }
 
     public int getID() {
