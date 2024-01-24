@@ -11,7 +11,6 @@ import javafx.scene.layout.RowConstraints;
 import java.util.*;
 import java.util.concurrent.Future;
 
-import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -22,7 +21,6 @@ import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.SimulationEngine;
 
-import static java.lang.Math.ceil;
 import static java.lang.Math.max;
 
 
@@ -66,7 +64,11 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label energy;
     @FXML
+    private Label consumedGrass;
+    @FXML
     private Label numOfChildren;
+    @FXML
+    private Label numOfDescendants;
     @FXML
     private Label deathDate;
     private WorldMap worldMap;
@@ -174,7 +176,9 @@ public class SimulationPresenter implements MapChangeListener {
             animalGens.setText(animal.getAnimalGens().toString());
             lengthOfLife.setText(Integer.toString(animal.getAge()));
             energy.setText(Integer.toString(max(0, animal.getEnergy())));
+            consumedGrass.setText(Integer.toString(animal.getConsumedGrass()));
             numOfChildren.setText(Integer.toString(animal.getNumOfChildren()));
+            numOfDescendants.setText(Integer.toString(animal.getNumOfDescendants()));
             if(animal.getDayOfDeath().isPresent()) {
                 deathDate.setText(Integer.toString(animal.getDayOfDeath().orElse(null)));
             }
@@ -185,7 +189,9 @@ public class SimulationPresenter implements MapChangeListener {
             animalGens.setText("-");
             lengthOfLife.setText("-");
             energy.setText("-");
+            consumedGrass.setText("-");
             numOfChildren.setText("-");
+            numOfDescendants.setText("-");
             deathDate.setText("-");
         }
     }
@@ -200,6 +206,7 @@ public class SimulationPresenter implements MapChangeListener {
         circle.setOnMouseClicked(event -> {
             if(worldElement instanceof Animal animal){
                 chosen = animal.equals(chosen) ? null : animal;
+                if(chosen != null) chosen.changeTracking();
                 mapChanged(worldMap,day);
             }
         });
@@ -264,19 +271,27 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, int day) {
+        if(!simulation.isShouldStop())statisticsUpdate(day);
         Platform.runLater(() -> {
             drawMap(day);
-            if(!simulation.isShouldStop())statisticsUpdate(day);
             displayAnimalStatistics(Optional.ofNullable(chosen));
         });
     }
 
     public void statisticsUpdate(int day) {
-        simulationStatistics.updateStatistic(day, worldMap);
+        simulationStatistics.updateStatistics(day, worldMap);
         popularGens = simulationStatistics.getPopularGens();
 
+        Platform.runLater(this::displayedStatisticsUpdate);
+
+        if(toCSV){
+            simulationStatistics.saveStatisticsToCsv();
+        }
+    }
+
+    private void displayedStatisticsUpdate() {
         Map<Statistics, String> mapStatistics = simulationStatistics.getMapStatistics();
-                mapLabelStatistics.forEach((name, label) -> {
+        mapLabelStatistics.forEach((name, label) -> {
             if(name == Statistics.MAP_TYPE) {
                 if(Objects.equals(mapStatistics.get(name), "1")) {
                     label.setText("Earth");
@@ -297,10 +312,8 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setText(mapStatistics.get(name));
             }
         });
-        if(toCSV){
-            simulationStatistics.saveStatisticsToCsv();
-        }
     }
+
     public void endSimulation(){
         onStopClicked();
         simulationEngine.interruptSimulation();

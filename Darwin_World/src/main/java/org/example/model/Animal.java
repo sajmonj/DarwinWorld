@@ -4,10 +4,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import org.example.data.SimulationConfiguration;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Random;
+import java.util.*;
 
 public class Animal implements WorldElement {
     private final HashSet<Animal> descendants = new HashSet<>();
@@ -19,10 +16,13 @@ public class Animal implements WorldElement {
     private final int genNumbers;
     private int energy;
     private int numOfChildren;
+    private int numOfDescendants;
     private int age;
+    private int consumedGrass;
     private Vector2d animalPosition;
     private MapDirection animalDirection;
     private Integer dayOfDeath;
+    private boolean isTracked = false;
 
     public Animal(SimulationConfiguration configuration, int ID) {
         this.configuration = configuration;
@@ -37,22 +37,44 @@ public class Animal implements WorldElement {
         energy = configuration.getAnimalEnergy();
         age = 0;
         numOfChildren = 0;
+        consumedGrass = 0;
+        numOfDescendants = 0;
     }
 
     public Animal(Animal firstAnimal, Animal secondAnimal, int ID) {
         this.ID = ID;
-        this.age = 0;
         this.animalPosition = firstAnimal.getPosition();
         this.configuration = firstAnimal.configuration;
+        age = 0;
         genNumbers = configuration.getGenNumbers();
         energy = 2*configuration.getReproductionEnergy();
         parentA = firstAnimal;
         parentB = secondAnimal;
+        HashSet<Animal> set = new HashSet<>();
+//        setDescendants(parentA, parentB, set);
         dayOfDeath = null;
+        numOfChildren = 0;
+        consumedGrass = 0;
+        numOfDescendants = 0;
         animalDirection = generateOrientation();
         MutationsGenerator mutationsGenerator = new MutationsGenerator(configuration.getMinMutations(),
                 configuration.getMaxMutations(), genNumbers, new Genotype(firstAnimal, secondAnimal, configuration.getGenotype()));
         animalGenotype = mutationsGenerator.mutatedGenotype();
+    }
+
+    void setDescendants(Animal parentA, Animal parentB, HashSet<Animal> animalHashSet) {
+        if (parentA != null && parentB != null) {
+            numOfDescendants++;
+            if(animalHashSet.contains(this)) numOfDescendants--;
+            else animalHashSet.add(this);
+            parentA.setDescendants(parentA.getParentA(), parentA.getParentB(), animalHashSet);
+            parentB.setDescendants(parentB.getParentA(), parentB.getParentB(), animalHashSet);
+        }
+//        if (parentB != null) {
+//            parentB.descendants.add(this);
+//            numOfDescendants = animalHashSet.size();
+//            setDescendants(parentB.getParentA(), parentB.getParentB());
+//        }
     }
 
     void move(MoveValidator validator) {
@@ -105,8 +127,21 @@ public class Animal implements WorldElement {
         return numOfChildren;
     }
 
+    public int getNumOfDescendants() {
+        return numOfDescendants;
+    }
+
     public int getAge() {
         return age;
+    }
+
+    public int getConsumedGrass() {
+        System.out.println(consumedGrass);
+        return consumedGrass;
+    }
+
+    public int getGenNumbers() {
+        return genNumbers;
     }
 
     public Animal getParentA() {
@@ -166,20 +201,21 @@ public class Animal implements WorldElement {
 
     }
 
-    public int getGenNumbers() {
-        return genNumbers;
-    }
-
     public void incrementAge() {
         age++;
     }
 
-    public void addConsumptionEnergy() {
+    public void consumeGrass() {
         energy += configuration.getGrassEnergy();
+        consumedGrass++;
     }
 
     public void subtractReproductionEnergy() {
         energy -= configuration.getReproductionEnergy();
+    }
+
+    public void changeTracking() {
+        isTracked = !isTracked;
     }
 
     public void kill() {
