@@ -29,8 +29,12 @@ public class Simulation extends AbstractSimulation implements Runnable {
 
     @Override
     public void run() {
-        thread = Thread.currentThread();
-        StartSimulation();
+        try {
+            thread = Thread.currentThread();
+            StartSimulation();
+        } catch (RuntimeException e) {
+            System.err.println("Simulation interrupted!");
+        }
     }
 
     private void StartSimulation() {

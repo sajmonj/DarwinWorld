@@ -51,7 +51,7 @@ public class Animal implements WorldElement {
         parentA = firstAnimal;
         parentB = secondAnimal;
         HashSet<Animal> set = new HashSet<>();
-//        setDescendants(parentA, parentB, set);
+        setDescendants(parentA, parentB, set);
         dayOfDeath = null;
         numOfChildren = 0;
         consumedGrass = 0;
@@ -63,10 +63,10 @@ public class Animal implements WorldElement {
     }
 
     void setDescendants(Animal parentA, Animal parentB, HashSet<Animal> animalHashSet) {
-        if (parentA != null && parentB != null) {
             numOfDescendants++;
             if(animalHashSet.contains(this)) numOfDescendants--;
             else animalHashSet.add(this);
+        if (parentA != null && parentB != null) {
             parentA.setDescendants(parentA.getParentA(), parentA.getParentB(), animalHashSet);
             parentB.setDescendants(parentB.getParentA(), parentB.getParentB(), animalHashSet);
         }
@@ -136,7 +136,6 @@ public class Animal implements WorldElement {
     }
 
     public int getConsumedGrass() {
-        System.out.println(consumedGrass);
         return consumedGrass;
     }
 
