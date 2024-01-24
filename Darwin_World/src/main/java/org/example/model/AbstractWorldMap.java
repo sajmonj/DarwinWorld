@@ -57,10 +57,7 @@ abstract class AbstractWorldMap implements WorldMap{
         Map<Vector2d, List<Animal>> mapAnimals = new HashMap<>();
 
         mapElements.forEach((position, elements) -> {
-            List<Animal> animalElements = elements.stream()
-                    .filter(element -> element instanceof Animal)
-                    .map(element -> (Animal) element)
-                    .collect(Collectors.toList());
+            List<Animal> animalElements = getAnimals(elements);
 
             if (!animalElements.isEmpty()) {
                 mapAnimals.put(position, animalElements);
@@ -91,10 +88,7 @@ abstract class AbstractWorldMap implements WorldMap{
         Map<Grass, Animal> consumptionList = new HashMap<>();
 
         grassSet.forEach(grass -> {
-            List<Animal> animalList = mapElements.get(grass.position()).stream()
-                    .filter(element -> element instanceof Animal)
-                    .map(element -> (Animal) element)
-                    .collect(Collectors.toList());
+            List<Animal> animalList = getAnimals(mapElements.get(grass.position()));
 
             AnimalComparator comparator = new AnimalComparator();
             if(!animalList.isEmpty()) {
@@ -124,6 +118,20 @@ abstract class AbstractWorldMap implements WorldMap{
         }
         return new ArrayList<>();
     }
+
+    public boolean isOccupiedByAnimal(Vector2d position) {
+        List<Animal> animalList = getAnimals(mapElements.get(position));
+        return !animalList.isEmpty();
+    }
+
+    private List<Animal> getAnimals(List<WorldElement> elements) {
+        List<Animal> animalList = elements.stream()
+                .filter(element -> element instanceof Animal)
+                .map(element -> (Animal) element)
+                .collect(Collectors.toList());
+        return animalList;
+    }
+
     @Override
     public String toString() {
         return this.mapVisualizer.draw(bounds.lowerLeft(), bounds.upperRight());

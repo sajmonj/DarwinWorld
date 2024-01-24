@@ -25,7 +25,7 @@ public class HellPortal extends AbstractWorldMap {
 
         List<Vector2d> freeFields = new ArrayList<>();
         mapElements.forEach((field, element) -> {
-            if(!isOccupied(field)) freeFields.add(field);
+            if(!isOccupiedByAnimal(field)) freeFields.add(field);
         });
 
         return animalRelocation(animal, freeFields);
