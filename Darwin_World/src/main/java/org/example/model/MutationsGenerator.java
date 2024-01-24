@@ -51,6 +51,4 @@ public class MutationsGenerator {
     private int numberOfMutations() {
         return minMutations + random.nextInt(maxMutations-minMutations+1);
     }
-
-
 }
