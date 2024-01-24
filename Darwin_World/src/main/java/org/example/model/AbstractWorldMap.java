@@ -25,7 +25,7 @@ abstract class AbstractWorldMap implements WorldMap{
     }
     @Override
     public void place(WorldElement element) {
-        Vector2d position = element.position();
+        Vector2d position = element.getPosition();
         List<WorldElement> objectsAt = objectAt(position);
         objectsAt.add(element);
         mapElements.put(position, objectsAt);
@@ -33,9 +33,9 @@ abstract class AbstractWorldMap implements WorldMap{
 
     @Override
     public void move(Animal animal) {
-        Vector2d oldPosition = animal.position();
+        Vector2d oldPosition = animal.getPosition();
         animal.move(this);
-        Vector2d newPosition = animal.position();
+        Vector2d newPosition = animal.getPosition();
         List<WorldElement> objectsAt = objectAt(newPosition);
         objectsAt.add(animal);
         List<WorldElement> objectsAtOldPosition = mapElements.get(oldPosition);
@@ -47,7 +47,7 @@ abstract class AbstractWorldMap implements WorldMap{
     public void removeDeadAnimals(Animal animal, int day) {
         if(animal.getEnergy() <= 0 && animal.getDayOfDeath().isEmpty()){
             animal.setDayOfDeath(day);
-            List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.position());
+            List<WorldElement> objectsAtAnimalPosition = mapElements.get(animal.getPosition());
             objectsAtAnimalPosition.remove(animal);
         }
     }
@@ -105,7 +105,7 @@ abstract class AbstractWorldMap implements WorldMap{
     private void consumeGrass(Grass grass, Animal animal, Set<Grass> grassSet) {
         grassSet.remove(grass);
 
-        List<WorldElement> objectsAtGrassPosition = mapElements.get(grass.position());
+        List<WorldElement> objectsAtGrassPosition = mapElements.get(grass.getPosition());
         objectsAtGrassPosition.remove(grass);
 
         animal.addConsumptionEnergy();

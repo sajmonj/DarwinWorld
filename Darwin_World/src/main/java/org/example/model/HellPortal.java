@@ -3,8 +3,6 @@ package org.example.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.Vector;
-import java.util.stream.Stream;
 
 public class HellPortal extends AbstractWorldMap {
 
@@ -42,7 +40,7 @@ public class HellPortal extends AbstractWorldMap {
         }
         else {
             animal.kill();
-            return animal.position();
+            return animal.getPosition();
         }
     }
 
