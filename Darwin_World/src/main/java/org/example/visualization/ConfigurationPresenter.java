@@ -8,13 +8,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.example.data.SimulationConfiguration;
+import org.example.simulation.Simulation;
+import org.example.simulation.SimulationEngine;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import static java.lang.Math.min;
 
 public class ConfigurationPresenter {
+    private static final List<Simulation> SIMULATIONS= new ArrayList<>();
+    private static final SimulationEngine SIMULATION_ENGINE = new SimulationEngine(SIMULATIONS);
 
     @FXML
     private TextField mapHeight;
@@ -64,7 +70,7 @@ public class ConfigurationPresenter {
             BorderPane simulationWindow = loader.load();
 
             SimulationPresenter simulationPresenter = loader.getController();
-            int ID = simulationPresenter.startSimulationPresenter(configuration, selectedMapType);
+            int ID = simulationPresenter.startSimulationPresenter(this, configuration, selectedMapType);
             Stage stage = new Stage();
             stage.setTitle("Simulation "+ID);
 
@@ -203,5 +209,10 @@ public class ConfigurationPresenter {
     private void handleSpinnerClick() {
         int genNumber = Integer.parseInt(genNumbers.getText());
         handleSpinnerBoundaries(genNumber, minMutations.getValue(), maxMutations.getValue());
+    }
+
+    public void addSimulation(Simulation simulation){
+        SIMULATIONS.add(simulation);
+        SIMULATION_ENGINE.addAndRunSimulationToThreadPool(simulation);
     }
 }

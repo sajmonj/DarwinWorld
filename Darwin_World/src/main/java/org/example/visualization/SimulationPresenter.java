@@ -84,8 +84,9 @@ public class SimulationPresenter implements MapChangeListener {
     private List<Gen> popularGens = null;
     private boolean isPreferredAreaShown;
     private boolean toCSV = false;
+    private ConfigurationPresenter configurationPresenter;
 
-    public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
+    public int startSimulationPresenter(ConfigurationPresenter configurationPresenter, SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
         runStatistics();
         increaseID();
@@ -103,11 +104,11 @@ public class SimulationPresenter implements MapChangeListener {
             if(toCSV){
                 simulationStatistics.openFile();
             }
+            this.configurationPresenter = configurationPresenter;
+            this.configurationPresenter.addSimulation(simulation);
 
-            simulations.add(simulation);
-
-            simulationEngine = new SimulationEngine(simulations);
-            simulationEngine.runAsyncInThreadPool();
+//            simulationEngine = new SimulationEngine(simulations);
+//            simulationEngine.runAsyncInThreadPool();
 
 
         } catch (IllegalArgumentException e) {
@@ -271,6 +272,7 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     public void onShowPreferredAreaClick(){
         isPreferredAreaShown = !isPreferredAreaShown;
+        mapChanged(worldMap,simulation.getDay());
     }
 
     @Override
@@ -320,7 +322,7 @@ public class SimulationPresenter implements MapChangeListener {
 
     public void endSimulation(){
         onStopClicked();
-        simulationEngine.interruptSimulation();
+        simulation.endSimulation();
         clearGrid();
     }
 }
