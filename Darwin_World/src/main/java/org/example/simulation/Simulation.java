@@ -32,22 +32,28 @@ public class Simulation extends AbstractSimulation implements Runnable {
     }
 
     private void StartSimulation() {
-        while (true){
-            if (!shouldStop){
-                dayCycleSimulation.removeDeadAnimals(day);
-                dayCycleSimulation.move();
-                dayCycleSimulation.consumption();
-                dayCycleSimulation.reproduction();
-                dayCycleSimulation.grassGrowth();
-                try {
+        try{
+            while (!Thread.currentThread().isInterrupted()){
+                if (!shouldStop){
+                    dayCycleSimulation.removeDeadAnimals(day);
+                    dayCycleSimulation.move();
+                    dayCycleSimulation.consumption();
+                    dayCycleSimulation.reproduction();
+                    dayCycleSimulation.grassGrowth();
                     Thread.sleep(super.getSpeed());
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
+                    map.mapChanged(day);
+                    day++;
                 }
-                map.mapChanged(day);
-                day++;
             }
         }
+        catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+        finally {
+            simulationStatistics.closeFile();
+        }
+
+
     }
 
     public void stopSimulation() {
@@ -56,6 +62,11 @@ public class Simulation extends AbstractSimulation implements Runnable {
     public void continueSimulation() {
         shouldStop = false;
     }
+
+    public boolean isShouldStop() {
+        return shouldStop;
+    }
+
     public void endSimulation() {
         Thread.currentThread().interrupt();
     }
