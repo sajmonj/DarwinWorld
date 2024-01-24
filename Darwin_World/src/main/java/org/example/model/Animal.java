@@ -50,7 +50,8 @@ public class Animal implements WorldElement {
         energy = 2*configuration.getReproductionEnergy();
         parentA = firstAnimal;
         parentB = secondAnimal;
-        setDescendants(parentA, parentB);
+        HashSet<Animal> set = new HashSet<>();
+//        setDescendants(parentA, parentB, set);
         dayOfDeath = null;
         numOfChildren = 0;
         consumedGrass = 0;
@@ -61,15 +62,19 @@ public class Animal implements WorldElement {
         animalGenotype = mutationsGenerator.mutatedGenotype();
     }
 
-    void setDescendants(Animal parentA, Animal parentB) {
-        if (parentA != null) {
-            parentA.descendants.add(this);
-            setDescendants(parentA.getParentA(), parentA.getParentB());
+    void setDescendants(Animal parentA, Animal parentB, HashSet<Animal> animalHashSet) {
+        if (parentA != null && parentB != null) {
+            numOfDescendants++;
+            if(animalHashSet.contains(this)) numOfDescendants--;
+            else animalHashSet.add(this);
+            parentA.setDescendants(parentA.getParentA(), parentA.getParentB(), animalHashSet);
+            parentB.setDescendants(parentB.getParentA(), parentB.getParentB(), animalHashSet);
         }
-        if (parentB != null) {
-            parentB.descendants.add(this);
-            setDescendants(parentB.getParentA(), parentB.getParentB());
-        }
+//        if (parentB != null) {
+//            parentB.descendants.add(this);
+//            numOfDescendants = animalHashSet.size();
+//            setDescendants(parentB.getParentA(), parentB.getParentB());
+//        }
     }
 
     void move(MoveValidator validator) {
@@ -123,7 +128,7 @@ public class Animal implements WorldElement {
     }
 
     public int getNumOfDescendants() {
-        return descendants.size();
+        return numOfDescendants;
     }
 
     public int getAge() {

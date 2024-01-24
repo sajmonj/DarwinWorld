@@ -271,19 +271,28 @@ public class SimulationPresenter implements MapChangeListener {
 
     @Override
     public void mapChanged(WorldMap worldMap, int day) {
+        statisticsUpdate(day);
+
         Platform.runLater(() -> {
             drawMap(day);
-            statisticsUpdate(day);
             displayAnimalStatistics(Optional.ofNullable(chosen));
         });
     }
 
     public void statisticsUpdate(int day) {
-        simulationStatistics.updateStatistic(day, worldMap);
+        simulationStatistics.updateStatistics(day, worldMap);
         popularGens = simulationStatistics.getPopularGens();
 
+        Platform.runLater(this::displayedStatisticsUpdate);
+
+        if(toCSV){
+            simulationStatistics.saveStatisticsToCsv();
+        }
+    }
+
+    private void displayedStatisticsUpdate() {
         Map<Statistics, String> mapStatistics = simulationStatistics.getMapStatistics();
-                mapLabelStatistics.forEach((name, label) -> {
+        mapLabelStatistics.forEach((name, label) -> {
             if(name == Statistics.MAP_TYPE) {
                 if(Objects.equals(mapStatistics.get(name), "1")) {
                     label.setText("Earth");
@@ -304,10 +313,8 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setText(mapStatistics.get(name));
             }
         });
-        if(toCSV){
-            simulationStatistics.saveStatisticsToCsv();
-        }
     }
+
     public void endSimulation(){
         if (toCSV) {
             simulationStatistics.closeFile();
