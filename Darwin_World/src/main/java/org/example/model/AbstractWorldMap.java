@@ -108,7 +108,7 @@ abstract class AbstractWorldMap implements WorldMap{
         List<WorldElement> objectsAtGrassPosition = mapElements.get(grass.getPosition());
         objectsAtGrassPosition.remove(grass);
 
-        animal.addConsumptionEnergy();
+        animal.consumeGrass();
     }
 
     @Override

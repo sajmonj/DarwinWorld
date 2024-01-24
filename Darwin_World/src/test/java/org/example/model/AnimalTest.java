@@ -52,7 +52,7 @@ public class AnimalTest {
     public void testAnimalConsumption() {
         // Test animal consumption of energy
         int initialEnergy = animal.getEnergy();
-        animal.addConsumptionEnergy();
+        animal.consumeGrass();
         assertEquals(initialEnergy + configuration.getGrassEnergy(), animal.getEnergy());
     }
 

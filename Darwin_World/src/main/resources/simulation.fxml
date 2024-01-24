@@ -76,8 +76,16 @@
                     <Label fx:id="energy" text="-" style="-fx-padding: 10"/>
                 </HBox>
                 <HBox>
+                    <Label text="Consumed grass: " style="-fx-padding: 10"/>
+                    <Label fx:id="consumedGrass" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
                     <Label text="Num of children: " style="-fx-padding: 10"/>
                     <Label fx:id="numOfChildren" text="-" style="-fx-padding: 10"/>
+                </HBox>
+                <HBox>
+                    <Label text="Num of all descendants: " style="-fx-padding: 10"/>
+                    <Label fx:id="numOfDescendants" text="-" style="-fx-padding: 10"/>
                 </HBox>
                 <HBox>
                     <Label text="Day of death: " style="-fx-padding: 10"/>

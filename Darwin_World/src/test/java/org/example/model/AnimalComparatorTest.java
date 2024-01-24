@@ -32,7 +32,7 @@ public class AnimalComparatorTest {
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
-        animal1.addConsumptionEnergy();
+        animal1.consumeGrass();
 
         AnimalComparator comparator = new AnimalComparator();
         assertEquals(-1, comparator.compare(animal1, animal2));
@@ -82,8 +82,8 @@ public class AnimalComparatorTest {
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
-        animal1.addConsumptionEnergy();
-        animal2.addConsumptionEnergy();
+        animal1.consumeGrass();
+        animal2.consumeGrass();
         animal1.incrementAge();
         animal2.increaseNumberOfChildren();
 
