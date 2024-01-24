@@ -34,7 +34,6 @@ public class Simulation extends AbstractSimulation implements Runnable {
     private void StartSimulation() {
         while (true){
             if (!shouldStop){
-                System.out.println(map.getElements());
                 dayCycleSimulation.removeDeadAnimals(day);
                 dayCycleSimulation.move();
                 dayCycleSimulation.consumption();
