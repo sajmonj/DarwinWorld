@@ -9,6 +9,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
+import java.util.concurrent.Future;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -24,6 +25,7 @@ import static java.lang.Math.max;
 
 
 public class SimulationPresenter implements MapChangeListener {
+    private SimulationEngine simulationEngine;
     private int cellSize;
     private static final List<Simulation> simulations = new ArrayList<>();
     private static int simulationID = 0;
@@ -69,7 +71,6 @@ public class SimulationPresenter implements MapChangeListener {
     private Label numOfDescendants;
     @FXML
     private Label deathDate;
-
     private WorldMap worldMap;
     private Boundary boundaries;
     private int cols;
@@ -79,8 +80,10 @@ public class SimulationPresenter implements MapChangeListener {
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
+    private boolean tracking = false;
     private List<Gen> popularGens = null;
     private boolean isPreferredAreaShown;
+    private boolean toCSV = false;
 
     public int startSimulationPresenter(SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
@@ -96,9 +99,14 @@ public class SimulationPresenter implements MapChangeListener {
             simulation = new Simulation(configuration, worldMap, simulationID);
             simulationStatistics = simulation.getSimulationStatistics();
 
+            toCSV = configuration.getToCSV();
+            if(toCSV){
+                simulationStatistics.openFile();
+            }
+
             simulations.add(simulation);
 
-            SimulationEngine simulationEngine = new SimulationEngine(simulations);
+            simulationEngine = new SimulationEngine(simulations);
             simulationEngine.runAsyncInThreadPool();
 
 
@@ -154,7 +162,7 @@ public class SimulationPresenter implements MapChangeListener {
             if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
                 circle.setFill(Color.ORANGE);
 //                displayAnimalStatistics(Optional.ofNullable(chosen));
-            } else if (worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
+            } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
                 circle.setFill(Color.BLUE);
             }
             addLabel(circle, i, j);
@@ -252,13 +260,10 @@ public class SimulationPresenter implements MapChangeListener {
     }
     @FXML
     private void onTrackGens(){
-
+        tracking = ! tracking;
+        mapChanged(worldMap,simulation.getDay());
     }
 
-    @FXML
-    private void saveToCsv(){
-        simulationStatistics.saveStatisticsToCsv();
-    }
     @FXML
     public void onShowPreferredAreaClick(){
         isPreferredAreaShown = !isPreferredAreaShown;
@@ -299,5 +304,16 @@ public class SimulationPresenter implements MapChangeListener {
                 label.setText(mapStatistics.get(name));
             }
         });
+        if(toCSV){
+            simulationStatistics.saveStatisticsToCsv();
+        }
+    }
+    public void endSimulation(){
+        if (toCSV) {
+            simulationStatistics.closeFile();
+        }
+        onStopClicked();
+        simulationEngine.interruptSimulation();
+        clearGrid();
     }
 }

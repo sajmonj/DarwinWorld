@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
@@ -53,5 +54,10 @@ public class SimulationEngine {
             throw new RuntimeException(e);
         }
 
+    }
+    public void interruptSimulation(){
+        for (Thread simulationThread : simulationsThread) {
+            simulationThread.interrupt();
+        }
     }
 }

@@ -56,6 +56,10 @@ public class Simulation extends AbstractSimulation implements Runnable {
     public void continueSimulation() {
         shouldStop = false;
     }
+    public void endSimulation() {
+        Thread.currentThread().interrupt();
+    }
+
     public List<Animal> getAnimalsList() {
         return listAnimals;
     }

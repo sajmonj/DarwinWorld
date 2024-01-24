@@ -23,6 +23,8 @@ public class SimulationConfiguration {
     private int maxMutations;
     private int mapType;
     private int genotype;
+    private boolean toCSV;
+
 //    public SimulationConfiguration(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
 //                                   int animalEnergy, int readyEnergy, int reproductionEnergy,
 //                                   int grassNum, int grassEnergy) {
@@ -31,7 +33,8 @@ public class SimulationConfiguration {
 
     public void update(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
                        int animalEnergy, int readyEnergy, int reproductionEnergy, int grassInitNumber,
-                       int grassNum, int grassEnergy, int minMutations, int maxMutations,int speed, int mapType, int genotype) {
+                       int grassNum, int grassEnergy, int minMutations, int maxMutations,int speed, int mapType,
+                       int genotype, boolean toCSV) {
 
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
@@ -48,6 +51,7 @@ public class SimulationConfiguration {
         this.maxMutations = maxMutations;
         this.mapType = mapType;
         this.genotype = genotype;
+        this.toCSV = toCSV;
     }
     public void save() {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -66,7 +70,8 @@ public class SimulationConfiguration {
             update(loadedConfig.getMapHeight(), loadedConfig.getMapWidth(), loadedConfig.getAnimalsNumber(),
                     loadedConfig.getGenNumbers(), loadedConfig.getAnimalEnergy(), loadedConfig.getReadyEnergy(),
                     loadedConfig.getReproductionEnergy(), loadedConfig.getGrassInitNumber(), loadedConfig.getGrassNum(),
-                    loadedConfig.getGrassEnergy(), loadedConfig.getMinMutations(), loadedConfig.getMaxMutations(), loadedConfig.getSpeed(), loadedConfig.getMapType(), loadedConfig.getGenotype()
+                    loadedConfig.getGrassEnergy(), loadedConfig.getMinMutations(), loadedConfig.getMaxMutations(),
+                    loadedConfig.getSpeed(), loadedConfig.getMapType(), loadedConfig.getGenotype(), loadedConfig.getToCSV()
             );
             System.out.println("Configuration loaded from JSON file: " + FILE_PATH);
         } catch (IOException e) {
@@ -117,6 +122,11 @@ public class SimulationConfiguration {
     public int getGenotype() {
         return genotype;
     }
+
+    public boolean getToCSV() {
+        return toCSV;
+    }
+
     @Override
     public String toString() {
         return "SimulationConfiguration{" +

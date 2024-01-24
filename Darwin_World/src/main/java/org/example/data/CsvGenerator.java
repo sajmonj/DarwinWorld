@@ -1,18 +1,22 @@
 package org.example.data;
 
 
-import java.util.List;
+import java.util.Map;
 import java.util.StringJoiner;
 
 public class CsvGenerator {
 
-    public static String generateCsvLine(List<String> statisticsList) {
+    public static String generateCsvLine(Map<Statistics, String> statisticsMap) {
         StringJoiner csvLine = new StringJoiner(",");
 
-        for (String stat : statisticsList) {
-            csvLine.add(stat);
+        int skip = 0;
+        for (Statistics stat : Statistics.values()) {
+            if(skip > 1){
+                csvLine.add(statisticsMap.get(stat));
+            }else {
+                skip++;
+            }
         }
-
         return csvLine.toString();
     }
 }

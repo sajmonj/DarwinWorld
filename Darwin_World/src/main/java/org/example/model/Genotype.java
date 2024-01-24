@@ -88,7 +88,7 @@ public class Genotype {
     }
 
     public List<Gen> getGens() {
-        return Gens;
+        return Collections.unmodifiableList(Gens);
     }
 
     @Override
