@@ -128,7 +128,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapLabelStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, avgChildren);
     }
 
-    private void drawMap(int day){
+    private synchronized void drawMap(int day){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Vector2d currentPosition = new Vector2d(boundaries.lowerLeft().x(),boundaries.upperRight().y());
@@ -266,7 +266,7 @@ public class SimulationPresenter implements MapChangeListener {
     public void mapChanged(WorldMap worldMap, int day) {
         Platform.runLater(() -> {
             drawMap(day);
-            statisticsUpdate(day);
+            if(!simulation.isShouldStop())statisticsUpdate(day);
             displayAnimalStatistics(Optional.ofNullable(chosen));
         });
     }
@@ -302,9 +302,6 @@ public class SimulationPresenter implements MapChangeListener {
         }
     }
     public void endSimulation(){
-        if (toCSV) {
-            simulationStatistics.closeFile();
-        }
         onStopClicked();
         simulationEngine.interruptSimulation();
         clearGrid();

@@ -13,10 +13,8 @@ import java.util.*;
 public class SimulationStatistics {
     private final String filePath;
     private final int statisticID;
-
     private final Map<List<Gen>, Integer> mapGens = new HashMap<>();
     private final Map<Statistics, String> mapStatistics = new HashMap<>();
-//    private final List<List<String>> listStatistics= new ArrayList<>();
     private final List<Animal> listAnimals;
     private List<Gen> popularGens = null;
     private int counterGenotype = 0;
@@ -30,12 +28,12 @@ public class SimulationStatistics {
         for(Statistics statistics : Statistics.values()){
             mapStatistics.put(statistics,"-");
         }
-        filePath = "statistics" + statisticID+".csv";
+        filePath = "Statistics/statistics" + statisticID+".csv";
 
         mapStatistics.put(Statistics.MAP_TYPE, String.valueOf(mapType));
         mapStatistics.put(Statistics.GENOM_TYPE, String.valueOf(genotype));
     }
-    public void updateStatistic(int day, WorldMap worldMap){
+    public synchronized void updateStatistic(int day, WorldMap worldMap){
         double numberOfChildren = 0;
         double animalsEnergy = 0;
         double animalsLife = 0;
@@ -86,9 +84,9 @@ public class SimulationStatistics {
         try {
             writer.write(CsvGenerator.generateCsvLine(mapStatistics) + "\n");
         } catch (IOException e) {
+            System.err.println("Statistics have not been added to: " + filePath);
             e.printStackTrace();
         }
-        System.out.println("Statistics have been added to the CSV file.");
     }
 
     public void openFile() {
@@ -104,6 +102,7 @@ public class SimulationStatistics {
         try {
             if (writer != null) {
                 writer.close();
+                System.out.println("File is closed: "+filePath);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -56,6 +56,7 @@ public class SimulationEngine {
 
     }
     public void interruptSimulation(){
+        threadPool.shutdownNow();
         for (Thread simulationThread : simulationsThread) {
             simulationThread.interrupt();
         }
