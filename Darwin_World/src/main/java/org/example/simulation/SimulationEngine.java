@@ -17,6 +17,7 @@ public class SimulationEngine {
         this.simulations = simulations;
         this.simulationsThread = new ArrayList<>();
         this.threadPool = Executors.newFixedThreadPool(4);
+//        runAsyncInThreadPool();
     }
 
     public void runSync() {
@@ -36,6 +37,11 @@ public class SimulationEngine {
         for (Simulation simulation : simulations) {
             threadPool.submit(simulation);
         }
+    }
+
+    public void addAndRunSimulationToThreadPool(Simulation simulation) {
+        threadPool.submit(simulation);
+        System.out.println(Thread.currentThread());
     }
 
     public void awaitSimulationsEnd(){
@@ -60,5 +66,10 @@ public class SimulationEngine {
         for (Thread simulationThread : simulationsThread) {
             simulationThread.interrupt();
         }
+    }
+
+    public void endSimulation(){
+        System.out.println(Thread.currentThread());
+       Thread.currentThread().interrupt();
     }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 public class Simulation extends AbstractSimulation implements Runnable {
     private final DayCycleSimulation dayCycleSimulation;
     private volatile boolean shouldStop = false;
+    private Thread thread = null;
 
     public Simulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         super(configuration, worldMap, ID);
@@ -28,6 +29,7 @@ public class Simulation extends AbstractSimulation implements Runnable {
 
     @Override
     public void run() {
+        thread = Thread.currentThread();
         StartSimulation();
     }
 
@@ -52,8 +54,6 @@ public class Simulation extends AbstractSimulation implements Runnable {
         finally {
             simulationStatistics.closeFile();
         }
-
-
     }
 
     public void stopSimulation() {
@@ -68,7 +68,7 @@ public class Simulation extends AbstractSimulation implements Runnable {
     }
 
     public void endSimulation() {
-        Thread.currentThread().interrupt();
+        thread.interrupt();
     }
 
     public List<Animal> getAnimalsList() {
