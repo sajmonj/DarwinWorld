@@ -2,11 +2,16 @@ package org.example.visualization;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.data.FileSelectorController;
+import org.example.data.InputValidation;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.Simulation;
 import org.example.simulation.SimulationEngine;
@@ -14,7 +19,6 @@ import org.example.simulation.SimulationEngine;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -64,8 +68,8 @@ public class ConfigurationPresenter {
     private Slider speed;
     @FXML
     private CheckBox toCSV;
-    private int selectedMapType;
-    private int selectedGenotype;
+    private Integer selectedMapType = null;
+    private Integer selectedGenotype = null;
     private SimulationConfiguration configuration = null;
 
     @FXML
@@ -94,9 +98,17 @@ public class ConfigurationPresenter {
 
         } catch (IOException | IllegalArgumentException e) {
             System.err.println("Configuration error!");
-//            e.printStackTrace();
+            Popup popup = ErrorPopUp.createErrorPopup();
+
+            Scene scene = earth.getScene();
+
+            double centerX = scene.getWindow().getX() + scene.getWidth() / 2;
+            double centerY = scene.getWindow().getY() + scene.getHeight() / 2;
+
+            popup.show(scene.getWindow(), centerX - popup.getWidth() / 2, centerY - popup.getHeight() / 2);
         }
     }
+
     @FXML
     public void onSimulationSaveClicked(){
         creatConfiguration();
@@ -107,6 +119,7 @@ public class ConfigurationPresenter {
         creatConfiguration();
         configuration.load(file.orElseThrow());
         updateConfiguration();
+        configurationValidation();
         if (selectedMapType == 1) onEarthButtonClicked();
         else if (selectedMapType == 2) onHellPortalButtonClicked();
         if (selectedGenotype == 1) onGenotypeButtonClicked();
@@ -114,18 +127,19 @@ public class ConfigurationPresenter {
     }
 
     private void configurationValidation() {
-        if(file.isEmpty() && !inputValidation()){
-            System.err.println("Configuration doesn't set");
+        if( !InputValidation.inputValidation(mapHeight, mapWidth, animalsNumber, genNumbers, animalEnergy,
+                readyEnergy, reproductionEnergy, grassInitNum, grassNum, grassEnergy, selectedMapType,earth,hellPortal,
+                selectedGenotype, genotype, backAndForward)
+                && !fileValidation()){
+            System.err.println("Invalid settings");
             throw new IllegalArgumentException();
-        }
-        else {
-            setConfiguration(configuration);
         }
     }
 
-    private boolean inputValidation() {
-        return !mapHeight.getText().isEmpty();
+    private boolean fileValidation() {
+        return file.isEmpty();
     }
+
 
     @FXML
     public void onEarthButtonClicked(){
