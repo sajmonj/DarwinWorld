@@ -68,7 +68,8 @@ abstract class AbstractWorldMap implements WorldMap{
         mapAnimals.forEach((position, elements) -> {
             if(elements.size()>1){
                 elements.sort(animalComparator);
-                if(elements.get(1).getEnergy() >= 8)bornAnimal(elements.get(0), elements.get(1), simulationAnimalsList);
+                int readyForReproductionEnergy = elements.get(1).getConfiguration().getReadyEnergy();
+                if(elements.get(1).getEnergy() >= readyForReproductionEnergy)bornAnimal(elements.get(0), elements.get(1), simulationAnimalsList);
             }
         });
     }

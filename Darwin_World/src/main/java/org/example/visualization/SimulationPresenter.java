@@ -3,6 +3,7 @@ package org.example.visualization;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.geometry.HPos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -68,6 +69,14 @@ public class SimulationPresenter implements MapChangeListener {
     private Label numOfDescendants;
     @FXML
     private Label deathDate;
+    @FXML
+    private Button stop;
+    @FXML
+    private Button continueButton;
+    @FXML
+    private Button preferredArea;
+    @FXML
+    private Button trackGens;
     private WorldMap worldMap;
     private Boundary boundaries;
     private int cols;
@@ -91,6 +100,7 @@ public class SimulationPresenter implements MapChangeListener {
         cols = Math.abs(boundaries.upperRight().x()-boundaries.lowerLeft().x())+1;
         rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
         cellSize = 600/max(cols, rows);
+
         if(rows < 5 && rows > 1) {
             preferredAreaBounds = new Boundary(new Vector2d(1, 2),
                     new Vector2d(cols, 2));
@@ -280,22 +290,28 @@ public class SimulationPresenter implements MapChangeListener {
 
     @FXML
     private void onContinueClicked(){
+        setButtonStyle(stop, false);
+        setButtonStyle(continueButton, true);
         simulation.continueSimulation();
     }
 
     @FXML
     private void onStopClicked(){
+        setButtonStyle(stop, true);
+        setButtonStyle(continueButton, false);
         simulation.stopSimulation();
     }
     @FXML
     private void onTrackGens(){
-        tracking = ! tracking;
+        tracking = !tracking;
+        setButtonStyle(trackGens, tracking);
         mapChanged(worldMap,simulation.getDay());
     }
 
     @FXML
     public void onShowPreferredAreaClick(){
         isPreferredAreaShown = !isPreferredAreaShown;
+        setButtonStyle(preferredArea, isPreferredAreaShown);
         mapChanged(worldMap,simulation.getDay());
     }
 
@@ -348,5 +364,13 @@ public class SimulationPresenter implements MapChangeListener {
         onStopClicked();
         simulation.endSimulation();
         clearGrid();
+    }
+
+    private void setButtonStyle(Button button, boolean isActive) {
+        if (isActive) {
+            button.setStyle("-fx-background-color: lightblue; -fx-font-weight: bold;");
+        } else {
+            button.setStyle("");
+        }
     }
 }

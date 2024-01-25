@@ -147,6 +147,10 @@ public class Animal implements WorldElement {
         return parentB;
     }
 
+    public SimulationConfiguration getConfiguration() {
+        return configuration;
+    }
+
     public void increaseNumberOfChildren() {
         numOfChildren++;
     }
