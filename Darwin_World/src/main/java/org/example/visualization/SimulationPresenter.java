@@ -9,7 +9,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
-import java.util.concurrent.Future;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -94,8 +93,14 @@ public class SimulationPresenter implements MapChangeListener {
         cols = Math.abs(boundaries.upperRight().x()-boundaries.lowerLeft().x())+1;
         rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
         cellSize = 600/max(cols, rows);
-        preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
-                new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
+        if(rows < 5 && rows > 1) {
+            preferredAreaBounds = new Boundary(new Vector2d(1, 2),
+                    new Vector2d(cols, 2));
+        }
+        else {
+            preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
+                    new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
+        }
         try {
             simulation = new Simulation(configuration, worldMap, simulationID);
             simulationStatistics = simulation.getSimulationStatistics();
@@ -106,10 +111,6 @@ public class SimulationPresenter implements MapChangeListener {
             }
             this.configurationPresenter = configurationPresenter;
             this.configurationPresenter.addSimulation(simulation);
-
-//            simulationEngine = new SimulationEngine(simulations);
-//            simulationEngine.runAsyncInThreadPool();
-
 
         } catch (IllegalArgumentException e) {
             System.err.println("Illegal argument!");
@@ -161,7 +162,7 @@ public class SimulationPresenter implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
                 setIcon(circle, worldElement , day);
                 GridPane.setHalignment(circle, HPos.CENTER);
-                if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
+                if(chosen != null && chosen.getDayOfDeath().isEmpty() && chosen.getPosition().equals(currentPosition.add(addVector))){
                     circle.setFill(Color.ORANGE);
     //                displayAnimalStatistics(Optional.ofNullable(chosen));
                 } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){

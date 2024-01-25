@@ -2,8 +2,11 @@ package org.example.model;
 
 import org.example.data.SimulationConfiguration;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,8 +15,9 @@ public class AnimalComparatorTest {
     static SimulationConfiguration simulationConfiguration;
     @BeforeAll
     public static void setUp() {
+        File file = new File("Config/config1.json");
         simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
+        simulationConfiguration.load(file);
     }
 
     @Test
@@ -27,8 +31,6 @@ public class AnimalComparatorTest {
 
     @Test
     public void testDifferentEnergy() {
-        SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
@@ -40,8 +42,6 @@ public class AnimalComparatorTest {
 
     @Test
     public void testDifferentAge() {
-        SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
@@ -53,8 +53,6 @@ public class AnimalComparatorTest {
 
     @Test
     public void testDifferentNumberOfChildren() {
-        SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
@@ -65,9 +63,7 @@ public class AnimalComparatorTest {
     }
 
     @Test
-    public void testDifferentID() {
-        SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
+    public void testDifferentID() {;
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 
@@ -77,8 +73,6 @@ public class AnimalComparatorTest {
 
     @Test
     public void testMixedDifferences() {
-        SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
         Animal animal1 = new Animal(simulationConfiguration, 1);
         Animal animal2 = new Animal(simulationConfiguration, 2);
 

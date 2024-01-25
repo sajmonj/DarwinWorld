@@ -93,11 +93,13 @@
             </HBox>
             <HBox spacing="10">
                 <Button onAction="#onSimulationStartClicked" text="Start" />
-                <Button onAction="#onSimulationLoadClicked" text="Load" />
+                <Button text="Select File" onAction="#selectFile" />
                 <Button onAction="#onSimulationSaveClicked" text="Save" />
             </HBox>
+            <VBox spacing="10">
+                <TextField fx:id="filePathTextField" promptText="Selected File Path" editable="false" />
+            </VBox>
         </VBox>
-
     </center>
 
     <bottom>
