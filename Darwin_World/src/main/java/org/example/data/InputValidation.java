@@ -1,6 +1,8 @@
 package org.example.data;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
 
 public class InputValidation {
@@ -11,7 +13,8 @@ public class InputValidation {
                                           TextField genNumbers, TextField animalEnergy, TextField readyEnergy,
                                           TextField reproductionEnergy, TextField grassInitNum, TextField grassNum,
                                           TextField grassEnergy, Integer selectedMapType, Button earth, Button hellPortal,
-                                          Integer selectedGenotype, Button genotype, Button backAndForward) {
+                                          Integer selectedGenotype, Button genotype, Button backAndForward,
+                                          Spinner<Integer> minMutations, Spinner<Integer> maxMutations) {
         boolean validation = true;
         if(check(mapHeight,3,61)){
             mapHeight.setStyle(POSITIVE);
@@ -100,6 +103,12 @@ public class InputValidation {
         if(selectedGenotype == null){
             genotype.setStyle(NEGATIVE);
             backAndForward.setStyle(NEGATIVE);
+            validation = false;
+        }
+        SpinnerValueFactory<Integer> valueMin = minMutations.getValueFactory();
+        SpinnerValueFactory<Integer> valueMax = maxMutations.getValueFactory();
+
+        if(valueMin.getValue() > valueMax.getValue()){
             validation = false;
         }
 
