@@ -129,7 +129,7 @@ public class ConfigurationPresenter {
     private void configurationValidation() {
         if( !InputValidation.inputValidation(mapHeight, mapWidth, animalsNumber, genNumbers, animalEnergy,
                 readyEnergy, reproductionEnergy, grassInitNum, grassNum, grassEnergy, selectedMapType,earth,hellPortal,
-                selectedGenotype, genotype, backAndForward)
+                selectedGenotype, genotype, backAndForward, minMutations, maxMutations)
                 && !fileValidation()){
             System.err.println("Invalid settings");
             throw new IllegalArgumentException();
