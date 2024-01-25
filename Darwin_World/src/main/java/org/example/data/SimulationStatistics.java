@@ -4,7 +4,6 @@ import javafx.application.Platform;
 import org.example.model.Animal;
 import org.example.model.Gen;
 import org.example.model.Genotype;
-import org.yaml.snakeyaml.events.Event;
 import org.example.model.*;
 
 import java.io.FileWriter;
@@ -123,5 +122,8 @@ public class SimulationStatistics {
 
     public Map<Statistics, String> getMapStatistics() {
         return mapStatistics;
+    }
+    public int getStatisticID() {
+        return statisticID;
     }
 }

@@ -1,7 +1,5 @@
 package org.example.model;
 
-import org.example.util.MapVisualizer;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -10,7 +8,6 @@ abstract class AbstractWorldMap implements WorldMap{
     protected final Boundary bounds;
     private final List<MapChangeListener> observers = new ArrayList<>();
     protected final Map<Vector2d, List<WorldElement>> mapElements = new HashMap<>();
-    protected MapVisualizer mapVisualizer;
     public abstract Vector2d moveTo(Vector2d position, Vector2d directionVector, Animal animal);
 
     public Boundary getCurrentBounds() {
@@ -98,9 +95,7 @@ abstract class AbstractWorldMap implements WorldMap{
             }
         });
 
-        consumptionList.forEach((grass, animal) -> {
-            consumeGrass(grass, animal, grassSet);
-        });
+        consumptionList.forEach((grass, animal) -> consumeGrass(grass, animal, grassSet));
     }
 
     private void consumeGrass(Grass grass, Animal animal, Set<Grass> grassSet) {
@@ -126,17 +121,12 @@ abstract class AbstractWorldMap implements WorldMap{
     }
 
     public List<Animal> getAnimals(List<WorldElement> elements) {
-        List<Animal> animalList = elements.stream()
+        return elements.stream()
                 .filter(element -> element instanceof Animal)
                 .map(element -> (Animal) element)
                 .collect(Collectors.toList());
-        return animalList;
     }
 
-    @Override
-    public String toString() {
-        return this.mapVisualizer.draw(bounds.lowerLeft(), bounds.upperRight());
-    }
     @Override
     public Map<Vector2d, List<WorldElement>> getElements() {
         return Collections.unmodifiableMap(mapElements);

@@ -19,8 +19,6 @@ import org.example.data.Statistics;
 import org.example.model.*;
 import org.example.simulation.Simulation;
 import org.example.data.SimulationConfiguration;
-import org.example.simulation.SimulationEngine;
-
 import static java.lang.Math.max;
 
 
@@ -82,7 +80,6 @@ public class SimulationPresenter implements MapChangeListener {
     private int cols;
     private int rows;
     private Boundary preferredAreaBounds;
-    private SimulationConfiguration configuration;
     private final Map<Statistics, Label> mapLabelStatistics = new HashMap<>();
 
     private Animal chosen = null;
@@ -90,7 +87,6 @@ public class SimulationPresenter implements MapChangeListener {
     private List<Gen> popularGens = null;
     private boolean isPreferredAreaShown;
     private boolean toCSV = false;
-    private ConfigurationPresenter configurationPresenter;
 
     public int startSimulationPresenter(ConfigurationPresenter configurationPresenter, SimulationConfiguration configuration, int mapType) {
         setOptions(configuration, mapType);
@@ -117,8 +113,7 @@ public class SimulationPresenter implements MapChangeListener {
             if(toCSV){
                 simulationStatistics.openFile();
             }
-            this.configurationPresenter = configurationPresenter;
-            this.configurationPresenter.addSimulation(simulation);
+            configurationPresenter.addSimulation(simulation);
 
         } catch (IllegalArgumentException e) {
             System.err.println("Illegal argument!");
@@ -214,7 +209,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void writeGenotype(Genotype genotype) {
-        double genotypeCellSize = 300/ genotype.getGens().size();
+        int genotypeCellSize = 300/genotype.getGens().size();
         animalGens.getChildren().retainAll(mapGrid.getChildren().get(0));
         animalGens.getColumnConstraints().clear();
         animalGens.getRowConstraints().clear();
@@ -279,7 +274,6 @@ public class SimulationPresenter implements MapChangeListener {
             worldMap = new HellPortal(2, configuration.getMapWidth(), configuration.getMapHeight());
         }
         worldMap.registerObserver(this);
-        this.configuration = configuration;
     }
 
     private void increaseID() {

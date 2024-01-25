@@ -40,10 +40,6 @@ public class Genotype {
         Animal second = first.equals(firstAnimal) ? secondAnimal : firstAnimal;
         copyGens(0,point, first);
         copyGens(point,genNumbers, second);
-        if(Gens.size()!=firstAnimal.getGenNumbers()){
-            System.out.println(Gens);
-            throw new IllegalArgumentException();
-        }
     }
 
     private void newGenotype(int genNumbers) {
@@ -93,7 +89,6 @@ public class Genotype {
     }
 
     public Gen getGens(int i) {
-//        System.out.println(Gens);
         return Gens.get(i);
     }
     public void setGens(int i, Gen val) {

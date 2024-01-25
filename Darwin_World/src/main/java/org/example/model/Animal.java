@@ -7,7 +7,6 @@ import org.example.data.SimulationConfiguration;
 import java.util.*;
 
 public class Animal implements WorldElement {
-    private final HashSet<Animal> descendants = new HashSet<>();
     private final SimulationConfiguration configuration;
     private final Genotype animalGenotype;
     private final Animal parentA;

@@ -3,13 +3,6 @@ package org.example.model;
 import java.util.Objects;
 
 public record Vector2d(int x, int y) {
-    public String xToString() {
-        return "%d".formatted(x);
-    }
-
-    public String yToString() {
-        return "%d".formatted(y);
-    }
 
     public String toString() {
         return "(%d,%d)".formatted(x, y);

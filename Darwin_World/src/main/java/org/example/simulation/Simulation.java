@@ -74,8 +74,4 @@ public class Simulation extends SuperSimulation implements Runnable {
     public void endSimulation() {
         thread.interrupt();
     }
-
-    public List<Animal> getAnimalsList() {
-        return listAnimals;
-    }
 }
