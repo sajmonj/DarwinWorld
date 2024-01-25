@@ -38,8 +38,10 @@ public class SimulationStatistics {
         double numberOfChildren = 0;
         double animalsEnergy = 0;
         double animalsLife = 0;
-        double numOfLivingAnimals = 0;
+        int numOfLivingAnimals = 0;
         double freeFields = 0;
+        counterGenotype = 0;
+        mapGens.clear();
 
         for(Animal animal : listAnimals){
             if(animal.getDayOfDeath().isEmpty()) {
@@ -63,7 +65,7 @@ public class SimulationStatistics {
         updateDisplayingStatistics(day, numOfLivingAnimals, freeFields, animalsEnergy, animalsLife, numberOfChildren);
     }
 
-    public void updateDisplayingStatistics(int day, double numOfLivingAnimals, double freeFields, double animalsEnergy, double animalsLife, double numberOfChildren){
+    public void updateDisplayingStatistics(int day, int numOfLivingAnimals, double freeFields, double animalsEnergy, double animalsLife, double numberOfChildren){
         Platform.runLater(() -> {
             mapStatistics.put(Statistics.DAY, String.valueOf(day));
             mapStatistics.put(Statistics.NUMBER_OF_ALL_ANIMALS, String.valueOf(listAnimals.size()));
@@ -100,7 +102,6 @@ public class SimulationStatistics {
         try{
             writer = new FileWriter(filePath);
             writer.write(Statistics.getHeaders() + "\n");
-            System.out.println(Statistics.getHeaders());
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -23,6 +23,12 @@ public class MutationsGenerator {
         List<Integer> gensSelectedToMutation = selectedGens(numberOfMutatedGens);
         Gen[] gens = Gen.values();
 
+//        System.out.println("KK "+genNumbers+" "+maxMutations);
+
+//        System.out.println("G"+genotype.getGenNumbers()+" "+numberOfMutatedGens);
+//        System.out.println("L"+genotype.getGenNumbers());
+//        System.out.println(gensSelectedToMutation);
+//        System.out.println(numberOfMutations());
         gensSelectedToMutation.forEach(gen -> {
             int rand = random.nextInt(gens.length);
             while (genotype.getGens(gen) == gens[rand]) {

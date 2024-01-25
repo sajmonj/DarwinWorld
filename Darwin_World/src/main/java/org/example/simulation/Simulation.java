@@ -6,7 +6,7 @@ import org.example.model.*;
 
 import java.util.List;
 
-public class Simulation extends AbstractSimulation implements Runnable {
+public class Simulation extends SuperSimulation implements Runnable {
     private final DayCycleSimulation dayCycleSimulation;
     private volatile boolean shouldStop = false;
     private Thread thread = null;

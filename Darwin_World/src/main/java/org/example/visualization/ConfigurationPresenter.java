@@ -4,23 +4,27 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import org.example.data.FileSelectorController;
 import org.example.data.SimulationConfiguration;
 import org.example.simulation.Simulation;
 import org.example.simulation.SimulationEngine;
 
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.module.Configuration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static java.lang.Math.min;
 
 public class ConfigurationPresenter {
     private static final List<Simulation> SIMULATIONS= new ArrayList<>();
     private static final SimulationEngine SIMULATION_ENGINE = new SimulationEngine(SIMULATIONS);
+    private Optional<File> file = Optional.empty();
 
     @FXML
     private TextField mapHeight;
@@ -43,9 +47,11 @@ public class ConfigurationPresenter {
     @FXML
     private TextField grassEnergy;
     @FXML
-    private Spinner<Integer> minMutations = new Spinner<Integer>(0, 10, 0);
+    private TextField filePathTextField;
     @FXML
-    private Spinner<Integer> maxMutations = new Spinner<Integer>(0,10,3);
+    private Spinner<Integer> minMutations = new Spinner<>(0, 10, 0);
+    @FXML
+    private Spinner<Integer> maxMutations = new Spinner<>(0, 10, 3);
     @FXML
     private Button earth;
     @FXML
@@ -64,13 +70,16 @@ public class ConfigurationPresenter {
 
     @FXML
     public void onSimulationStartClicked(){
-        onSimulationSaveClicked();
         try {
+            creatConfiguration();
+            configurationValidation();
+            SimulationConfiguration simulationConfiguration = new SimulationConfiguration();
+            setConfiguration(simulationConfiguration);
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("simulation.fxml"));
             BorderPane simulationWindow = loader.load();
 
             SimulationPresenter simulationPresenter = loader.getController();
-            int ID = simulationPresenter.startSimulationPresenter(this, configuration, selectedMapType);
+            int ID = simulationPresenter.startSimulationPresenter(this, simulationConfiguration, selectedMapType);
             Stage stage = new Stage();
             stage.setTitle("Simulation "+ID);
 
@@ -83,26 +92,41 @@ public class ConfigurationPresenter {
 
             stage.show();
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException | IllegalArgumentException e) {
+            System.err.println("Configuration error!");
+//            e.printStackTrace();
         }
     }
     @FXML
     public void onSimulationSaveClicked(){
         creatConfiguration();
-        setConfiguration();
+        setConfiguration(configuration);
         configuration.save();
     }
-    @FXML
-    public void onSimulationLoadClicked(){
+    public void onSimulationLoadClicked()  {
         creatConfiguration();
-        configuration.load();
+        configuration.load(file.orElseThrow());
         updateConfiguration();
         if (selectedMapType == 1) onEarthButtonClicked();
         else if (selectedMapType == 2) onHellPortalButtonClicked();
         if (selectedGenotype == 1) onGenotypeButtonClicked();
         else if (selectedGenotype == 2) onBAFButtonClicked();
     }
+
+    private void configurationValidation() {
+        if(file.isEmpty() && !inputValidation()){
+            System.err.println("Configuration doesn't set");
+            throw new IllegalArgumentException();
+        }
+        else {
+            setConfiguration(configuration);
+        }
+    }
+
+    private boolean inputValidation() {
+        return !mapHeight.getText().isEmpty();
+    }
+
     @FXML
     public void onEarthButtonClicked(){
         selectedMapType = 1;
@@ -143,8 +167,7 @@ public class ConfigurationPresenter {
         }
     }
 
-
-    private void setConfiguration(){
+    private void setConfiguration(SimulationConfiguration tempConfiguration){
         int height = Integer.parseInt(mapHeight.getText());
         int width = Integer.parseInt(mapWidth.getText());
         int animals = Integer.parseInt(animalsNumber.getText());
@@ -164,7 +187,7 @@ public class ConfigurationPresenter {
 
         handleSpinnerBoundaries(genNumber, minimumMutations, maximumMutations);
 
-        configuration.update(height, width, animals, genNumber, energy, readyEnergyValue,
+        tempConfiguration.update(height, width, animals, genNumber, energy, readyEnergyValue,
                 reproductionEnergyValue, grassInitNumber, grassNumber, grassEnergyValue, minimumMutations,
                 maximumMutations, speedValue,mapType, genotype, toCVS);
     }
@@ -215,4 +238,10 @@ public class ConfigurationPresenter {
         SIMULATIONS.add(simulation);
         SIMULATION_ENGINE.addAndRunSimulationToThreadPool(simulation);
     }
+    @FXML
+    private void selectFile() {
+        file = FileSelectorController.openFolder(filePathTextField);
+        if(file.isPresent())onSimulationLoadClicked();
+    }
+
 }

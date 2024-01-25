@@ -4,15 +4,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.data.SimulationConfiguration;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.io.File;
 
 class HellPortalTest {
 
     static SimulationConfiguration simulationConfiguration;
     @BeforeAll
     public static void setUp() {
+        File file = new File("Config/config1.json");
         simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
+        simulationConfiguration.load(file);
     }
 
     @Test

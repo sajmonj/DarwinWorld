@@ -6,9 +6,10 @@ import org.example.model.*;
 
 import java.util.*;
 
-public class AbstractSimulation {
+public class SuperSimulation {
 
     protected final WorldMap map;
+    private final SimulationConfiguration configuration;
     protected Integer day;
     protected List<Animal> listAnimals;
     protected final Set<Grass> setGrass = new HashSet<>();
@@ -24,8 +25,9 @@ public class AbstractSimulation {
     protected final int genotype;
     protected final int ID;
 
-    public AbstractSimulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+    public SuperSimulation(SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         listAnimals = new ArrayList<>();
+        this.configuration = configuration;
         this.map = worldMap;
         this.animalEnergy = configuration.getAnimalEnergy();
         this.reproductionEnergy = configuration.getReproductionEnergy();
@@ -40,7 +42,7 @@ public class AbstractSimulation {
         this.simulationStatistics = new SimulationStatistics(listAnimals, setGrass, ID, mapType, genotype);
         day = 1;
     }
-    public AbstractSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
+    public SuperSimulation(List<Animal> animalList, SimulationConfiguration configuration, WorldMap worldMap, int ID) {
         this(configuration, worldMap, ID);
         listAnimals = animalList;
     }
@@ -50,6 +52,10 @@ public class AbstractSimulation {
 
     public Integer getDay() {
         return day;
+    }
+
+    public SimulationConfiguration getConfiguration() {
+        return configuration;
     }
 
     public int getSpeed() {
