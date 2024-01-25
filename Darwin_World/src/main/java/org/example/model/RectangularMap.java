@@ -1,12 +1,9 @@
 package org.example.model;
 
-import org.example.util.MapVisualizer;
-
 
 public class RectangularMap extends AbstractWorldMap {
     public RectangularMap(int ID, int width, int height) {
         super(ID, width, height);
-        this.mapVisualizer = new MapVisualizer(this);
     }
 
     @Override

@@ -2,12 +2,9 @@ package org.example.visualization;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.example.data.FileSelectorController;
@@ -19,15 +16,12 @@ import org.example.simulation.SimulationEngine;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 import static java.lang.Math.min;
 
 public class ConfigurationPresenter {
-    private static final List<Simulation> SIMULATIONS= new ArrayList<>();
-    private static final SimulationEngine SIMULATION_ENGINE = new SimulationEngine(SIMULATIONS);
+    private static final SimulationEngine SIMULATION_ENGINE = new SimulationEngine();
     private Optional<File> file = Optional.empty();
 
     @FXML
@@ -252,7 +246,6 @@ public class ConfigurationPresenter {
     }
 
     public void addSimulation(Simulation simulation){
-        SIMULATIONS.add(simulation);
         SIMULATION_ENGINE.addAndRunSimulationToThreadPool(simulation);
     }
     @FXML

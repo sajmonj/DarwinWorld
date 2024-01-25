@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.IOException;
 
 public class SimulationConfiguration {
-    private File file;
     private int mapHeight;
     private int mapWidth;
     private int animalsNumber;
@@ -65,7 +64,6 @@ public class SimulationConfiguration {
     }
 
     public void load(File file) {
-        this.file = file;
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             SimulationConfiguration loadedConfig = objectMapper.readValue(file, SimulationConfiguration.class);

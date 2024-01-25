@@ -8,13 +8,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 public class SimulationEngine {
-
-    private final List<Simulation> simulations;
     private final List<Thread> simulationsThread;
     private final ExecutorService threadPool;
 
-    public SimulationEngine(List<Simulation> simulations) {
-        this.simulations = simulations;
+    public SimulationEngine() {
         this.simulationsThread = new ArrayList<>();
         this.threadPool = Executors.newFixedThreadPool(4);
     }

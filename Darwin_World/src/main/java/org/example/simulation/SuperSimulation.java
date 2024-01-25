@@ -54,10 +54,6 @@ public class SuperSimulation {
         return day;
     }
 
-    public SimulationConfiguration getConfiguration() {
-        return configuration;
-    }
-
     public int getSpeed() {
         return speed;
     }
