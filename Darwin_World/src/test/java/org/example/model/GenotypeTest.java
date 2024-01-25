@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.example.data.SimulationConfiguration;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,8 +16,9 @@ class GenotypeTest {
     static SimulationConfiguration simulationConfiguration;
     @BeforeAll
     public static void setUp() {
+        File file = new File("Config/config1.json");
         simulationConfiguration = new SimulationConfiguration();
-        simulationConfiguration.load();
+        simulationConfiguration.load(file);
     }
 
     @Test
@@ -39,7 +42,6 @@ class GenotypeTest {
     void testCopyGens() {
         Animal parent = new Animal(simulationConfiguration, 1);
         Genotype genotype = new Genotype(0, 1);
-        System.out.println(genotype.getGens());
 
         int to = simulationConfiguration.getGenNumbers()/2;
         genotype.copyGens(0, to, parent);
@@ -53,8 +55,6 @@ class GenotypeTest {
     @Test
     void testNextGen1() {
         Genotype genotype = new Genotype(3, 1);
-
-        System.out.println(genotype.getGens());
 
         Gen gen0 = genotype.nextGen();
         Gen gen1 = genotype.nextGen();
@@ -70,8 +70,6 @@ class GenotypeTest {
     @Test
     void testNextGen2() {
         Genotype genotype = new Genotype(3, 2);
-
-        System.out.println(genotype.getGens());
 
         Gen gen0 = genotype.nextGen();
         Gen gen1 = genotype.nextGen();

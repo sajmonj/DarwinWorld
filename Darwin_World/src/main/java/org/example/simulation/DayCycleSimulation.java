@@ -1,15 +1,13 @@
 package org.example.simulation;
 
 import org.example.data.SimulationConfiguration;
-import org.example.data.SimulationStatistics;
 import org.example.model.*;
-import org.example.simulation.AbstractSimulation;
 
 import java.util.List;
 import java.util.Set;
 
 
-public class DayCycleSimulation extends AbstractSimulation {
+public class DayCycleSimulation extends SuperSimulation {
     private final Set<Grass> grassSet;
     private final WorldMap map;
 

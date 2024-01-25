@@ -10,12 +10,10 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 
 import java.util.*;
-import java.util.concurrent.Future;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import org.example.data.SimulationStatistics;
 import org.example.data.Statistics;
 import org.example.model.*;
@@ -27,10 +25,7 @@ import static java.lang.Math.max;
 
 
 public class SimulationPresenter implements MapChangeListener {
-    private SimulationEngine simulationEngine;
     private int cellSize;
-    private int genCellSize;
-    private static final List<Simulation> simulations = new ArrayList<>();
     private static int simulationID = 0;
     private Simulation simulation;
     private SimulationStatistics simulationStatistics;
@@ -106,9 +101,14 @@ public class SimulationPresenter implements MapChangeListener {
         rows = Math.abs(boundaries.upperRight().y()-boundaries.lowerLeft().y())+1;
         cellSize = 600/max(cols, rows);
 
-        preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
-                new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
-        System.out.println("Preferred " + preferredAreaBounds);
+        if(rows < 5 && rows > 1) {
+            preferredAreaBounds = new Boundary(new Vector2d(1, 2),
+                    new Vector2d(cols, 2));
+        }
+        else {
+            preferredAreaBounds = new Boundary(new Vector2d(1, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + 1),
+                    new Vector2d(cols, boundaries.upperRight().y() / 2 - (int)(boundaries.upperRight().y() * 0.2) / 2 + (int)(boundaries.upperRight().y()*0.2)));
+        }
         try {
             simulation = new Simulation(configuration, worldMap, simulationID);
             simulationStatistics = simulation.getSimulationStatistics();
@@ -119,10 +119,6 @@ public class SimulationPresenter implements MapChangeListener {
             }
             this.configurationPresenter = configurationPresenter;
             this.configurationPresenter.addSimulation(simulation);
-
-//            simulationEngine = new SimulationEngine(simulations);
-//            simulationEngine.runAsyncInThreadPool();
-
 
         } catch (IllegalArgumentException e) {
             System.err.println("Illegal argument!");
@@ -174,7 +170,7 @@ public class SimulationPresenter implements MapChangeListener {
                 WorldElement worldElement = worldMap.objectAt(currentPosition.add(addVector)).get(0);
                 setIcon(circle, worldElement , day);
                 GridPane.setHalignment(circle, HPos.CENTER);
-                if(chosen != null && chosen.getPosition().equals(currentPosition.add(addVector))){
+                if(chosen != null && chosen.getDayOfDeath().isEmpty() && chosen.getPosition().equals(currentPosition.add(addVector))){
                     circle.setFill(Color.ORANGE);
                 } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
                     circle.setFill(Color.BLUE);

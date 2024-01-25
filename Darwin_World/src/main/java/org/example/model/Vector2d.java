@@ -1,5 +1,7 @@
 package org.example.model;
 
+import java.util.Objects;
+
 public record Vector2d(int x, int y) {
     public String xToString() {
         return "%d".formatted(x);
@@ -41,4 +43,15 @@ public record Vector2d(int x, int y) {
         return new Vector2d(-this.x, -this.y);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vector2d vector2d)) return false;
+        return x == vector2d.x && y == vector2d.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(x, y);
+    }
 }
