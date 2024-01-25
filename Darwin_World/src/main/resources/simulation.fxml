@@ -8,7 +8,7 @@
 <?import javafx.scene.control.Label?>
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
-            minHeight="720.0" minWidth="960.0"
+            minHeight="720.0" minWidth="1150.0"
             fx:controller="org.example.visualization.SimulationPresenter">
 
     <top>
@@ -23,8 +23,10 @@
         <HBox alignment="CENTER" spacing="20">
             <VBox minWidth="250" alignment="CENTER_LEFT">
                 <HBox>
-                    <Label fx:id="mapType" text="-" style="-fx-font-size: 15; -fx-padding: 0 5 0 10 "/>
-                    <Label fx:id="genomType" text="-" style="-fx-font-size: 15; -fx-padding: 0 10 0 5"/>
+                    <Label fx:id="mapType" text="-" style="-fx-font-size: 15; -fx-padding: 0 15 0 15 "/>
+                </HBox>
+                <HBox>
+                    <Label fx:id="genomType" text="-" style="-fx-font-size: 15; -fx-padding: 0 15 0 15"/>
                 </HBox>
                 <HBox>
                     <Label text="Number of all animals: " style="-fx-padding: 10"/>
@@ -62,7 +64,7 @@
             <VBox minWidth="600" alignment="CENTER">
                 <GridPane fx:id="mapGrid" gridLinesVisible="true" alignment="CENTER"/>
             </VBox>
-            <VBox minWidth="250" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 25;">
+            <VBox minWidth="315" alignment="CENTER_LEFT" style="-fx-padding: 0 0 0 15;">
                 <Label text="Animal statistics" style="-fx-font-size: 15;"/>
                 <HBox>
                     <Label text="Animal ID: " style="-fx-padding: 10"/>

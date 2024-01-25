@@ -25,10 +25,10 @@ public class SimulationConfiguration {
     private int genotype;
     private boolean toCSV;
 
-    public void update(int mapHeight, int mapWidth, int animalsNumber, int genNumbers,
-                       int animalEnergy, int readyEnergy, int reproductionEnergy, int grassInitNumber,
-                       int grassNum, int grassEnergy, int minMutations, int maxMutations, int speed, int mapType,
-                       int genotype, boolean toCSV) {
+    public void update(Integer mapHeight, Integer mapWidth, Integer animalsNumber, Integer genNumbers,
+                       Integer animalEnergy, Integer readyEnergy, Integer reproductionEnergy, Integer grassInitNumber,
+                       Integer grassNum, Integer grassEnergy, Integer minMutations, Integer maxMutations, Integer speed, Integer mapType,
+                       Integer genotype, boolean toCSV) {
 
         this.mapHeight = mapHeight;
         this.mapWidth = mapWidth;
@@ -82,47 +82,49 @@ public class SimulationConfiguration {
         }
     }
 
-    public int getMapHeight() {
+    public Integer getMapHeight() {
         return mapHeight;
     }
-    public int getMapWidth() {
+    public Integer getMapWidth() {
         return mapWidth;
     }
-    public int getAnimalsNumber() {
+    public Integer getAnimalsNumber() {
         return animalsNumber;
     }
-    public int getGenNumbers() {
+    public Integer getGenNumbers() {
         return genNumbers;
     }
-    public int getAnimalEnergy() {
+    public Integer getAnimalEnergy() {
         return animalEnergy;
     }
-    public int getReadyEnergy() { return readyEnergy; }
-    public int getReproductionEnergy() {
+    public Integer getReadyEnergy() {
+        return readyEnergy;
+    }
+    public Integer getReproductionEnergy() {
         return reproductionEnergy;
     }
-    public int getGrassInitNumber() {
+    public Integer getGrassInitNumber() {
         return grassInitNumber;
     }
-    public int getGrassNum() {
+    public Integer getGrassNum() {
         return grassNum;
     }
-    public int getGrassEnergy() {
+    public Integer getGrassEnergy() {
         return grassEnergy;
     }
-    public int getSpeed() {
+    public Integer getSpeed() {
         return speed;
     }
-    public int getMinMutations() {
+    public Integer getMinMutations() {
         return  minMutations;
     }
-    public int getMaxMutations() {
+    public Integer getMaxMutations() {
         return maxMutations;
     }
-    public int getMapType() {
+    public Integer getMapType() {
         return mapType;
     }
-    public int getGenotype() {
+    public Integer getGenotype() {
         return genotype;
     }
     public boolean getToCSV() {
