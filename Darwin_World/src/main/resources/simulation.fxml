@@ -20,7 +20,7 @@
     </top>
 
     <center>
-        <HBox>
+        <HBox alignment="CENTER" spacing="20">
             <VBox minWidth="250" alignment="CENTER_LEFT">
                 <HBox>
                     <Label fx:id="mapType" text="-" style="-fx-font-size: 15; -fx-padding: 0 5 0 10 "/>
@@ -44,7 +44,7 @@
                 </HBox>
                 <VBox>
                     <Label text="Most popular genotype: " style="-fx-padding: 10"/>
-                    <Label fx:id="genotype" text="-" style="-fx-padding: 10; -fx-font-size: 12; -fx-font-family: 'system-ui'; -fx-font-weight: lighter" />
+                    <Label fx:id="genotype" text="-" style="-fx-padding: 10; -fx-: 20 ; -fx-font-size: 12; -fx-font-family: 'system-ui'; -fx-font-weight: lighter;" />
                 </VBox>
                 <HBox>
                     <Label text="Avg animals energy: " style="-fx-padding: 10"/>
@@ -98,10 +98,10 @@
         </HBox>
     </center>
     <bottom>
-        <HBox>
+        <HBox style="-fx-spacing: 15;">
             <Button fx:id="stop" onAction="#onStopClicked" text="Stop"/>
-            <Button fx:id="continue" onAction="#onContinueClicked" text="Continue"/>
-            <Button fx:id="prefferedArea" onAction="#onShowPreferredAreaClick" text="Show preferred area" />
+            <Button fx:id="continueButton" onAction="#onContinueClicked" text="Continue"/>
+            <Button fx:id="preferredArea" onAction="#onShowPreferredAreaClick" text="Show preferred area" />
             <Button fx:id="trackGens" onAction="#onTrackGens" text="Gens tracking" />
         </HBox>
     </bottom>
