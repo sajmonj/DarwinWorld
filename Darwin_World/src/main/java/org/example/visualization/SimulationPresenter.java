@@ -214,7 +214,7 @@ public class SimulationPresenter implements MapChangeListener {
     }
 
     private void writeGenotype(Genotype genotype) {
-        double genotypeCellSize = 280/ genotype.getGens().size();
+        double genotypeCellSize = 300/ genotype.getGens().size();
         animalGens.getChildren().retainAll(mapGrid.getChildren().get(0));
         animalGens.getColumnConstraints().clear();
         animalGens.getRowConstraints().clear();

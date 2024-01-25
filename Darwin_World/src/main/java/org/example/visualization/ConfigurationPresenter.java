@@ -168,21 +168,21 @@ public class ConfigurationPresenter {
     }
 
     private void setConfiguration(SimulationConfiguration tempConfiguration){
-        int height = Integer.parseInt(mapHeight.getText());
-        int width = Integer.parseInt(mapWidth.getText());
-        int animals = Integer.parseInt(animalsNumber.getText());
-        int genNumber = Integer.parseInt(genNumbers.getText());
-        int energy = Integer.parseInt(animalEnergy.getText());
-        int readyEnergyValue = Integer.parseInt(readyEnergy.getText());
-        int reproductionEnergyValue = Integer.parseInt(reproductionEnergy.getText());
-        int grassInitNumber = Integer.parseInt(grassInitNum.getText());
-        int grassNumber = Integer.parseInt(grassNum.getText());
-        int grassEnergyValue = Integer.parseInt(grassEnergy.getText());
-        int minimumMutations = minMutations.getValue();
-        int maximumMutations = maxMutations.getValue();
-        int speedValue = (int) speed.getValue();
-        int mapType = selectedMapType;
-        int genotype = selectedGenotype;
+        Integer height = Integer.parseInt(mapHeight.getText());
+        Integer width = Integer.parseInt(mapWidth.getText());
+        Integer animals = Integer.parseInt(animalsNumber.getText());
+        Integer genNumber = Integer.parseInt(genNumbers.getText());
+        Integer energy = Integer.parseInt(animalEnergy.getText());
+        Integer readyEnergyValue = Integer.parseInt(readyEnergy.getText());
+        Integer reproductionEnergyValue = Integer.parseInt(reproductionEnergy.getText());
+        Integer grassInitNumber = Integer.parseInt(grassInitNum.getText());
+        Integer grassNumber = Integer.parseInt(grassNum.getText());
+        Integer grassEnergyValue = Integer.parseInt(grassEnergy.getText());
+        Integer minimumMutations = minMutations.getValue();
+        Integer maximumMutations = maxMutations.getValue();
+        Integer speedValue = (int) speed.getValue();
+        Integer mapType = selectedMapType;
+        Integer genotype = selectedGenotype;
         boolean toCVS = Boolean.parseBoolean(String.valueOf(toCSV.isSelected()));
 
         handleSpinnerBoundaries(genNumber, minimumMutations, maximumMutations);
@@ -209,7 +209,7 @@ public class ConfigurationPresenter {
         selectedGenotype = configuration.getGenotype();
         toCSV.setSelected(configuration.getToCSV());
 
-        handleSpinnerBoundaries(configuration.getGenNumbers(), minMutations.getValue(), maxMutations.getValue());
+        if(configuration.getGenNumbers() != null) handleSpinnerBoundaries(configuration.getGenNumbers(), minMutations.getValue(), maxMutations.getValue());
     }
 
     @FXML
@@ -230,8 +230,11 @@ public class ConfigurationPresenter {
 
     @FXML
     private void handleSpinnerClick() {
-        int genNumber = Integer.parseInt(genNumbers.getText());
-        handleSpinnerBoundaries(genNumber, minMutations.getValue(), maxMutations.getValue());
+        Integer genNumber;
+        if(!genNumbers.getText().isEmpty()) {
+            genNumber = Integer.parseInt(genNumbers.getText());
+            handleSpinnerBoundaries(genNumber, minMutations.getValue(), maxMutations.getValue());
+        }
     }
 
     public void addSimulation(Simulation simulation){
