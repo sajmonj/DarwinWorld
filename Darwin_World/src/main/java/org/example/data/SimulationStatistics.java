@@ -72,7 +72,7 @@ public class SimulationStatistics {
             mapStatistics.put(Statistics.NUMBER_OF_LIVING_ANIMALS, String.valueOf(numOfLivingAnimals));
             mapStatistics.put(Statistics.FIELD_WITH_GRASS, String.valueOf(grassSet.size()));
             mapStatistics.put(Statistics.FREE_FIELDS, String.valueOf(freeFields));
-            mapStatistics.put(Statistics.MOST_POPULAR_GENOTYPE, popularGens.toString());
+            mapStatistics.put(Statistics.MOST_POPULAR_GENOTYPE, popularGens.toString().replaceAll("[]\\[]", "").replace(",", "    "));
             mapStatistics.put(Statistics.AVG_ANIMALS_ENERGY, String.valueOf((double) Math.round(animalsEnergy*100/numOfLivingAnimals)/100));
             mapStatistics.put(Statistics.AVG_LENGTH_OF_LIFE, String.valueOf((double)Math.round(animalsLife*100/listAnimals.size())/100));
             mapStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, String.valueOf((double)Math.round(numberOfChildren*100/numOfLivingAnimals)/100));

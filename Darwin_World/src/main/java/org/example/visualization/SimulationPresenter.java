@@ -24,9 +24,7 @@ import static java.lang.Math.max;
 
 
 public class SimulationPresenter implements MapChangeListener {
-    private SimulationEngine simulationEngine;
     private int cellSize;
-    private static final List<Simulation> simulations = new ArrayList<>();
     private static int simulationID = 0;
     private Simulation simulation;
     private SimulationStatistics simulationStatistics;
@@ -57,7 +55,7 @@ public class SimulationPresenter implements MapChangeListener {
     @FXML
     private Label animalId;
     @FXML
-    private Label animalGens;
+    private GridPane animalGens;
     @FXML
     private Label lengthOfLife;
     @FXML
@@ -132,7 +130,7 @@ public class SimulationPresenter implements MapChangeListener {
         mapLabelStatistics.put(Statistics.AVG_NUMBER_OF_CHILDREN, avgChildren);
     }
 
-    private synchronized void drawMap(int day){
+    private void drawMap(int day){
         clearGrid();
         mapGrid.setGridLinesVisible(true);
         Vector2d currentPosition = new Vector2d(boundaries.lowerLeft().x(),boundaries.upperRight().y());
@@ -164,7 +162,6 @@ public class SimulationPresenter implements MapChangeListener {
                 GridPane.setHalignment(circle, HPos.CENTER);
                 if(chosen != null && chosen.getDayOfDeath().isEmpty() && chosen.getPosition().equals(currentPosition.add(addVector))){
                     circle.setFill(Color.ORANGE);
-    //                displayAnimalStatistics(Optional.ofNullable(chosen));
                 } else if (tracking && worldElement instanceof Animal && ((Animal) worldElement).getAnimalGens().equals(popularGens)){
                     circle.setFill(Color.BLUE);
                 }
@@ -179,7 +176,9 @@ public class SimulationPresenter implements MapChangeListener {
         if(optionalAnimal.isPresent()) {
             Animal animal = optionalAnimal.orElseThrow();
             animalId.setText(Integer.toString(animal.getID()));
-            animalGens.setText(animal.getAnimalGens().toString());
+
+            Genotype genotype = animal.getAnimalGenotype();
+            writeGenotype(genotype);
             lengthOfLife.setText(Integer.toString(animal.getAge()));
             energy.setText(Integer.toString(max(0, animal.getEnergy())));
             consumedGrass.setText(Integer.toString(animal.getConsumedGrass()));
@@ -192,13 +191,37 @@ public class SimulationPresenter implements MapChangeListener {
         }
         else {
             animalId.setText("-");
-            animalGens.setText("-");
+            animalGens.getChildren().retainAll(mapGrid.getChildren().get(0));
+            animalGens.getColumnConstraints().clear();
+            animalGens.getRowConstraints().clear();
             lengthOfLife.setText("-");
             energy.setText("-");
             consumedGrass.setText("-");
             numOfChildren.setText("-");
             numOfDescendants.setText("-");
             deathDate.setText("-");
+        }
+    }
+
+    private void writeGenotype(Genotype genotype) {
+        double genotypeCellSize = 280/ genotype.getGens().size();
+        animalGens.getChildren().retainAll(mapGrid.getChildren().get(0));
+        animalGens.getColumnConstraints().clear();
+        animalGens.getRowConstraints().clear();
+        animalGens.getRowConstraints().add(new RowConstraints(genotypeCellSize));
+        for (int col = 0; col < genotype.getGens().size(); col++) {
+            animalGens.getColumnConstraints().add(new ColumnConstraints(genotypeCellSize));
+        }
+        for (int col = 0; col < genotype.getGens().size(); col++) {
+            if(col == genotype.nextGenIndex()) {
+                Rectangle cell = new Rectangle(genotypeCellSize, genotypeCellSize);
+                GridPane.setHalignment(cell, HPos.CENTER);
+                cell.setFill(Color.PEACHPUFF.deriveColor(1,1,1,1));
+                animalGens.add(cell, col, 0);
+            }
+            Label grid = new Label(String.valueOf(genotype.getGens().get(col)));
+            GridPane.setHalignment(grid, HPos.CENTER);
+            animalGens.add(grid, col, 0);
         }
     }
 
